@@ -6,3 +6,4 @@ I made it because I needed it.
 
 **Note:** I've no affiliation to Etherscan - It's just the one I use most.
 
+##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension/
