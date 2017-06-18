@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+
+  "name": "EtherAddressLookup",
+  "description": "Adds links to strings that look like Ethereum addresses to etherscan.",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "images/eth.png",
+    "default_popup": "options.html",
+    "default_title": "EtherAddressLookup"
+  },
+
+  "permissions": [
+    "https://etherscan.io/",
+    "activeTab"
+  ],
+
+  "content_scripts":[{
+    "run_at": "document_end",
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["js/addLinkToEtherAddress.js"],
+    "css": ["css/app.css"]
+  }]
+}
