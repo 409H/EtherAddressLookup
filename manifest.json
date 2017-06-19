@@ -19,7 +19,11 @@
   "content_scripts":[{
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],
-    "js": ["js/addLinkToEtherAddress.js"],
+    "js": ["js/addLinkToEtherAddress.js", "js/DomManipulator.js"],
     "css": ["css/app.css"]
-  }]
+  }],
+
+  "background": {
+    "scripts": ["js/options.js"]
+  }
 }
