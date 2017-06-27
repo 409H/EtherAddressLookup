@@ -8,7 +8,7 @@ I made it because I needed it.
 
 ##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension/
 
-### Installation
+### Manual Installation
 
 * Clone/download [the repo](https://github.com/409H/EtherAddressLookup).
 * Go to [chrome://extensions](chrome://extensions) in Chrome.
