@@ -3,25 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>EthAddressLookup</title>
+    <link rel="stylesheet" href="css/skyblue.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/app.css" type="text/css" />
 </head>
-<body>
-    <h3>EthAddressLookup</h3>
+<body id="ext-etheraddresslookup-popup">
+    <div id="content">
+        <h3 class="text-center">EtherAddressLookup</h3>
+        <label class="fancy-checkbox">
+            <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-show_style">
+            <span>Highlight Matches</span>
+        </label>
 
-    Adds links to strings that look like Ethereum addresses to a block explorer.
-
-    <br />
-    <br />
-
-    <hr />
-
-    <label>Highlight Matches</label>
-    <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-show_style" />
-
-    <hr />
-
-    <img src="images/eth.png" />
-
-    <sup><a href="http://harrydenley.com/ethaddresslookup-chrome-extension/" target="_blank">Read Author Blog</a></sup>
+        <br /><br />
+        <div id="footer">
+            <a href="http://harrydenley.com/ethaddresslookup-chrome-extension/" target="_blank">Read Author Blog</a> <br />
+            <strong>Version:</strong> <span id="ext-manifest_version"></span>
+        </div>
+    </div>
 
     <script src="js/toggleMatchHighlight.js"></script>
     <script src="js/options.js"></script>

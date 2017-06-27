@@ -3,7 +3,7 @@
 
   "name": "EtherAddressLookup",
   "description": "Adds links to strings that look like Ethereum addresses to etherscan.",
-  "version": "1.0",
+  "version": "1.1",
 
   "browser_action": {
     "default_icon": "images/eth.png",
@@ -19,7 +19,7 @@
   "content_scripts":[{
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],
-    "js": ["js/addLinkToEtherAddress.js", "js/DomManipulator.js"],
+    "js": ["js/DomManipulator.js"],
     "css": ["css/app.css"]
   }],
 

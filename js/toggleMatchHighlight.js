@@ -18,7 +18,6 @@ function refreshHighlightOption() {
     //Notify the tab to do a class method
     var strMethod = (intShowHighlight == 1 ? "addHighlightStyle" : "removeHighlightStyle");
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        //Construct & send message
         chrome.tabs.sendMessage(tabs[0].id, {
             "func":strMethod
         }, function(response) {

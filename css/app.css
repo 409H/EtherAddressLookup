@@ -11,3 +11,18 @@
     border: 1px solid transparent;
     color: inherit;
 }
+
+#ext-etheraddresslookup-popup {
+    margin: 0;
+    padding: 0px;
+    font-family: "Arial";
+    font-size: 12pt;
+    width: 300px;
+}
+#ext-etheraddresslookup-popup #content {
+    padding: 15px;
+    margin-top: 15px;
+}
+#ext-etheraddresslookup-popup #content #footer {
+    font-size: 70%;
+}
