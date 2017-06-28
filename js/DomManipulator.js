@@ -16,8 +16,8 @@ class EtherAddressLookup {
     //Gets extension settings and then converts addresses to links
     init()
     {
+        //Get the highlight option for the user
         chrome.runtime.sendMessage({func: "highlight_option"}, function(objResponse) {
-            console.log(objResponse);
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 this.blHighlight = (objResponse.resp == 1 ? true : false);
             }
@@ -26,20 +26,18 @@ class EtherAddressLookup {
 
         //Update the DOM once all settings have been received...
         setTimeout(function() {
-            console.log("Settings:" + this.intSettingsCount);
-            console.log("Total: "+ this.intSettingsTotalCount);
             if(this.intSettingsCount === this.intSettingsTotalCount) {
                 this.convertAddressToLink();
             }
-        }.bind(this), 500)
+        }.bind(this), 1)
     }
 
     //Finds Ethereum addresses and converts to a link to a block explorer
     convertAddressToLink()
     {
         document.body.innerHTML = document.body.innerHTML.replace(
-            new RegExp("(?!.*\")(0[xX][0-9a-fA-F]{40})(?!\")(!?<\s|\<|$)", "g"),
-            `<a title="See this address on Etherscan" href="https://etherscan.io/address/$1" class="ext-etheraddresslookup-link">$1</a>$2`
+            new RegExp("(?!.*\")(0x?[0-9a-fA-F]{40})(?!\")", "gi"),
+            `<a title="See this address on Etherscan" href="https://etherscan.io/address/$1" class="ext-etheraddresslookup-link">$1</a>`
         );
 
         if(this.blHighlight) {
