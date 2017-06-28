@@ -36,7 +36,7 @@ class EtherAddressLookup {
     convertAddressToLink()
     {
         var arrWhitelistedTags = new Array("code", "span", "p", "td");
-        var strRegex = /(?:^|\s)(0x?[0-9a-fA-F]{40})(?:\s|$)/gi;
+        var strRegex = /(?:^|\s)((?:0x)?[0-9a-fA-F]{40})(?:\s|$)/gi;
 
         //Get the whitelisted nodes
         for(var i=0; i<arrWhitelistedTags.length; i++) {
@@ -44,8 +44,7 @@ class EtherAddressLookup {
             //Loop through the whitelisted content
             for(var x=0; x<objNodes.length; x++) {
                 var strContent = objNodes[x].innerText;
-                if( strRegex.exec(strContent) !== null) {
-                    console.log(strContent);
+                if( /((?:0x)?[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
                     objNodes[x].innerHTML = strContent.replace(
                         new RegExp(strRegex, "gi"),
                         `<a title="See this address on Etherscan" href="https://etherscan.io/address/$1" class="ext-etheraddresslookup-link">$1</a>`
@@ -82,7 +81,9 @@ class EtherAddressLookup {
     }
 }
 
-let objEtherAddressLookup = new EtherAddressLookup();
+window.addEventListener("load", function() {
+    let objEtherAddressLookup = new EtherAddressLookup();
+});
 
 //Send message from the extension to here.
 chrome.runtime.onMessage.addListener(
