@@ -82,9 +82,7 @@ class EtherAddressLookup {
     }
 }
 
-window.addEventListener('load', function() {
-    let objEtherAddressLookup = new EtherAddressLookup();
-}, false);
+let objEtherAddressLookup = new EtherAddressLookup();
 
 //Send message from the extension to here.
 chrome.runtime.onMessage.addListener(
