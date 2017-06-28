@@ -9,8 +9,10 @@ class EtherAddressLookup {
     setDefaultExtensionSettings()
     {
         this.blHighlight = false;
+        this.strBlockchainExplorer = "https://etherscan.io/address";
+
         this.intSettingsCount = 0;
-        this.intSettingsTotalCount = 1;
+        this.intSettingsTotalCount = 2;
     }
 
     //Gets extension settings and then converts addresses to links
@@ -21,6 +23,12 @@ class EtherAddressLookup {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 this.blHighlight = (objResponse.resp == 1 ? true : false);
             }
+            ++this.intSettingsCount;
+        }.bind(this));
+
+        //Get the blockchain explorer for the user
+        chrome.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
+            this.strBlockchainExplorer = objResponse.resp;
             ++this.intSettingsCount;
         }.bind(this));
 
@@ -47,7 +55,7 @@ class EtherAddressLookup {
                 if( /((?:0x)?[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
                     objNodes[x].innerHTML = strContent.replace(
                         new RegExp(strRegex, "gi"),
-                        `<a title="See this address on Etherscan" href="https://etherscan.io/address/$1" class="ext-etheraddresslookup-link">$1</a>`
+                        '<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$1" class="ext-etheraddresslookup-link">$1</a>'
                     );
                 }
             }
