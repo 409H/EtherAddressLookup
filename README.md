@@ -1,12 +1,12 @@
 ### EtherAddressLookup
 
-Automatically adds links to strings that look like Ethereum addresses so you can quickly look them up on Etherscan.
+Automatically adds links to strings that look like Ethereum addresses so you can quickly look them up on your favourite block explorer.
 
 I made it because I needed it.
 
-**Note:** I've no affiliation to Etherscan - It's just the one I use most.
+**Chrome Extension:** https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn
 
-##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension/
+##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension-release/
 
 ### Manual Installation
 
