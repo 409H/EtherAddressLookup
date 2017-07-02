@@ -2,8 +2,9 @@
   "manifest_version": 2,
 
   "name": "EtherAddressLookup",
-  "description": "Adds links to strings that look like Ethereum addresses to etherscan.",
-  "version": "1.2",
+  "short_name": "EtherAddressLookup",
+  "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
+  "version": "1.2.1",
 
   "browser_action": {
     "default_icon": "images/icon.png",
