@@ -55,7 +55,7 @@ class EtherAddressLookup {
                 if( /((?:0x)?[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
                     objNodes[x].innerHTML = strContent.replace(
                         new RegExp(strRegex, "gi"),
-                        '<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$1" class="ext-etheraddresslookup-link">$1</a>'
+                        '<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$1" class="ext-etheraddresslookup-link" target="_blank">$1</a>'
                     );
                 }
             }
