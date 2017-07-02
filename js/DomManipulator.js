@@ -9,44 +9,64 @@ class EtherAddressLookup {
     setDefaultExtensionSettings()
     {
         this.blHighlight = false;
+        this.strBlockchainExplorer = "https://etherscan.io/address";
+
         this.intSettingsCount = 0;
-        this.intSettingsTotalCount = 1;
+        this.intSettingsTotalCount = 2;
     }
 
     //Gets extension settings and then converts addresses to links
     init()
     {
+        //Get the highlight option for the user
         chrome.runtime.sendMessage({func: "highlight_option"}, function(objResponse) {
-            console.log(objResponse);
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 this.blHighlight = (objResponse.resp == 1 ? true : false);
             }
             ++this.intSettingsCount;
         }.bind(this));
 
+        //Get the blockchain explorer for the user
+        chrome.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
+            this.strBlockchainExplorer = objResponse.resp;
+            ++this.intSettingsCount;
+        }.bind(this));
+
         //Update the DOM once all settings have been received...
         setTimeout(function() {
-            console.log("Settings:" + this.intSettingsCount);
-            console.log("Total: "+ this.intSettingsTotalCount);
             if(this.intSettingsCount === this.intSettingsTotalCount) {
                 this.convertAddressToLink();
             }
-        }.bind(this), 500)
+        }.bind(this), 1)
     }
 
     //Finds Ethereum addresses and converts to a link to a block explorer
     convertAddressToLink()
     {
-        document.body.innerHTML = document.body.innerHTML.replace(
-            new RegExp("(?!.*\")(0[xX][0-9a-fA-F]{40})(?!\")(!?<\s|\<|$)", "g"),
-            `<a title="See this address on Etherscan" href="https://etherscan.io/address/$1" class="ext-etheraddresslookup-link">$1</a>$2`
-        );
+        var arrWhitelistedTags = new Array("code", "span", "p", "td");
+        var strRegex = /(?:^|\s)((?:0x)?[0-9a-fA-F]{40})(?:\s|$)/gi;
+
+        //Get the whitelisted nodes
+        for(var i=0; i<arrWhitelistedTags.length; i++) {
+            var objNodes = document.getElementsByTagName(arrWhitelistedTags[i]);
+            //Loop through the whitelisted content
+            for(var x=0; x<objNodes.length; x++) {
+                var strContent = objNodes[x].innerText;
+                if( /((?:0x)?[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
+                    objNodes[x].innerHTML = strContent.replace(
+                        new RegExp(strRegex, "gi"),
+                        '<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$1" class="ext-etheraddresslookup-link" target="_blank">$1</a>'
+                    );
+                }
+            }
+        }
 
         if(this.blHighlight) {
             this.addHighlightStyle();
         }
     }
-    //Removes the highlight style
+
+    //Removes the highlight style from Ethereum addresses
     removeHighlightStyle()
     {
         var objEtherAddresses = document.getElementsByClassName("ext-etheraddresslookup-link");
@@ -69,11 +89,14 @@ class EtherAddressLookup {
     }
 }
 
-let objEtherAddressLookup = new EtherAddressLookup();
+window.addEventListener("load", function() {
+    let objEtherAddressLookup = new EtherAddressLookup();
+});
 
 //Send message from the extension to here.
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+        let objEtherAddressLookup = new EtherAddressLookup();
         if(typeof request.func !== "undefined") {
             if(typeof objEtherAddressLookup[request.func] == "function") {
                 objEtherAddressLookup[request.func]();

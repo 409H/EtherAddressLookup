@@ -3,10 +3,10 @@
 
   "name": "EtherAddressLookup",
   "description": "Adds links to strings that look like Ethereum addresses to etherscan.",
-  "version": "1.1",
+  "version": "1.2",
 
   "browser_action": {
-    "default_icon": "images/eth.png",
+    "default_icon": "images/icon.png",
     "default_popup": "options.html",
     "default_title": "EtherAddressLookup"
   },
