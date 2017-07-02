@@ -43,7 +43,7 @@ class EtherAddressLookup {
     //Finds Ethereum addresses and converts to a link to a block explorer
     convertAddressToLink()
     {
-        var arrWhitelistedTags = new Array("code", "span", "p", "td");
+        var arrWhitelistedTags = new Array("code", "span", "p", "td", "li");
         var strRegex = /(?:^|\s)((?:0x)?[0-9a-fA-F]{40})(?:\s|$)/gi;
 
         //Get the whitelisted nodes
