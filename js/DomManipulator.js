@@ -107,7 +107,7 @@ class EtherAddressLookup {
 
         //@todo - check local storage and if within 5 minutes, don't send this request.
         var objAjax = new XMLHttpRequest();
-        objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/release/blacklists/domains.json", true);
+        objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json", true);
         objAjax.send();
         objAjax.onreadystatechange = function () {
             if(objAjax.readyState === 4) {
