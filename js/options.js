@@ -11,6 +11,12 @@
         objOptionBlockchainExplorer.addEventListener('change', toggleBlockchainExplorer);
     }
 
+    //Toggle the blacklist domains option and set it in LocalStorage
+    var objBlacklistDomains = document.getElementById('ext-etheraddresslookup-blacklist_domains');
+    if(objBlacklistDomains) {
+        objBlacklistDomains.addEventListener('click', toggleBlacklistDomains);
+    }
+
     //Get the extension version
     var objManifest = chrome.runtime.getManifest();
     var objManifestVersion = document.getElementById('ext-manifest_version');
@@ -30,6 +36,9 @@ chrome.runtime.onMessage.addListener(
                 break;
             case 'blockchain_explorer' :
                 strResponse = localStorage.getItem("ext-etheraddresslookup-blockchain_explorer");
+                break;
+            case 'blacklist_domains' :
+                strResponse = localStorage.getItem("ext-etheraddresslookup-blacklist_domains");
                 break;
             default:
                 strResponse = "unsupported";

@@ -9,10 +9,11 @@ class EtherAddressLookup {
     setDefaultExtensionSettings()
     {
         this.blHighlight = false;
+        this.blBlacklistDomains = true;
         this.strBlockchainExplorer = "https://etherscan.io/address";
 
         this.intSettingsCount = 0;
-        this.intSettingsTotalCount = 2;
+        this.intSettingsTotalCount = 3;
     }
 
     //Gets extension settings and then converts addresses to links
@@ -32,9 +33,18 @@ class EtherAddressLookup {
             ++this.intSettingsCount;
         }.bind(this));
 
+        //Get the blacklist domains option for the user
+        chrome.runtime.sendMessage({func: "blacklist_domains"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                this.blBlacklistDomains = (objResponse.resp == 1 ? true : false);
+            }
+            ++this.intSettingsCount;
+        }.bind(this));
+
         //Update the DOM once all settings have been received...
         setTimeout(function() {
             if(this.intSettingsCount === this.intSettingsTotalCount) {
+                this.blacklistedDomainCheck();
                 this.convertAddressToLink();
             }
         }.bind(this), 1)
@@ -86,6 +96,42 @@ class EtherAddressLookup {
             objEtherAddresses[i].classList.remove("ext-etheraddresslookup-link-no_highlight");
         }
         return false;
+    }
+
+    //Detects if the current tab is in the blacklisted domains file
+    blacklistedDomainCheck()
+    {
+        if(this.blBlacklistDomains === false) {
+            return true;
+        }
+
+        //@todo - check local storage and if within 5 minutes, don't send this request.
+        var objAjax = new XMLHttpRequest();
+        objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/release/blacklists/domains.json", true);
+        objAjax.send();
+        objAjax.onreadystatechange = function () {
+            if(objAjax.readyState === 4) {
+                var arrBlacklistedDomains = JSON.parse(objAjax.responseText);
+                var strCurrentTab = window.location.hostname;
+
+                if(arrBlacklistedDomains.includes(strCurrentTab)) {
+                    var objBlacklistedDomain = document.createElement("div");
+                    objBlacklistedDomain.style.cssText = "position:absolute;z-index:999999999;top:0%;left:0%;width:100%;height:100%;background:#fff;color:#000;text-align:center;"
+
+                    var objBlacklistedDomainText = document.createElement("div");
+                    objBlacklistedDomainText.style.cssText = "padding:5%;color:#57618F;";
+                    objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' />" +
+                        "<br /><h3>ATTENTION</h3>We have detected this domain to have malicious " +
+                        "intent and have prevented you from interacting with it.<br /><br /><br /><small>This is " +
+                        "because you have <br />enabled <em>'Warn of blacklisted domains'</em> setting <br />on EtherAddressLookup Chrome " +
+                        "Extension. You <br />can turn this setting off to interact with this site <br />but it's advised not to." +
+                        "<br /><br />We blacklisted it for a reason.</small>";
+
+                    objBlacklistedDomain.appendChild(objBlacklistedDomainText);
+                    document.body.appendChild(objBlacklistedDomain);
+                }
+            }
+        }
     }
 }
 
