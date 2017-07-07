@@ -44,7 +44,9 @@ class EtherAddressLookup {
         //Update the DOM once all settings have been received...
         setTimeout(function() {
             if(this.intSettingsCount === this.intSettingsTotalCount) {
-                this.blacklistedDomainCheck();
+                if(this.blBlacklistDomains === false) {
+                    this.blacklistedDomainCheck();
+                }
                 this.convertAddressToLink();
             }
         }.bind(this), 1)
@@ -53,8 +55,9 @@ class EtherAddressLookup {
     //Finds Ethereum addresses and converts to a link to a block explorer
     convertAddressToLink()
     {
+        console.log("converting");
         var arrWhitelistedTags = new Array("code", "span", "p", "td", "li");
-        var strRegex = /(?:^|\s)((?:0x)?[0-9a-fA-F]{40})(?:\s|$)/gi;
+        var strRegex = /(^|\s|:|-)((?:0x)?[0-9a-fA-F]{40})(?:\s|$)/gi;
 
         //Get the whitelisted nodes
         for(var i=0; i<arrWhitelistedTags.length; i++) {
@@ -62,10 +65,11 @@ class EtherAddressLookup {
             //Loop through the whitelisted content
             for(var x=0; x<objNodes.length; x++) {
                 var strContent = objNodes[x].innerText;
+                console.log(strContent);
                 if( /((?:0x)?[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
                     objNodes[x].innerHTML = strContent.replace(
                         new RegExp(strRegex, "gi"),
-                        '<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$1" class="ext-etheraddresslookup-link" target="_blank">$1</a>'
+                        '$1<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$2" class="ext-etheraddresslookup-link" target="_blank">$2</a>'
                     );
                 }
             }
@@ -101,34 +105,31 @@ class EtherAddressLookup {
     //Detects if the current tab is in the blacklisted domains file
     blacklistedDomainCheck()
     {
-        if(this.blBlacklistDomains === false) {
-            return true;
-        }
-
         //@todo - check local storage and if within 5 minutes, don't send this request.
         var objAjax = new XMLHttpRequest();
         objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json", true);
-        objAjax.send();
-        objAjax.onreadystatechange = function () {
-            if(objAjax.readyState === 4) {
-                var arrBlacklistedDomains = JSON.parse(objAjax.responseText);
-                var strCurrentTab = window.location.hostname;
+        if( objAjax.send() ) {
+            objAjax.onreadystatechange = function () {
+                if (objAjax.readyState === 4) {
+                    var arrBlacklistedDomains = JSON.parse(objAjax.responseText);
+                    var strCurrentTab = window.location.hostname;
 
-                if(arrBlacklistedDomains.includes(strCurrentTab)) {
-                    var objBlacklistedDomain = document.createElement("div");
-                    objBlacklistedDomain.style.cssText = "position:absolute;z-index:999999999;top:0%;left:0%;width:100%;height:100%;background:#fff;color:#000;text-align:center;"
+                    if (arrBlacklistedDomains.includes(strCurrentTab)) {
+                        var objBlacklistedDomain = document.createElement("div");
+                        objBlacklistedDomain.style.cssText = "position:absolute;z-index:999999999;top:0%;left:0%;width:100%;height:100%;background:#fff;color:#000;text-align:center;"
 
-                    var objBlacklistedDomainText = document.createElement("div");
-                    objBlacklistedDomainText.style.cssText = "padding:5%;color:#57618F;";
-                    objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' />" +
-                        "<br /><h3>ATTENTION</h3>We have detected this domain to have malicious " +
-                        "intent and have prevented you from interacting with it.<br /><br /><br /><small>This is " +
-                        "because you have <br />enabled <em>'Warn of blacklisted domains'</em> setting <br />on EtherAddressLookup Chrome " +
-                        "Extension. You <br />can turn this setting off to interact with this site <br />but it's advised not to." +
-                        "<br /><br />We blacklisted it for a reason.</small>";
+                        var objBlacklistedDomainText = document.createElement("div");
+                        objBlacklistedDomainText.style.cssText = "padding:5%;color:#57618F;";
+                        objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' />" +
+                            "<br /><h3>ATTENTION</h3>We have detected this domain to have malicious " +
+                            "intent and have prevented you from interacting with it.<br /><br /><br /><small>This is " +
+                            "because you have <br />enabled <em>'Warn of blacklisted domains'</em> setting <br />on EtherAddressLookup Chrome " +
+                            "Extension. You <br />can turn this setting off to interact with this site <br />but it's advised not to." +
+                            "<br /><br />We blacklisted it for a reason.</small>";
 
-                    objBlacklistedDomain.appendChild(objBlacklistedDomainText);
-                    document.body.appendChild(objBlacklistedDomain);
+                        objBlacklistedDomain.appendChild(objBlacklistedDomainText);
+                        document.body.appendChild(objBlacklistedDomain);
+                    }
                 }
             }
         }
