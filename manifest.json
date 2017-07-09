@@ -3,7 +3,7 @@
 
   "name": "EtherAddressLookup",
   "short_name": "EtherAddressLookup",
-  "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
+  "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer. It also attempts to protect you from phishing sites stealing your private keys.",
   "version": "1.3.3",
 
   "browser_action": {
