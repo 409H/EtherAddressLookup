@@ -26,3 +26,10 @@
 #ext-etheraddresslookup-popup #content #footer {
     font-size: 70%;
 }
+
+#ext-etheraddresslookup-blacklist_domains_stats {
+    font-size: 10pt;
+    color: #c2c6c7;
+    line-height: 10pt;
+    padding-left: 3.5em;
+}
