@@ -55,7 +55,7 @@ class EtherAddressLookup {
     //Finds Ethereum addresses and converts to a link to a block explorer
     convertAddressToLink()
     {
-        var arrWhitelistedTags = new Array("code", "span", "p", "td", "li");
+        var arrWhitelistedTags = new Array("code", "span", "p", "td", "li", "em", "i", "b", "strong");
         var strRegex = /(^|\s|:|-)((?:0x)?[0-9a-fA-F]{40})(?:\s|$)/gi;
 
         //Get the whitelisted nodes
@@ -63,7 +63,7 @@ class EtherAddressLookup {
             var objNodes = document.getElementsByTagName(arrWhitelistedTags[i]);
             //Loop through the whitelisted content
             for(var x=0; x<objNodes.length; x++) {
-                var strContent = objNodes[x].innerText;
+                var strContent = objNodes[x].innerHTML;
                 if( /((?:0x)?[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
                     objNodes[x].innerHTML = strContent.replace(
                         new RegExp(strRegex, "gi"),
@@ -103,16 +103,18 @@ class EtherAddressLookup {
     //Detects if the current tab is in the blacklisted domains file
     blacklistedDomainCheck()
     {
-        //@todo - check local storage and if within 5 minutes, don't send this request.
-        var objAjax = new XMLHttpRequest();
-        objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json", true);
-        objAjax.send();
-        objAjax.onreadystatechange = function () {
-            if (objAjax.readyState === 4) {
-                var arrBlacklistedDomains = JSON.parse(objAjax.responseText);
-                var strCurrentTab = window.location.hostname;
+        var arrBlacklistedDomains = [];
+        chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                arrBlacklistedDomains = objResponse.resp;
+            }
+        }.bind(arrBlacklistedDomains));
 
+        setTimeout(function() {
+            if(arrBlacklistedDomains.length > 0) {
+                var strCurrentTab = window.location.hostname;
                 if (arrBlacklistedDomains.includes(strCurrentTab)) {
+                    document.body.innerHTML = ""; //Clear the DOM.
                     var objBlacklistedDomain = document.createElement("div");
                     objBlacklistedDomain.style.cssText = "position:absolute;z-index:999999999;top:0%;left:0%;width:100%;height:100%;background:#fff;color:#000;text-align:center;"
 
@@ -129,7 +131,7 @@ class EtherAddressLookup {
                     document.body.appendChild(objBlacklistedDomain);
                 }
             }
-        }
+        }.bind(arrBlacklistedDomains), 500)
     }
 }
 
