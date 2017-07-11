@@ -37,7 +37,7 @@ details on why the changes are needed.
 ## Special Thanks
 
 * Thanks to the team at MyEtherWallet for helping keep the domain blacklist up-to-date!
-* Thanks to the team at [Crypto Minded](https://cryptominded.com/) for the store graphics!
+* Thanks to the team at [Cryptominded](https://cryptominded.com/) for the store graphics!
 
 ----
 
