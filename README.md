@@ -12,7 +12,7 @@ Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](htt
 
 ### Chrome Extension
 
-`master` is bundled and pushed to the Chrome Extension store, you can view/download it 
+The `master` branch is bundled on every release and pushed to the Chrome Extension store, you can view/download it 
 here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn)
 
 (Note that this will have automatic updates)
@@ -33,6 +33,11 @@ from modifying the blacklist (ie: removing something). To request a change to th
 blacklist, please [open an issue](https://github.com/409H/EtherAddressLookup/issues/new) or open
 a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the changes. Make sure you give some
 details on why the changes are needed.
+
+## Special Thanks
+
+* Thanks to the team at MyEtherWallet for helping keep the domain blacklist up-to-date!
+* Thanks to the team at [Crypto Minded](https://cryptominded.com/) for the store graphics!
 
 ----
 

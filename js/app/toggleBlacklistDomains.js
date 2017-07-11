@@ -24,7 +24,12 @@ function refreshBlacklistDomains()
     });
 
     var intBlacklistDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains");
-    document.getElementById("ext-etheraddresslookup-blacklist_domains").checked = (intBlacklistDomains == 1 ? true : false);
+
+    if(intBlacklistDomains === null) {
+        document.getElementById("ext-etheraddresslookup-blacklist_domains").checked = true;
+    } else {
+        document.getElementById("ext-etheraddresslookup-blacklist_domains").checked = (intBlacklistDomains == 1 ? true : false);
+    }
 }
 
 function getBlacklistStats()
