@@ -128,7 +128,7 @@ class EtherAddressLookup {
                         "<span style='font-size:10pt;'>This is because you have enabled <em>'Warn of blacklisted domains'</em> setting on EtherAddressLookup Chrome " +
                         "Extension. You can turn this setting off to interact with this site but it's advised not to." +
                         "<br /><br />We blacklisted it for a reason.</span></div>";
-                    objBlacklistedDomainText.innerHTML += "<br /><span style='font-size:10pt;'>You can donate to this " +
+                    objBlacklistedDomainText.innerHTML += "<br /><span style='font-size:10pt;'>You can donate to the developers " +
                         "address if you want to: 0x661b5dc032bedb210f225df4b1aa2bdd669b38bc</span>";
 
                     objBlacklistedDomain.appendChild(objBlacklistedDomainText);
