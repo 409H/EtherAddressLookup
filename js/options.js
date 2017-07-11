@@ -23,6 +23,14 @@
     if(objManifestVersion) {
         objManifestVersion.innerHTML = objManifest.version;
     }
+
+    //init getting blacklisted domains
+    getBlacklistedDomainsFromSource();
+    setInterval(function() {
+        console.log("Re-caching domains");
+        getBlacklistedDomainsFromSource();
+    }, 180000);
+
 })();
 
 chrome.runtime.onMessage.addListener(
@@ -70,6 +78,7 @@ chrome.runtime.onMessage.addListener(
 
 function getBlacklistedDomainsFromSource()
 {
+    console.log("Getting blacklist from GitHub now");
     var objAjax = new XMLHttpRequest();
     objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json", true);
     objAjax.send();
