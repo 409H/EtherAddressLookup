@@ -113,7 +113,7 @@ class EtherAddressLookup {
         setTimeout(function() {
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
-                if (true || arrBlacklistedDomains.includes(strCurrentTab)) {
+                if (arrBlacklistedDomains.includes(strCurrentTab)) {
                     document.body.innerHTML = ""; //Clear the DOM.
                     document.body.cssText = "margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;font-family:arial,sans-serif";
                     var objBlacklistedDomain = document.createElement("div");
