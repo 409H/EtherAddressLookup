@@ -113,19 +113,23 @@ class EtherAddressLookup {
         setTimeout(function() {
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
-                if (arrBlacklistedDomains.includes(strCurrentTab)) {
+                if (true || arrBlacklistedDomains.includes(strCurrentTab)) {
                     document.body.innerHTML = ""; //Clear the DOM.
+                    document.body.cssText = "margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;font-family:arial,sans-serif";
                     var objBlacklistedDomain = document.createElement("div");
-                    objBlacklistedDomain.style.cssText = "position:absolute;z-index:999999999;top:0%;left:0%;width:100%;height:100%;background:#fff;color:#000;text-align:center;"
+                    objBlacklistedDomain.style.cssText = "position:absolute;top:0%;left:0%;width:100%;height:100%;background:#00c2c1;color:#fff;text-align:center;font-size:100%;"
 
                     var objBlacklistedDomainText = document.createElement("div");
-                    objBlacklistedDomainText.style.cssText = "padding:5%;color:#57618F;";
-                    objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' />" +
-                        "<br /><h3>ATTENTION</h3>We have detected this domain to have malicious " +
-                        "intent and have prevented you from interacting with it.<br /><br /><br /><small>This is " +
-                        "because you have <br />enabled <em>'Warn of blacklisted domains'</em> setting <br />on EtherAddressLookup Chrome " +
-                        "Extension. You <br />can turn this setting off to interact with this site <br />but it's advised not to." +
-                        "<br /><br />We blacklisted it for a reason.</small>";
+                    objBlacklistedDomainText.style.cssText = "margin-left:auto;margin-right:auto;width:50%;padding:5%;margin-top:5%;";
+                    objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' style='margin-left:auto;margin-right:auto;margin-bottom:1.5em'/>" +
+                        "<br /><h3 style='font-size:130%;font-weight:800;'>ATTENTION</h3>We have detected this domain to have malicious " +
+                        "intent and have prevented you from interacting with it.<br /><br /><br />" +
+                        "<div style='margin-left:auto;margin-right:auto;width:50%'>" +
+                        "<span style='font-size:10pt;'>This is because you have enabled <em>'Warn of blacklisted domains'</em> setting on EtherAddressLookup Chrome " +
+                        "Extension. You can turn this setting off to interact with this site but it's advised not to." +
+                        "<br /><br />We blacklisted it for a reason.</span></div>";
+                    objBlacklistedDomainText.innerHTML += "<br /><span style='font-size:10pt;'>You can donate to this " +
+                        "address if you want to: 0x661b5dc032bedb210f225df4b1aa2bdd669b38bc</span>";
 
                     objBlacklistedDomain.appendChild(objBlacklistedDomainText);
                     document.body.appendChild(objBlacklistedDomain);
