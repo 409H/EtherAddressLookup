@@ -161,8 +161,7 @@ class EtherAddressLookup {
 
                 var source = strCurrentTab.replace(/\./g,'');
                 var holisticMetric = self.levenshtein(source, 'myetherwallet');
-                var holisticStd = 3.639774978064392; // determined by analysing current blacklist
-                var holisticLimit = 7 + (1 * holisticStd); // we can 2 * std will get 95% of matches, but that may be aggressive
+                var holisticLimit = 7 // How different can the word be? 
                 var holisticStatus = (holisticMetric > 0 && holisticMetric < holisticLimit) ? true : false;
 
                 if (isBLacklisted || holisticStatus ) {
