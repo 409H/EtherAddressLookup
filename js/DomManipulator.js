@@ -6,6 +6,44 @@ class EtherAddressLookup {
         this.init();
     }
 
+    levenshtein(a, b) {
+      if(a.length == 0) return b.length;
+      if(b.length == 0) return a.length;
+
+      // swap to save some memory O(min(a,b)) instead of O(a)
+      if(a.length > b.length) {
+        var tmp = a;
+        a = b;
+        b = tmp;
+      }
+
+      var row = [];
+      // init the row
+      for(var i = 0; i <= a.length; i++){
+        row[i] = i;
+      }
+
+      // fill in the rest
+      for(var i = 1; i <= b.length; i++){
+        var prev = i;
+        for(var j = 1; j <= a.length; j++){
+          var val;
+          if(b.charAt(i-1) == a.charAt(j-1)){
+            val = row[j-1]; // match
+          } else {
+            val = Math.min(row[j-1] + 1, // substitution
+                           prev + 1,     // insertion
+                           row[j] + 1);  // deletion
+          }
+          row[j - 1] = prev;
+          prev = val;
+        }
+        row[a.length] = prev;
+      }
+
+      return row[a.length];
+    }
+
     setDefaultExtensionSettings()
     {
         this.blHighlight = false;
@@ -103,6 +141,7 @@ class EtherAddressLookup {
     //Detects if the current tab is in the blacklisted domains file
     blacklistedDomainCheck()
     {
+        var self = this;
         var arrBlacklistedDomains = [];
         chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
@@ -113,7 +152,20 @@ class EtherAddressLookup {
         setTimeout(function() {
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
-                if (arrBlacklistedDomains.includes(strCurrentTab)) {
+                var passthrough = (strCurrentTab === 'www.myetherwallet.com' ||
+                                   strCurrentTab === 'myetherwallet.com')
+                                   ? true : false;
+                if(passthrough) { return; }
+
+                var isBLacklisted = arrBlacklistedDomains.includes(strCurrentTab)
+
+                var source = strCurrentTab.replace(/\./g,'')
+                var holisticMetric = self.levenshtein(source, 'myetherwallet')
+                var holisticStd = 3.868807070663773 // determined by analysing current blacklist
+                var holisticLimit = 8 + holisticStd // we can 2 * std will get 95% of matches, but that may be aggressive
+                var holisticStatus = (holisticMetric > 0 && holisticMetric < holisticLimit) ? true : false
+
+                if (isBLacklisted || holisticStatus ) {
                     document.body.innerHTML = ""; //Clear the DOM.
                     document.body.cssText = "margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;font-family:arial,sans-serif";
                     var objBlacklistedDomain = document.createElement("div");
