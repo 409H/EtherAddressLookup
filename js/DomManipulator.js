@@ -157,13 +157,13 @@ class EtherAddressLookup {
                                    ? true : false;
                 if(passthrough) { return; }
 
-                var isBLacklisted = arrBlacklistedDomains.includes(strCurrentTab)
+                var isBLacklisted = arrBlacklistedDomains.includes(strCurrentTab);
 
-                var source = strCurrentTab.replace(/\./g,'')
-                var holisticMetric = self.levenshtein(source, 'myetherwallet')
-                var holisticStd = 3.868807070663773 // determined by analysing current blacklist
-                var holisticLimit = 8 + holisticStd // we can 2 * std will get 95% of matches, but that may be aggressive
-                var holisticStatus = (holisticMetric > 0 && holisticMetric < holisticLimit) ? true : false
+                var source = strCurrentTab.replace(/\./g,'');
+                var holisticMetric = self.levenshtein(source, 'myetherwallet');
+                var holisticStd = 3.639774978064392; // determined by analysing current blacklist
+                var holisticLimit = 7 + (1 * holisticStd); // we can 2 * std will get 95% of matches, but that may be aggressive
+                var holisticStatus = (holisticMetric > 0 && holisticMetric < holisticLimit) ? true : false;
 
                 if (isBLacklisted || holisticStatus ) {
                     document.body.innerHTML = ""; //Clear the DOM.
