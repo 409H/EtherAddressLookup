@@ -143,28 +143,36 @@ class EtherAddressLookup {
     {
         var self = this;
         var arrBlacklistedDomains = [];
+        var arrWhitelistedDomains = ["www.myetherwallet.com", "myetherwallet.com"];
         chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 arrBlacklistedDomains = objResponse.resp;
             }
         }.bind(arrBlacklistedDomains));
 
+        chrome.runtime.sendMessage({func: "whitelist_domain_list"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                arrWhitelistedDomains = objResponse.resp;
+            }
+        }.bind(arrWhitelistedDomains));
+
         setTimeout(function() {
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
-                var passthrough = (strCurrentTab === 'www.myetherwallet.com' ||
-                                   strCurrentTab === 'myetherwallet.com')
-                                   ? true : false;
-                if(passthrough) { return; }
 
-                var isBLacklisted = arrBlacklistedDomains.includes(strCurrentTab);
+                //Domain is whitelisted, don't check the blacklist.
+                if(arrWhitelistedDomains.includes(strCurrentTab)) {
+                    return;
+                }
 
+                //Levenshtien - @sogoiii
+                var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
                 var source = strCurrentTab.replace(/\./g,'');
-                var holisticMetric = self.levenshtein(source, 'myetherwallet');
-                var holisticLimit = 7 // How different can the word be? 
-                var holisticStatus = (holisticMetric > 0 && holisticMetric < holisticLimit) ? true : false;
+                var intHolisticMetric = self.levenshtein(source, 'myetherwallet');
+                var intHolisticLimit = 7 // How different can the word be?
+                var blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
 
-                if (isBLacklisted || holisticStatus ) {
+                if (isBlacklisted || blHolisticStatus ) {
                     document.body.innerHTML = ""; //Clear the DOM.
                     document.body.cssText = "margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;font-family:arial,sans-serif";
                     var objBlacklistedDomain = document.createElement("div");
@@ -173,7 +181,7 @@ class EtherAddressLookup {
                     var objBlacklistedDomainText = document.createElement("div");
                     objBlacklistedDomainText.style.cssText = "margin-left:auto;margin-right:auto;width:50%;padding:5%;margin-top:5%;";
                     objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' style='margin-left:auto;margin-right:auto;margin-bottom:1.5em'/>" +
-                        "<br /><h3 style='font-size:130%;font-weight:800;'>ATTENTION</h3>We have detected this domain to have malicious " +
+                        "<br /><h3 style='font-size:130%;font-weight:800;color:#fff'>ATTENTION</h3>We have detected this domain to have malicious " +
                         "intent and have prevented you from interacting with it.<br /><br /><br />" +
                         "<div style='margin-left:auto;margin-right:auto;width:50%'>" +
                         "<span style='font-size:10pt;'>This is because you have enabled <em>'Warn of blacklisted domains'</em> setting on EtherAddressLookup Chrome " +
