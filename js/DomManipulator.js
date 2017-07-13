@@ -6,6 +6,44 @@ class EtherAddressLookup {
         this.init();
     }
 
+    levenshtein(a, b) {
+      if(a.length == 0) return b.length;
+      if(b.length == 0) return a.length;
+
+      // swap to save some memory O(min(a,b)) instead of O(a)
+      if(a.length > b.length) {
+        var tmp = a;
+        a = b;
+        b = tmp;
+      }
+
+      var row = [];
+      // init the row
+      for(var i = 0; i <= a.length; i++){
+        row[i] = i;
+      }
+
+      // fill in the rest
+      for(var i = 1; i <= b.length; i++){
+        var prev = i;
+        for(var j = 1; j <= a.length; j++){
+          var val;
+          if(b.charAt(i-1) == a.charAt(j-1)){
+            val = row[j-1]; // match
+          } else {
+            val = Math.min(row[j-1] + 1, // substitution
+                           prev + 1,     // insertion
+                           row[j] + 1);  // deletion
+          }
+          row[j - 1] = prev;
+          prev = val;
+        }
+        row[a.length] = prev;
+      }
+
+      return row[a.length];
+    }
+
     setDefaultExtensionSettings()
     {
         this.blHighlight = false;
@@ -103,17 +141,39 @@ class EtherAddressLookup {
     //Detects if the current tab is in the blacklisted domains file
     blacklistedDomainCheck()
     {
+        var self = this;
         var arrBlacklistedDomains = [];
+        var arrWhitelistedDomains = ["www.myetherwallet.com", "myetherwallet.com"];
         chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 arrBlacklistedDomains = objResponse.resp;
             }
         }.bind(arrBlacklistedDomains));
 
+        chrome.runtime.sendMessage({func: "whitelist_domain_list"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                arrWhitelistedDomains = objResponse.resp;
+            }
+        }.bind(arrWhitelistedDomains));
+
         setTimeout(function() {
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
-                if (arrBlacklistedDomains.includes(strCurrentTab)) {
+
+                //Domain is whitelisted, don't check the blacklist.
+                if(arrWhitelistedDomains.includes(strCurrentTab)) {
+                    console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
+                    return;
+                }
+
+                //Levenshtien - @sogoiii
+                var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
+                var source = strCurrentTab.replace(/\./g,'');
+                var intHolisticMetric = self.levenshtein(source, 'myetherwallet');
+                var intHolisticLimit = 7 // How different can the word be?
+                var blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
+
+                if (isBlacklisted || blHolisticStatus ) {
                     document.body.innerHTML = ""; //Clear the DOM.
                     document.body.cssText = "margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;font-family:arial,sans-serif";
                     var objBlacklistedDomain = document.createElement("div");
@@ -122,7 +182,7 @@ class EtherAddressLookup {
                     var objBlacklistedDomainText = document.createElement("div");
                     objBlacklistedDomainText.style.cssText = "margin-left:auto;margin-right:auto;width:50%;padding:5%;margin-top:5%;";
                     objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' style='margin-left:auto;margin-right:auto;margin-bottom:1.5em'/>" +
-                        "<br /><h3 style='font-size:130%;font-weight:800;'>ATTENTION</h3>We have detected this domain to have malicious " +
+                        "<br /><h3 style='font-size:130%;font-weight:800;color:#fff'>ATTENTION</h3>We have detected this domain to have malicious " +
                         "intent and have prevented you from interacting with it.<br /><br /><br />" +
                         "<div style='margin-left:auto;margin-right:auto;width:50%'>" +
                         "<span style='font-size:10pt;'>This is because you have enabled <em>'Warn of blacklisted domains'</em> setting on EtherAddressLookup Chrome " +

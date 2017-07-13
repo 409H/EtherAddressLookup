@@ -27,10 +27,15 @@
     //init getting blacklisted domains
     getBlacklistedDomains();
     setInterval(function() {
-        console.log("Re-caching domains");
+        console.log("Re-caching blacklisted domains");
         getBlacklistedDomains();
     }, 180000);
 
+    getWhitelistedDomains();
+    setInterval(function() {
+        console.log("Re-caching whitelisted domains");
+        getWhitelistedDomains();
+    }, 180000);
 })();
 
 chrome.runtime.onMessage.addListener(
@@ -54,8 +59,12 @@ chrome.runtime.onMessage.addListener(
                 }
                 break;
             case 'blacklist_domain_list' :
-                console.log("Getting domain list");
+                console.log("Getting blacklisted domain list");
                 strResponse = getBlacklistedDomains();
+                break;
+            case 'whitelist_domain_list' :
+                console.log("Getting whitelisted domain list");
+                strResponse = getWhitelistedDomains();
                 break;
             default:
                 strResponse = "unsupported";
@@ -66,6 +75,7 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
+//@todo - make these nicer and so they're not duplicated
 function getBlacklistedDomains()
 {
     var objBlacklistedDomains = {"timestamp":0,"domains":[]};
@@ -86,6 +96,26 @@ function getBlacklistedDomains()
     return objBlacklistedDomains.domains;
 }
 
+function getWhitelistedDomains()
+{
+    var objWhitelistedDomains = {"timestamp":0,"domains":[]};
+    //See if we need to get the blacklisted domains - ie: do we have them cached?
+    if(localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list") === null) {
+        objWhitelistedDomains = getWhitelistedDomainsFromSource();
+    } else {
+        var objWhitelistedDomains = localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list");
+        //Check to see if the cache is older than 5 minutes, if so re-cache it.
+        objWhitelistedDomains = JSON.parse(objWhitelistedDomains);
+        console.log("Whitelisted domains last fetched: " + (Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) + " seconds ago");
+        if ((Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) > 180) {
+            console.log("Caching blacklisted domains again.");
+            objWhitelistedDomains = getWhitelistedDomainsFromSource();
+        }
+    }
+
+    return objWhitelistedDomains.domains;
+}
+
 function getBlacklistedDomainsFromSource()
 {
     console.log("Getting blacklist from GitHub now");
@@ -100,6 +130,25 @@ function getBlacklistedDomainsFromSource()
             objBlacklist.domains = arrBlacklistedDomains;
             localStorage.setItem("ext-etheraddresslookup-blacklist_domains_list", JSON.stringify(objBlacklist));
             return objBlacklist;
+        }
+    }
+    return {"timestamp":0,"domains":[]};
+}
+
+function getWhitelistedDomainsFromSource()
+{
+    console.log("Getting whitelist from GitHub now");
+    var objAjax = new XMLHttpRequest();
+    objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json", true);
+    objAjax.send();
+    objAjax.onreadystatechange = function () {
+        if (objAjax.readyState === 4) {
+            var arrWhitelistedDomains = JSON.parse(objAjax.responseText);
+            var objWhitelist = {};
+            objWhitelist.timestamp = Math.floor(Date.now() / 1000);
+            objWhitelist.domains = arrWhitelistedDomains;
+            localStorage.setItem("ext-etheraddresslookup-whitelist_domains_list", JSON.stringify(objWhitelist));
+            return objWhitelist;
         }
     }
     return {"timestamp":0,"domains":[]};
