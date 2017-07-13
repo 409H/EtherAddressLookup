@@ -34,6 +34,13 @@ blacklist, please [open an issue](https://github.com/409H/EtherAddressLookup/iss
 a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the changes. Make sure you give some
 details on why the changes are needed.
 
+## Whitelisted Domains
+
+The whitelist can only be updated by myself (@409H) and MyEtherWallet (@tayvano). The whitelist will prevent any false-positives
+from happening with the Levenshtein algo (special thanks to @sogoiii). If you find a domain that is wrongly blacklisted, then please
+[open an issue](https://github.com/409H/EtherAddressLookup/issues/new) or open
+a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the changes.
+
 ## Special Thanks
 
 * Thanks to the team at MyEtherWallet for helping keep the domain blacklist up-to-date!
