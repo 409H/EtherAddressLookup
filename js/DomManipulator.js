@@ -162,6 +162,7 @@ class EtherAddressLookup {
 
                 //Domain is whitelisted, don't check the blacklist.
                 if(arrWhitelistedDomains.includes(strCurrentTab)) {
+                    console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
                     return;
                 }
 
