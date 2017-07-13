@@ -49,6 +49,9 @@ chrome.runtime.onMessage.addListener(
                 break;
             case 'blockchain_explorer' :
                 strResponse = localStorage.getItem("ext-etheraddresslookup-blockchain_explorer");
+                if(strResponse === null) {
+                    strResponse = "https://etherscan.io/address";
+                }
                 break;
             case 'blacklist_domains' :
                 //This option is enabled by default
