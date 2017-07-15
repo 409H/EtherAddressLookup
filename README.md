@@ -57,6 +57,10 @@ a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the ch
 
 ## Changelog
 
+### v1.4
+
+* Added support for Firefox.
+
 ### v1.3
 
 * Due to the recent phishing campaigns going on, we have decided to start a [domain blacklist](https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json), and 
