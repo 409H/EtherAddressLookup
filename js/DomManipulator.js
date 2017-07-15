@@ -91,7 +91,7 @@ class EtherAddressLookup {
                 }
                 this.convertAddressToLink();
             }
-        }.bind(this), 100)
+        }.bind(this), 10)
     }
 
     //Finds Ethereum addresses and converts to a link to a block explorer
