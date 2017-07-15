@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Phishing Warning</title>
+      <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+      <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    <style>
+        body {
+          background: #00c2c1;
+          padding: 50px;
+          font-family: 'Montserrat', sans-serif;
+          color: #ffffff;
+            font-weight: 600;
+        }
+
+        .centered, img {
+            margin-left: auto;
+            margin-right: auto;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          max-width: 500px;
+          text-align: center;
+        }
+        
+        #warn {
+            font-size: 30pt;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        h3 {
+            font-size: 23pt;
+        }
+        #subtitle {
+            font-size: 20pt;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="centered">
+      <i class="em em-warning" id="warn"></i>
+      <h3>ATTENTION</h3>
+      <p id="subtitle">We have detected this domain to have malicious intent and have prevented you from interacting with it..</p>
+      <p>This is because you have enabled <em>'Warn of blacklisted domains'</em> setting on EtherAddressLookup Browser Extension. You can turn this setting off to interact with this site but it's advised not to.<br /><br />We blacklisted it for a reason.</p>
+      <p>You can donate to the developers address if you want to: <a href="https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc" target="_blank">0x661b5dc032bedb210f225df4b1aa2bdd669b38bc</a></p>
+      <img src="https://github.com/409H/EtherAddressLookup/raw/master/images/ether-32x32.png?raw=true" width="32px" height="32px">
+    </div>
+  </body>
+</html>
