@@ -4,7 +4,7 @@ Automatically adds links to strings that look like Ethereum addresses so you can
 block explorer. It also prevents you from interacting with known phishing domains by wiping the DOM and displaying text
 notifying you.
 
-Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc) (donations aren't required to run the extension. Each Friday, I will send 50% of the donations to MEW)
+Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc) (Each Friday, I will send 50% of the donations from the week to MEW)
 
 ##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension-release/
 
@@ -12,7 +12,7 @@ Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](htt
 
 ### Chrome Extension
 
-The `master` branch is bundled on every release and pushed to the Chrome Extension store, you can view/download it 
+The `master` branch is bundled on every release and pushed to the Chrome & Firefox Extension store, you can view/download it 
 here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn)
 
 (Note that this will have automatic updates)
