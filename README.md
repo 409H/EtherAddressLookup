@@ -4,7 +4,7 @@ Automatically adds links to strings that look like Ethereum addresses so you can
 block explorer. It also prevents you from interacting with known phishing domains by wiping the DOM and displaying text
 notifying you.
 
-Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc) (donations aren't required to run the extension. Each Friday, I will send 50% of the donations to MEW)
+Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc) (Each Friday, I will send 50% of the donations from the week to MEW)
 
 ##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension-release/
 
@@ -12,17 +12,24 @@ Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](htt
 
 ### Chrome Extension
 
-The `master` branch is bundled on every release and pushed to the Chrome Extension store, you can view/download it 
+The `master` branch is bundled on every release and pushed to the Chrome & Firefox Extension store, you can view/download it 
 here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn)
 
 (Note that this will have automatic updates)
 
 ### Manual Installation
 
+#### Chrome
 * Clone/download [the repo](https://github.com/409H/EtherAddressLookup).
-* Go to [chrome://extensions](chrome://extensions) in Chrome.
+* Go to [chrome://extensions](chrome://extensions) in Chrome
 * Turn on developer mode.
 * Load the `manifest.json` file by dragging and dropping.
+
+#### Firefox
+* Clone/download [the repo](https://github.com/409H/EtherAddressLookup).
+* Go to [about:debugging](about:debugging) in Firefox
+* Click "Load Temporary Add-on"
+* Browse to the downloaded repo, and double click `manifest.json`
 
 (Note that this will **not** have automatic updates)
 
@@ -49,6 +56,10 @@ a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the ch
 ----
 
 ## Changelog
+
+### v1.4
+
+* Added support for Firefox.
 
 ### v1.3
 
