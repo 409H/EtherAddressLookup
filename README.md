@@ -19,10 +19,17 @@ here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhm
 
 ### Manual Installation
 
+#### Chrome
 * Clone/download [the repo](https://github.com/409H/EtherAddressLookup).
-* Go to [chrome://extensions](chrome://extensions) in Chrome.
+* Go to [chrome://extensions](chrome://extensions) in Chrome
 * Turn on developer mode.
 * Load the `manifest.json` file by dragging and dropping.
+
+#### Firefox
+* Clone/download [the repo](https://github.com/409H/EtherAddressLookup).
+* Go to [about:debugging](about:debugging) in Firefox
+* Click "Load Temporary Add-on"
+* Browse to the downloaded repo, and double click `manifest.json`
 
 (Note that this will **not** have automatic updates)
 
