@@ -13,7 +13,7 @@ Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](htt
 ### Chrome & Firefox Extension
 
 The `master` branch is bundled on every release and pushed to the Chrome & Firefox Extension store, you can view/download it 
-here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn) for Chrome, and ~coming soon~ for Firefox (though manual installation is supported - it's just not listed officially on the AMO site, going through review stages.).
+here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn) for Chrome, and _coming soon_ for Firefox (though manual installation is supported - it's just not listed officially on the AMO site, going through review stages.).
 
 (Note that this will have automatic updates)
 
