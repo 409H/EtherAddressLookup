@@ -1,6 +1,6 @@
 ### EtherAddressLookup
 
-Automatically adds links to strings that look like Ethereum addresses so you can quickly look them up on your favourite 
+Automatically adds links to strings that look like Ethereum addresses so you can quickly look them up on your favourite
 block explorer. It also prevents you from interacting with known phishing domains by wiping the DOM and displaying text
 notifying you.
 
@@ -12,7 +12,7 @@ Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](htt
 
 ### Chrome & Firefox Extension
 
-The `master` branch is bundled on every release and pushed to the Chrome & Firefox Extension store, you can view/download it 
+The `master` branch is bundled on every release and pushed to the Chrome & Firefox Extension store, you can view/download it
 here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn) for Chrome, and _coming soon_ for Firefox (though manual installation is supported - it's just not listed officially on the AMO site, going through review stages.).
 
 (Note that this will have automatic updates)
@@ -36,7 +36,7 @@ here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhm
 ## Blacklisted Domains
 
 The blacklist can only be updated by myself (@409H) and MyEtherWallet (@tayvano). This is a to prevent anyone
-from modifying the blacklist (ie: removing something). To request a change to the 
+from modifying the blacklist (ie: removing something). To request a change to the
 blacklist, please [open an issue](https://github.com/409H/EtherAddressLookup/issues/new) or open
 a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the changes. Make sure you give some
 details on why the changes are needed.
@@ -63,10 +63,10 @@ a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the ch
 
 ### v1.3
 
-* Due to the recent phishing campaigns going on, we have decided to start a [domain blacklist](https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json), and 
-the extension will try to help you from being phished by removing the ability for you to interact with the blacklisted 
+* Due to the recent phishing campaigns going on, we have decided to start a [domain blacklist](https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json), and
+the extension will try to help you from being phished by removing the ability for you to interact with the blacklisted
 domain by wiping the DOM and displaying a notice. This functionality is toggleable, but it's best to keep it on.
-  * If you find a domain that look suspicious and/or confirmed stealing private keys/being malicious, send 
+  * If you find a domain that look suspicious and/or confirmed stealing private keys/being malicious, send
 a [pull request](https://github.com/409H/EtherAddressLookup/compare) or [open an issue](https://github.com/409H/EtherAddressLookup/issues/new).
 
 ### v1.2
