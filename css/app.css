@@ -33,3 +33,10 @@
     line-height: 10pt;
     padding-left: 3.5em;
 }
+
+#ext-etheraddresslookup-report {
+	margin-bottom: 20px;
+	padding: 8px 20px 8px 17px;
+	margin-left: 10px;
+	font-size: 10pt;
+}
