@@ -74,10 +74,15 @@ a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the ch
 
 * Thanks to the team at MyEtherWallet for helping keep the domain blacklist up-to-date!
 * Thanks to the team at [Cryptominded](https://cryptominded.com/) for the store graphics!
+* Thanks to MrLuit for providing [https://etherscamdb.info](https://etherscamdb.info) and the report domain functionality (v1.5)
 
 ----
 
 ## Changelog
+
+### v1.5
+
+* Added report domain button.
 
 ### v1.4
 
