@@ -28,6 +28,10 @@
   "myetherwallet.groovehq.com",
   "shapeshift.io",
   "webtask.io",
+  "ethpool.org",
+  "ethermine.org",
+  "etherchain.org",
+  "ethernodes.org",
   "www.bity.com",
   "www.changelly.com",
   "www.coinbase.com",
@@ -56,5 +60,9 @@
   "www.myetherwallet.com",
   "www.myetherwallet.groovehq.com",
   "www.shapeshift.io",
-  "www.webtask.io"
+  "www.webtask.io",
+  "www.ethpool.org",
+  "www.ethermine.org",
+  "www.etherchain.org",
+  "www.ethernodes.org
 ]
