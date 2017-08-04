@@ -8,6 +8,28 @@ Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](htt
 
 ##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension-release/
 
+
+
+## Found a Phishing URL? Is your website getting erroneously blocked? You have the power to fix it, not just talk about it!
+
+As a community resource, everyone is encouraged to make a PR to add or update these lists. This process is far easier than you might imagine!
+
+1. If you do not already have a Github account, sign up. (it's free and easy!)
+2. Navigate to the file you would like to make the adjustment to by clicking it's name.
+    - If a site is erroneously blacklisted you will likely want to **add** it to the whitelist. It probably isn't on the blacklist and got caught due to Levenstein distance algoritm.
+    - If you see a scam website being passed around that isn't blockced, please **add** it to the blackliast.
+3. Click the pencil icon in upper right.
+4. Type `"yourdomain.com",` on line #2 (right below the first `[`)
+5. Type `"www.yourdomain.com",` on line #3
+6. Scroll to the bottom. under "Commit changes" enter a reason you are making this change.
+    - Example: *"Adding myetherscam.com to blacklist. See [link to tweet / reddit post / screenshot]."*
+    - You can also provide more details in the box below. Please provide as much detail / evidence as reasonable so reviewers can verify quickly.
+7. Click the green "Propose File change" button.
+8. This next page is a review of what you did. Proofread and stuff.
+9. Click the "Create Pull Request" button.....twice.
+10. That's it. You successfully made a new pull request and helped make the world a better place! Tell all your friends.
+
+
 ## Installations
 
 ### Chrome & Firefox Extension
