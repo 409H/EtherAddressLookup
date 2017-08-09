@@ -1,14 +1,16 @@
-### EtherAddressLookup
+## EtherAddressLookup
 
-Automatically adds links to strings that look like Ethereum addresses so you can quickly look them up on your favourite 
-block explorer. It also prevents you from interacting with known phishing domains by wiping the DOM and displaying text
-notifying you.
+#### Automatically adds links to strings that look like Ethereum addresses so you can quickly look them up on your favourite block explorer. 
 
-Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc) (Each Friday, I will send 50% of the donations from the week to MEW)
+#### Prevents you from interacting with known phishing domains by wiping the DOM and displaying text notifying you.
 
-##### Read: http://harrydenley.com/ethaddresslookup-chrome-extension-release/
+The blacklists found in this repo serve both the EAL Chrome Extension & MetaMask Chrome Extension. We use a [Levenshtein distance algoritm](https://en.wikipedia.org/wiki/Levenshtein_distance) to detect similar URLs, so if you encounter an errounously-blocked website, please add it to the whitelist. 
 
+Announcement Post: http://harrydenley.com/ethaddresslookup-chrome-extension-release/
 
+Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc)
+
+#### Install Chrome Extension Here: https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn
 
 ## Found a Phishing URL? Is your website getting erroneously blocked? You have the power to fix it, not just talk about it!
 
