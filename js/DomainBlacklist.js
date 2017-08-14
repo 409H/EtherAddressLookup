@@ -1,5 +1,6 @@
 (function() {
     let objBrowser = chrome ? chrome : browser;
+
     //Get the blacklist domains option for the user
     objBrowser.runtime.sendMessage({func: "blacklist_domains"}, function(objResponse) {
         if(objResponse && objResponse.hasOwnProperty("resp")) {
@@ -45,7 +46,8 @@
                 var blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
 
                 if (isBlacklisted || blHolisticStatus ) {
-                    window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html";
+                    window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
+                    return false;
                 }
             }
         }
