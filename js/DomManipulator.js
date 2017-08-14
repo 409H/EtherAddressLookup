@@ -50,6 +50,10 @@ class EtherAddressLookup {
     //Finds Ethereum addresses and converts to a link to a block explorer
     convertAddressToLink()
     {
+        //Put the blockchain explorer into a so we can parse it.
+        var objBlockchainExplorer = document.createElement("a");
+        objBlockchainExplorer.href = this.strBlockchainExplorer;
+
         var arrWhitelistedTags = new Array("code", "span", "p", "td", "li", "em", "i", "b", "strong", "small");
         var strRegex = /(^|\s|:|-)((?:0x)[0-9a-fA-F]{40})(?:\s|$)/gi;
 
@@ -60,9 +64,13 @@ class EtherAddressLookup {
             for(var x=0; x<objNodes.length; x++) {
                 var strContent = objNodes[x].innerHTML;
                 if( /((?:0x)[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
+                    //If we are on our favourite blockchain explorer, don't target blank.
                     objNodes[x].innerHTML = strContent.replace(
                         new RegExp(strRegex, "gi"),
-                        '$1<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$2" class="ext-etheraddresslookup-link" target="_blank">$2</a>'
+                        '$1<a title="See this address on the blockchain explorer" ' +
+                        'href="' + this.strBlockchainExplorer + '/$2" ' +
+                        'class="ext-etheraddresslookup-link" ' +
+                        'target="'+ (objBlockchainExplorer.hostname === window.location.hostname ? '_self' : '_blank') +'">$2</a>'
                     );
                 }
             }
