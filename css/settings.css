@@ -43,3 +43,8 @@ h3 {
     font-style: italic;
     font-size: 10pt;
 }
+#ext-etheraddresslookup-bookmark_modify_remove {
+    font-size: 85%;
+    background: rgb(202, 60, 60);
+    color: #fff;
+}
