@@ -10,6 +10,10 @@ h3 {
     font-size: 23pt;
 }
 
+.pure-g {
+    margin-bottom: 5%;
+}
+
 .pure-u-1-3 > p {
     font-size: 10pt;
     font-weight: 500;
@@ -47,4 +51,15 @@ h3 {
     font-size: 85%;
     background: rgb(202, 60, 60);
     color: #fff;
+}
+
+#donate_address {
+    font-size: 80%;
+    background: #fffdfd;
+    padding: 2px;
+    border: 1px solid #ffe4e4;
+    color: #009d9c;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
 }
