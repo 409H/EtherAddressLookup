@@ -29,12 +29,12 @@ function refreshBookmarksOption()
     var intShowBookmarks = localStorage.getItem("ext-etheraddresslookup-show_bookmarks");
 
     if(document.getElementById("ext-etheraddresslookup-show_bookmarks")) {
-        document.getElementById("ext-etheraddresslookup-show_bookmarks").checked = (intShowBookmarks == 1 ? true : false);
-        document.getElementById("ext-etheraddresslookup-show_bookmarks_text").innerText = (intShowBookmarks == 1 ? "Enabled" : "Disabled");
+        document.getElementById("ext-etheraddresslookup-show_bookmarks").checked = (intShowBookmarks == 1 || intShowBookmarks === null ? true : false);
+        document.getElementById("ext-etheraddresslookup-show_bookmarks_text").innerText = (intShowBookmarks == 1 || intShowBookmarks === null ? "Enabled" : "Disabled");
     }
 
     if(document.getElementById("ext-etheraddresslookup-bookmarks")) {
-        document.getElementById("ext-etheraddresslookup-bookmarks").style.display = (intShowBookmarks == 1 ? "block" : "none");
+        document.getElementById("ext-etheraddresslookup-bookmarks").style.display = (intShowBookmarks == 1 || intShowBookmarks === null ? "block" : "none");
     }
 }
 
