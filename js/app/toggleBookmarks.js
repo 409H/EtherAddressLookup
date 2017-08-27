@@ -119,7 +119,7 @@ function showBookmarks()
             }
             var objLink = document.createElement("span");
             objLink.className = 'ext-etheraddresslookup-bookmark_icon';
-            objLink.innerHTML = "<a href='"+ arrBookmarks[i].url +"' target='_blank'><img src='"+ arrBookmarks[i].icon +"'></a>";
+            objLink.innerHTML = "<a href='"+ arrBookmarks[i].url +"' target='_blank'><img src='"+ arrBookmarks[i].icon +"' class=\"ext-etheraddresslookup-bookmark_icon\"></a>";
             document.getElementById("ext-etheraddresslookup-bookmarks").appendChild(objLink);
         }
     }
@@ -135,13 +135,33 @@ function showModifyWindow()
     document.getElementById("ext-etheraddresslookup-bookmark_modify_id").value = intBookmarkId;
     document.getElementById("ext-etheraddresslookup-bookmark_modify_icon").value = objBookmarks[intBookmarkId].icon;
     document.getElementById("ext-etheraddresslookup-bookmark_modify_url").value = objBookmarks[intBookmarkId].url;
-    document.getElementById("ext-etheraddresslookup-bookmark_modify_form").setAttribute("data-id", intBookmarkId);
+        document.getElementById("ext-etheraddresslookup-bookmark_modify_form").setAttribute("data-id", intBookmarkId);
     document.getElementById("ext-etheraddresslookup-bookmark_modify_form").addEventListener('submit', function(objEvent) {
         objEvent.preventDefault();
         var intId = document.getElementById("ext-etheraddresslookup-bookmark_modify_id").value;
+
+        //See if the icon is blank
+        var strIconLink = document.getElementById("ext-etheraddresslookup-bookmark_modify_icon").value;
+        if(document.getElementById("ext-etheraddresslookup-bookmark_modify_icon").value === "") {
+            strIconLink = "https://www.google.com/s2/favicons?domain="+ document.getElementById("ext-etheraddresslookup-bookmark_modify_url").value;
+        }
+
         objBookmarks[intId] = {
-            "icon": document.getElementById("ext-etheraddresslookup-bookmark_modify_icon").value,
+            "icon": strIconLink,
             "url": document.getElementById("ext-etheraddresslookup-bookmark_modify_url").value
+        }
+
+        localStorage.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
+        location.reload();
+        return false;
+    }.bind(objBookmarks));
+
+    document.getElementById("ext-etheraddresslookup-bookmark_modify_remove").addEventListener('click', function(objEvent) {
+        objEvent.preventDefault();
+        var intId = document.getElementById("ext-etheraddresslookup-bookmark_modify_id").value;
+        objBookmarks[intId] = {
+            "icon": "",
+            "url": ""
         }
 
         localStorage.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
