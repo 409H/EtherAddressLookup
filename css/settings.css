@@ -1,0 +1,45 @@
+body {
+    background: #00c2c1;
+    padding: 50px;
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 23pt;
+}
+
+.pure-u-1-3 > p {
+    font-size: 10pt;
+    font-weight: 500;
+    color: #b4b4b4;
+}
+
+.pure-u-1-3 > p > .label {
+    font-weight: 700;
+}
+
+.pure-u-1-3 {
+    background: #fff;
+    color: #000;
+    border: 3px solid #009c9b;
+    padding: 15px;
+}
+.lblbox {
+    border: 1px solid #eeeeee;
+    border-radius: 5px;
+    background: #d4d4d4;
+    padding: 5px;
+    margin: 5px;
+    display: inline-block;
+}
+.pure-table {
+    width: 100%;
+}
+
+.note {
+    color: #b4b4b4;
+    font-style: italic;
+    font-size: 10pt;
+}
