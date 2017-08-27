@@ -37,6 +37,37 @@
 #ext-etheraddresslookup-report {
 	margin-bottom: 20px;
 	padding: 8px 20px 8px 17px;
-	margin-left: 10px;
+	width: 100%;
 	font-size: 10pt;
+}
+
+.ext-etheraddresslookup-center {
+    text-align: center;
+}
+
+#ext-etheraddresslookup-bookmarks {
+    margin-bottom: 10px;
+}
+
+.ext-etheraddresslookup-bookmark_icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+.ext-etheraddresslookup-bookmark_icon:hover {
+    opacity: 0.5;
+}
+
+.ext-etheraddresslookup-bookmark_icon:nth-child(2n) {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+#ext-etheraddresslookup-bookmark_modify_window {
+    display: none;
+    color: #252428;
+    margin-top: 5%;
+    padding: 15px 5%;
+    background: #e4e4e4;
 }
