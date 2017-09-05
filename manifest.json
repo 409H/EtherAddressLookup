@@ -4,7 +4,7 @@
   "name": "EtherAddressLookup",
   "short_name": "EtherAddressLookup",
   "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
-  "version": "1.3.5",
+  "version": "1.6",
 
   "browser_action": {
     "default_icon": "images/icon.png",
@@ -13,11 +13,14 @@
   },
 
   "permissions": [
-    "https://etherscan.io/",
     "activeTab"
   ],
 
   "content_scripts":[{
+    "run_at": "document_start",
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["js/DomainBlacklist.js"]
+  },{
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],
     "js": ["js/DomManipulator.js"],

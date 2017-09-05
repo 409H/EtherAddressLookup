@@ -1,0 +1,24 @@
+{
+  "name": "etheraddresslookup",
+  "version": "1.0.0",
+  "description": "A web extension for blocking ethereum phishing websites.",
+  "main": "blacklists/domains.json",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/409H/EtherAddressLookup.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "security",
+    "blacklist"
+  ],
+  "author": "Harry Denley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/409H/EtherAddressLookup/issues"
+  },
+  "homepage": "https://github.com/409H/EtherAddressLookup#readme"
+}
