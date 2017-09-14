@@ -66,10 +66,12 @@ function doHistoryInspection() {
         }
 
         objDiv.innerHTML = "";
-        if(intTotalWarnings > 0) {
+        if(false && intTotalWarnings > 0) {
             objDiv.innerHTML += "<div class='warning'>You have been on a domain that has now been blacklisted - if you " +
                 "entered your private key anywhere on the reported domains below, please consider your address " +
                 "compromised and start moving your coins to an alternative address that you trust and control!</div><br /><br />"
+        } else {
+            objDiv.innerHTML += "<div class='success'>It looks like you're all good! Remember to never share your private keys.</div><br /><br />"
         }
         objDiv.innerHTML += strReportText;
         objDiv.style.display = "inline";
@@ -78,7 +80,6 @@ function doHistoryInspection() {
 
 function exitNoPermission() {
     var objDiv = document.getElementById("ext-etheraddresslookup-history_inspect_data");
+    objDiv.innerHTML = "<div class='error'>Permission wasn't granted. Cannot inspect history!</div>";
     objDiv.classList.remove("hide-me");
-    objDiv.classList.add("error");
-    objDiv.innerText = "Permission wasn't granted. Cannot inspect history!";
 }
