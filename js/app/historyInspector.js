@@ -13,6 +13,7 @@
                     permissions: ['history']
                 }, function (blGranted) {
                     if (blGranted) {
+                        console.log("Granted history permission");
                         doHistoryInspection();
                     } else {
                         exitNoPermission();
@@ -27,7 +28,6 @@
 
 function doHistoryInspection() {
     chrome.history.search({text: "", maxResults: 500}, function (objHistoryItems) {
-        console.log(objHistoryItems);
         var blRedirected = false;
         var intTotalWarnings = 0;
         var strReportText = "";
@@ -48,7 +48,6 @@ function doHistoryInspection() {
             }
 
             //See if the domain is in the phishing list
-            console.log(objUri.domain() + ' - ' + objBlacklistedDomains.domains.indexOf(objUri.domain()));
             if (objBlacklistedDomains.domains.indexOf(objUri.domain()) >= 0) {
                 strReportText += "<span class='note'>" + (new Date(objHistoryItems[intIterator].lastVisitTime).toUTCString()) + "</span>&nbsp;";
                 //Did EAL redirect you away?
@@ -75,11 +74,27 @@ function doHistoryInspection() {
         }
         objDiv.innerHTML += strReportText;
         objDiv.style.display = "inline";
+
+        removePermission();
     });
 }
 
-function exitNoPermission() {
+function exitNoPermission()
+{
     var objDiv = document.getElementById("ext-etheraddresslookup-history_inspect_data");
     objDiv.innerHTML = "<div class='error'>Permission wasn't granted. Cannot inspect history!</div>";
     objDiv.classList.remove("hide-me");
+}
+
+function removePermission()
+{
+    chrome.permissions.remove({
+        permissions: ['history']
+    }, function(removed) {
+        if (removed) {
+            console.log("Removed history permission.")
+        } else {
+            console.log("Cannot remove history permission!");
+        }
+    });
 }
