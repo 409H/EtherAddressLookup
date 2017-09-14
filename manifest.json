@@ -4,7 +4,7 @@
   "name": "EtherAddressLookup",
   "short_name": "EtherAddressLookup",
   "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
-  "version": "1.6",
+  "version": "1.7",
 
   "browser_action": {
     "default_icon": "images/icon.png",
