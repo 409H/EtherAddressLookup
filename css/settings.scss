@@ -1,11 +1,17 @@
 $main_background: #00c2c1;
 $main_color: #fff;
+
 $u_background: #fff;
 $u_color: #000;
+
 $error_background: #fff;
 $error_color: #c2654c;
+
 $warning_background: #ffe700;
 $warning_color: #a98500;
+
+$success_background: #49bd51;
+$success_color: #fff;
 
 body {
   background: $main_background;
@@ -98,5 +104,13 @@ body {
   padding: 2px;
   color: $warning_color;
   border: 2px solid darken($warning_background, 1%);
+  text-align: center;
+}
+
+.success {
+  background: $success_background;
+  padding: 2px;
+  color: $success_color;
+  border: 2px solid darken($success_background, 1%);
   text-align: center;
 }

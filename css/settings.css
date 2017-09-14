@@ -70,4 +70,11 @@ body {
   border: 2px solid #fae200;
   text-align: center; }
 
+.success {
+  background: #49bd51;
+  padding: 2px;
+  color: #fff;
+  border: 2px solid #45bc4d;
+  text-align: center; }
+
 /*# sourceMappingURL=settings.css.map */
