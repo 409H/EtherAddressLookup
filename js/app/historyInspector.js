@@ -65,7 +65,7 @@ function doHistoryInspection() {
         }
 
         objDiv.innerHTML = "";
-        if(false && intTotalWarnings > 0) {
+        if(intTotalWarnings > 0) {
             objDiv.innerHTML += "<div class='warning'>You have been on a domain that has now been blacklisted - if you " +
                 "entered your private key anywhere on the reported domains below, please consider your address " +
                 "compromised and start moving your coins to an alternative address that you trust and control!</div><br /><br />"
