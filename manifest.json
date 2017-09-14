@@ -16,6 +16,10 @@
     "activeTab"
   ],
 
+  "optional_permissions": [
+    "history"
+  ],
+
   "content_scripts":[{
     "run_at": "document_start",
     "matches": ["http://*/*", "https://*/*"],
