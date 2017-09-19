@@ -39,6 +39,7 @@
                 }
 
                 //Levenshtein - @sogoiii
+                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
                 var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
                 var source = strCurrentTab.replace(/\./g,'');
                 var intHolisticMetric = levenshtein(source, 'myetherwallet');
