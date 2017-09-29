@@ -82,6 +82,18 @@ a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the ch
 
 ## Changelog
 
+### v1.8
+
+* Improved Levenshtien edit distance check for MyEtherWallet and punycode domains.
+
+### v1.7
+
+* Added the ability for EAL to check your browser history to see if you have been on a domain that has since been blacklisted.
+
+### v1.6
+
+* Added the ability to bookmark up to 6 domains with their favicon showing.
+
 ### v1.5
 
 * Added report domain button.
