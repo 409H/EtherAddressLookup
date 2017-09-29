@@ -38,13 +38,19 @@
                     return;
                 }
 
-                //Levenshtein - @sogoiii
                 var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+                var strCurrentTab = punycode.toUnicode(strCurrentTab);
                 var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
-                var source = strCurrentTab.replace(/\./g,'');
-                var intHolisticMetric = levenshtein(source, 'myetherwallet');
-                var intHolisticLimit = 7 // How different can the word be?
-                var blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
+
+                //Only do Levenshtein if it's not blacklisted
+                //Levenshtein - @sogoiii
+                var blHolisticStatus = false;
+                if(isBlacklisted === false) {
+                    var source = strCurrentTab.replace(/\./g, '');
+                    var intHolisticMetric = levenshtein(source, 'myetherwallet');
+                    var intHolisticLimit = 7 // How different can the word be?
+                    blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
+                }
 
                 if (isBlacklisted || blHolisticStatus ) {
                     window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
