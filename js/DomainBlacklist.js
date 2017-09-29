@@ -39,13 +39,13 @@
                 }
 
                 var strCurrentTab = strCurrentTab.replace(/www\./g,'');
-                var strCurrentTab = punycode.toUnicode(strCurrentTab);
                 var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
 
                 //Only do Levenshtein if it's not blacklisted
                 //Levenshtein - @sogoiii
                 var blHolisticStatus = false;
                 if(isBlacklisted === false) {
+                    var strCurrentTab = punycode.toUnicode(strCurrentTab);
                     var source = strCurrentTab.replace(/\./g, '');
                     var intHolisticMetric = levenshtein(source, 'myetherwallet');
                     var intHolisticLimit = 7 // How different can the word be?
