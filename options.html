@@ -3,50 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>EthAddressLookup</title>
-    <link rel="stylesheet" href="css/skyblue.min.css" type="text/css" />
-    <link rel="stylesheet" href="css/app.css" type="text/css" />
+    <link rel="stylesheet" href="css/skyblue.min.css" type="text/css"/>
+    <link rel="stylesheet" href="css/app.css" type="text/css"/>
 </head>
 <body id="ext-etheraddresslookup-popup">
-    <div id="content">
-        <h3 class="text-center">EtherAddressLookup</h3>
+<div id="content">
+    <h3 class="text-center">EtherAddressLookup</h3>
 
-        <br />
-
-        <label class="fancy-checkbox">
-            <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-show_style">
-            <span>Highlight Matches</span>
-        </label>
-
-        <br />
-
-        <label class="fancy-checkbox">
-            <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains" id="ext-etheraddresslookup-blacklist_domains">
-            <span>Warn of blacklisted domains</span>
-        </label>
-        <div id="ext-etheraddresslookup-blacklist_domains_stats">
-            <small>Last updated: <span id="ext-etheraddresslookup-blacklist_domains_last_updated">N/A</span></small><br />
-            <small>Domains Blacklisted: <span id="ext-etheraddresslookup-blacklist_domains_total_count">0</span></small>
-        </div>
-
-        <br /><br />
-
-        <label>Preferred Blockchain Explorer</label>
-        <select class="form-control" name="ext-etheraddresslookup-choose_blockchain" id="ext-etheraddresslookup-choose_blockchain">
-            <option value="https://etherscan.io/address">Etherscan.io</option>
-            <option value="https://etherchain.org/account">Etherchain.org</option>
-            <option value="https://ethplorer.io/address">Ethplorer.io</option>
-        </select>
-
-        <br /><br />
-        <div id="footer">
-            <a href="http://harrydenley.com/ethaddresslookup-chrome-extension-release/" target="_blank">Read Author Blog</a> <br />
-            <strong>Version:</strong> <span id="ext-manifest_version"></span> &mdash; BETA
-        </div>
+    <div id="ext-etheraddresslookup-bookmarks" class="ext-etheraddresslookup-center">
+        <!--- populated by js/app/toggleBookmarks.js showBookmarks() -->
     </div>
 
-    <script src="js/app/toggleMatchHighlight.js"></script>
-    <script src="js/app/chooseBlockchain.js"></script>
-    <script src="js/app/toggleBlacklistDomains.js"></script>
-    <script src="js/options.js"></script>
+    <a target="_blank" href="https://etherscamdb.info/report/domain/" class="btn btn-sm btn-error"
+       id="ext-etheraddresslookup-report"><img width="16" height="16" src="images/flag.png"> Report a domain</a>
+
+    <br/>
+
+    <label class="fancy-checkbox">
+        <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-show_style">
+        <span>Highlight Matches</span>
+    </label>
+
+    <br/>
+
+    <label class="fancy-checkbox">
+        <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains"
+               id="ext-etheraddresslookup-blacklist_domains">
+        <span>Warn of blacklisted domains</span>
+    </label>
+    <div id="ext-etheraddresslookup-blacklist_domains_stats">
+        <small>Last updated: <span id="ext-etheraddresslookup-blacklist_domains_last_updated">N/A</span></small>
+        <br/>
+        <small>Domains Blacklisted: <span id="ext-etheraddresslookup-blacklist_domains_total_count">0</span></small>
+    </div>
+
+    <br/>
+
+    <label>Preferred Blockchain Explorer</label>
+    <select class="form-control" name="ext-etheraddresslookup-choose_blockchain"
+            id="ext-etheraddresslookup-choose_blockchain">
+        <option value="https://etherscan.io/address">Etherscan.io</option>
+        <option value="https://etherchain.org/account">Etherchain.org</option>
+        <option value="https://ethplorer.io/address">Ethplorer.io</option>
+    </select>
+
+    <br/><br/>
+    <div id="footer">
+        <div class="ext-etheraddresslookup-center">
+            <a href="/settings.html" target="_blank">More Settings</a> &mdash;
+            <a href="http://eal-phishing-stats.herokuapp.com/" target="_blank">Scam domains</a> &mdash;
+            <a href="https://github.com/409H/EtherAddressLookup" target="_blank">GitHub</a>
+        </div>
+
+        <hr />
+
+        <a href="http://harrydenley.com/ethaddresslookup-chrome-extension-release/" target="_blank">Read Author Blog</a>
+        <br/>
+        <strong>Version:</strong> <span id="ext-manifest_version"></span> &mdash; BETA
+    </div>
+</div>
+
+<script src="js/app/toggleMatchHighlight.js"></script>
+<script src="js/app/chooseBlockchain.js"></script>
+<script src="js/app/toggleBlacklistDomains.js"></script>
+<script src="js/app/toggleBookmarks.js"></script>
+
+<script src="js/options.js"></script>
 </body>
 </html>
