@@ -5,6 +5,10 @@ class EtherAddressLookup {
     constructor()
     {
         console.log("Init EAL");
+
+        this.ethereumAddressRegex = new RegExp(/(^|\s|:|-)((?:0x)[0-9a-fA-F]{40})(?:\s|$)/gi, "gi");
+        this.ENSAddressRegex = new RegExp(/(^|\s|:|-)(\S+(?:\.eth))(?:\s|$)/gi, "gi");
+
         this.setDefaultExtensionSettings();
         this.init();
     }
@@ -50,34 +54,52 @@ class EtherAddressLookup {
     //Finds Ethereum addresses and converts to a link to a block explorer
     convertAddressToLink()
     {
-        //Put the blockchain explorer into a so we can parse it.
-        var objBlockchainExplorer = document.createElement("a");
-        objBlockchainExplorer.href = this.strBlockchainExplorer;
-
-        var arrWhitelistedTags = new Array("code", "span", "p", "td", "li", "em", "i", "b", "strong", "small");
-        var strRegex = /(^|\s|:|-)((?:0x)[0-9a-fA-F]{40})(?:\s|$)/gi;
+        var arrWhitelistedTags = ["code", "span", "p", "td", "li", "em", "i", "b", "strong", "small"];
 
         //Get the whitelisted nodes
         for(var i=0; i<arrWhitelistedTags.length; i++) {
             var objNodes = document.getElementsByTagName(arrWhitelistedTags[i]);
             //Loop through the whitelisted content
             for(var x=0; x<objNodes.length; x++) {
-                var strContent = objNodes[x].innerHTML;
-                if( /((?:0x)[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
-                    //If we are on our favourite blockchain explorer, don't target blank.
-                    objNodes[x].innerHTML = strContent.replace(
-                        new RegExp(strRegex, "gi"),
-                        '$1<a title="See this address on the blockchain explorer" ' +
-                        'href="' + this.strBlockchainExplorer + '/$2" ' +
-                        'class="ext-etheraddresslookup-link" ' +
-                        'target="'+ (objBlockchainExplorer.hostname === window.location.hostname ? '_self' : '_blank') +'">$2</a>'
-                    );
-                }
+
+                this.convertEthereumAddress(objNodes, x);
+                this.convertENSAddress(objNodes, x);
+
             }
         }
 
         if(this.blHighlight) {
             this.addHighlightStyle();
+        }
+    }
+
+    convertEthereumAddress(objNodes, index)
+    {
+        this.convertAddress(objNodes, index, /((?:0x)[0-9a-fA-F]{40})/gi, this.ethereumAddressRegex);
+    }
+
+    convertENSAddress(objNodes, index)
+    {
+        this.convertAddress(objNodes, index, this.ENSAddressRegex, this.ENSAddressRegex);
+    }
+
+    convertAddress(objNodes, index, checkRegex, replaceRegex)
+    {
+        //Put the blockchain explorer into a so we can parse it.
+        var objBlockchainExplorer = document.createElement("a");
+        objBlockchainExplorer.href = this.strBlockchainExplorer;
+
+        var strContent = objNodes[index].innerHTML;
+        if( checkRegex.exec(strContent) !== null) {
+            objNodes[index].innerHTML = strContent.replace(
+                replaceRegex,
+                '$1<a title="See this address on the blockchain explorer" ' +
+                'href="' + this.strBlockchainExplorer + '/$2" ' +
+                'class="ext-etheraddresslookup-link" ' +
+
+                //If we are on our favourite blockchain explorer, don't target blank.
+                'target="'+ (objBlockchainExplorer.hostname === window.location.hostname ? '_self' : '_blank') +'">$2</a>'
+            );
         }
     }
 
