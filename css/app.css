@@ -12,6 +12,11 @@
     color: inherit;
 }
 
+.ext-etheraddresslookup-warning {
+    color: red;
+    border-bottom: 1px dashed red;
+}
+
 #ext-etheraddresslookup-popup {
     margin: 0;
     padding: 0px;
