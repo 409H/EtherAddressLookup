@@ -116,7 +116,7 @@ class EtherAddressLookup {
         // On failure give the user a warning.
         if(!this.ENSCompatiable){
             this.replacePatterns[1] = '<a title="Notification! We have spotted an ENS address, your current block explorer can\'t parse this address. Please choose a compatible block explorer." ' +
-                'class="ext-etheraddresslookup-link ext-etheraddresslookup-warning" href="#">$1</a>';
+                'class="ext-etheraddresslookup-link ext-etheraddresslookup-warning" href="#">$1</a>$2';
         }
     }
 
@@ -234,7 +234,7 @@ class EtherAddressLookup {
         var slots = document.querySelectorAll("slot.ext-etheraddresslookup-temporary");
         for(var i=0; i < slots.length; i++){
             while(slots[i].childNodes.length > 0){
-                slots[i].parentNode.appendChild(slots[i].firstChild);
+                slots[i].parentNode.insertBefore(slots[i].firstChild, slots[i]);
             }
             slots[i].parentNode.removeChild(slots[i]);
         }
