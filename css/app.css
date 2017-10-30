@@ -32,6 +32,12 @@
     font-size: 70%;
 }
 
+.note {
+    font-size: 10pt;
+    color: #c2c6c7;
+    line-height: 10pt;
+}
+
 #ext-etheraddresslookup-blacklist_domains_stats {
     font-size: 10pt;
     color: #c2c6c7;
