@@ -143,6 +143,11 @@ class EtherAddressLookup {
             var objNodes = document.getElementsByTagName(arrWhitelistedTags[i]);
             //Loop through the whitelisted content
             for(var x=0; x<objNodes.length; x++) {
+
+                if(this.hasIgnoreAttributes(objNodes[x])){
+                    continue;
+                }
+
                 this.convertAddresses(objNodes[x]);
             }
         }
@@ -195,6 +200,47 @@ class EtherAddressLookup {
             content = content.replace(this.regExPatterns[i], this.replacePatterns[i]);
         }
         return content;
+    }
+
+    /**
+     * @name Has Ignore Attributes
+     * @desc Checks if a node contains any attribute that we want to avoid manipulating
+     * @param {Element} node
+     * @returns {boolean}
+     */
+    hasIgnoreAttributes(node)
+    {
+        var ignoreAttributes = {
+            "class": ["ng-binding"]
+        };
+
+        // Loop through all attributes we want to test for ignoring
+        for(var attributeName in ignoreAttributes){
+            // Filter out the object's default properties
+            if (ignoreAttributes.hasOwnProperty(attributeName)) {
+
+                // Check this node has the attribute we are currently checking for
+                if(node.hasAttribute(attributeName)){
+
+                    // This node's value for the attribute we are checking
+                    var nodeAttributeValue = node.getAttribute(attributeName);
+                    // The values we want to ignore for this attribute
+                    var badAttributeValueList = ignoreAttributes[attributeName];
+
+                    // Loop through the attribute values we want to ignore
+                    for(var i=0; i < badAttributeValueList.length; i++){
+                        // If we find an indexOf, this value is present in the attribute
+                        if(nodeAttributeValue.indexOf(badAttributeValueList[i]) !== -1){
+                            return true;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        return false;
     }
 
     /**
