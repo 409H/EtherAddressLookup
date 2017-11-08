@@ -23,7 +23,11 @@
   "content_scripts":[{
     "run_at": "document_start",
     "matches": ["http://*/*", "https://*/*"],
-    "js": ["js/app/lib/punycode.min.js", "js/DomainBlacklist.js"]
+    "js": [
+      "js/app/lib/punycode.min.js",
+      "js/app/lib/blockies.min.js",
+      "js/DomainBlacklist.js"
+    ]
   },{
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],
