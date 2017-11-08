@@ -82,7 +82,9 @@ class EtherAddressLookup {
             '$1<a title="See this address on the blockchain explorer" ' +
             'href="' + this.strBlockchainExplorer + '/$2" ' +
             'class="ext-etheraddresslookup-link" ' +
-            'target="'+ this.target +'">$2</a>$3',
+            'target="'+ this.target +'">' +
+            '<div class="ext-etheraddresslookup-blockie" data-ether-address="$2" ></div> $2' +
+            '</a>$3',
 
             // ENS Address Replace
             '<a title="See this address on the blockchain explorer" ' +
@@ -153,6 +155,7 @@ class EtherAddressLookup {
         }
 
         this.tidyUpSlots();
+        this.addBlockies();
 
         if(this.blHighlight) {
             this.addHighlightStyle();
@@ -283,6 +286,20 @@ class EtherAddressLookup {
                 slots[i].parentNode.insertBefore(slots[i].firstChild, slots[i]);
             }
             slots[i].parentNode.removeChild(slots[i]);
+        }
+    }
+
+    addBlockies()
+    {
+        var blockieDivs = document.querySelectorAll("div.ext-etheraddresslookup-blockie");
+        for(var i = 0; i < blockieDivs.length; i++){
+
+            blockieDivs[i].style.backgroundImage = 'url(' + blockies.create({
+                // toLowerCase is used because standard blockies are based on none-checksum Ethereum addresses
+                seed:blockieDivs[i].getAttribute('data-ether-address').toLowerCase(),
+                size: 8,
+                scale: 16
+            }).toDataURL() +')';
         }
     }
 
