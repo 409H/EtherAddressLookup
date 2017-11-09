@@ -64,7 +64,10 @@ class EtherAddressLookup {
             /(^|\s|:|-)((?:0x)[0-9a-fA-F]{40})(\s|$)/gi,
 
             // ENS Address Regex
-            /([a-z0-9][a-z0-9-\.]+[a-z0-9](?:\.eth))(\s|$)/gi
+            /(^|\s|:|-)([a-z0-9][a-z0-9-.]+[a-z0-9](?:\.eth))(\s|$)/gi,
+
+            // ENS With ZWCs
+            /(^|\s|:|-)([a-z0-9][a-z0-9-.]*(\u200B|\u200C|\u200D|\uFEFF|\u2028|\u2029|&zwnj;|&#x200c;)[a-z0-9]*(?:\.eth))(\s|$)/gi
         ];
 
         // Register RegEx Matching Patterns
@@ -73,7 +76,10 @@ class EtherAddressLookup {
             /((?:0x)[0-9a-fA-F]{40})/gi,
 
             // ENS Match Pattern
-            this.regExPatterns[1]
+            this.regExPatterns[1],
+
+            // ENS With ZWCs
+            this.regExPatterns[2]
         ];
 
         // Register Replace Patterns
@@ -85,10 +91,14 @@ class EtherAddressLookup {
             'target="'+ this.target +'">$2</a>$3',
 
             // ENS Address Replace
-            '<a title="See this address on the blockchain explorer" ' +
+            '$1<a title="See this address on the blockchain explorer" ' +
             'href="' + this.strBlockchainExplorer + '/$1" ' +
             'class="ext-etheraddresslookup-link" ' +
-            'target="'+ this.target +'">$1</a>$2'
+            'target="'+ this.target +'">$2</a>$3',
+
+            // ENS With ZWCs Replace
+            '$1<slot title="WARNING! This ENS address has ZWCs. Someone may be trying to scam you." ' +
+            'class="ext-etheraddresslookup-warning">$2</slot>$3'
         ];
     }
 
@@ -115,8 +125,8 @@ class EtherAddressLookup {
 
         // On failure give the user a warning.
         if(!this.ENSCompatiable){
-            this.replacePatterns[1] = '<a title="Notification! We have spotted an ENS address, your current block explorer can\'t parse this address. Please choose a compatible block explorer." ' +
-                'class="ext-etheraddresslookup-link ext-etheraddresslookup-warning" href="#">$1</a>$2';
+            this.replacePatterns[1] = '$1<a title="Notification! We have spotted an ENS address, your current block explorer can\'t parse this address. Please choose a compatible block explorer." ' +
+                'class="ext-etheraddresslookup-link ext-etheraddresslookup-warning" href="#">$2</a>$3';
         }
     }
 
