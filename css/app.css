@@ -112,6 +112,55 @@
     right: 5%;
     top: 10%;
     background-color: #fff;
+}
+
+.ext-etheraddresslookup-label-pill {
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    border-radius: 10rem;
+}
+
+/*Popovers*/
+.ext-etheraddresslookup-popover *,
+.ext-etheraddresslookup-popover *::before,
+.ext-etheraddresslookup-popover *::after {
+    box-sizing: inherit;
+}
+
+.ext-etheraddresslookup-popover.fade {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+}
+
+.ext-etheraddresslookup-popover.fade.show {
+    opacity: 1;
+}
+
+.ext-etheraddresslookup-popover h3 {
+    orphans: 3;
+    widows: 3;
+}
+
+.ext-etheraddresslookup-popover h3 {
+    page-break-after: avoid;
+}
+
+.ext-etheraddresslookup-popover h3 {
+    margin-top: 0;
+    margin-bottom: .5rem;
+}
+
+.ext-etheraddresslookup-popover h3, .h3 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+.ext-etheraddresslookup-popover .close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1rem;
     color: #000;
     padding: .5em;
     z-index: 99999;
@@ -179,4 +228,108 @@
 #ext-etheraddresslookup-tip_box a {
     color: #fff;
     text-decoration: underline;
+}
+
+.ext-etheraddresslookup-popover-body {
+    padding: 9px 14px;
+    color: #212529;
+}
+
+/*Tabs*/
+.ext-etheraddresslookup-nav {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none !important;
+}
+
+.ext-etheraddresslookup-nav li {
+    list-style: none !important;
+}
+
+.ext-etheraddresslookup-nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+}
+
+.ext-etheraddresslookup-nav-link:focus,
+.ext-etheraddresslookup-nav-link:hover {
+    text-decoration: none;
+}
+
+.ext-etheraddresslookup-nav-link.disabled {
+    color: #868e96;
+}
+
+.ext-etheraddresslookup-nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-item {
+    margin-bottom: -1px;
+}
+
+.ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+.ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link:focus,
+.ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6;
+}
+
+.ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link.disabled {
+    color: #868e96;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link.active,
+.ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-item.show .ext-etheraddresslookup-nav-link {
+    color: #495057;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.ext-etheraddresslookup-nav-tabs .dropdown-menu {
+    margin-top: -1px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.ext-etheraddresslookup-tab-content > .ext-etheraddresslookup-tab-pane {
+    display: none;
+}
+
+.ext-etheraddresslookup-tab-content > .active {
+    display: block;
+}
+
+.ext-etheraddresslookup-tab-content .fade {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+}
+
+.ext-etheraddresslookup-tab-content .fade.show {
+    opacity: 1;
+}
+
+.ext-etheraddresslookup-tab-content.collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.35s ease;
+}
+
+#ext-etheraddresslookup-new-labels option {
+    color:#ffffff;
+}
+
+#ext-etheraddresslookup-new-labels button {
+    width:100%;
 }
