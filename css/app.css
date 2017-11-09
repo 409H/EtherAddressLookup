@@ -1,3 +1,7 @@
+.ext-etheraddresslookup-link {
+    white-space: nowrap;
+}
+
 .ext-etheraddresslookup-link-highlight {
     padding: 2px;
     background: #F2EAAC;
