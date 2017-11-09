@@ -94,7 +94,7 @@ class EtherAddressLookup {
 
             // ENS Address Replace
             '$1<a title="See this address on the blockchain explorer" ' +
-            'href="' + this.strBlockchainExplorer + '/$1" ' +
+            'href="' + this.strBlockchainExplorer + '/$2" ' +
             'class="ext-etheraddresslookup-link" ' +
             'target="'+ this.target +'">$2</a>$3',
 
