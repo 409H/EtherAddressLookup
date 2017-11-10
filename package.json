@@ -1,6 +1,6 @@
 {
   "name": "etheraddresslookup",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "A web extension for blocking ethereum phishing websites.",
   "main": "blacklists/domains.json",
   "scripts": {
