@@ -4,7 +4,7 @@
   "name": "EtherAddressLookup",
   "short_name": "EtherAddressLookup",
   "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
-  "version": "1.8.1",
+  "version": "1.11.0",
 
   "browser_action": {
     "default_icon": "images/icon.png",
@@ -23,7 +23,11 @@
   "content_scripts":[{
     "run_at": "document_start",
     "matches": ["http://*/*", "https://*/*"],
-    "js": ["js/app/lib/punycode.min.js", "js/DomainBlacklist.js"]
+    "js": [
+      "js/app/lib/punycode.min.js",
+      "js/app/lib/blockies.min.js",
+      "js/DomainBlacklist.js"
+    ]
   },{
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],

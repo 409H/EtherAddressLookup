@@ -1,3 +1,7 @@
+.ext-etheraddresslookup-link {
+    white-space: nowrap;
+}
+
 .ext-etheraddresslookup-link-highlight {
     padding: 2px;
     background: #F2EAAC;
@@ -10,6 +14,11 @@
     background: transparent;
     border: 1px solid transparent;
     color: inherit;
+}
+
+.ext-etheraddresslookup-warning {
+    color: red;
+    border-bottom: 1px dashed red;
 }
 
 #ext-etheraddresslookup-popup {
@@ -25,6 +34,12 @@
 }
 #ext-etheraddresslookup-popup #content #footer {
     font-size: 70%;
+}
+
+.note {
+    font-size: 10pt;
+    color: #c2c6c7;
+    line-height: 10pt;
 }
 
 #ext-etheraddresslookup-blacklist_domains_stats {
@@ -70,4 +85,15 @@
     margin-top: 5%;
     padding: 15px 5%;
     background: #e4e4e4;
+}
+
+.ext-etheraddresslookup-blockie {
+    width: 1em;
+    height: 1em;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
+    display: inline-block;
+    margin-bottom: -0.2em;
 }
