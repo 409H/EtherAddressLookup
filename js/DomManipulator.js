@@ -2,9 +2,10 @@ let objBrowser = chrome ? chrome : browser;
 
 class EtherAddressLookup {
 
-    constructor()
+    constructor(objWeb3)
     {
         console.log("Init EAL");
+        this.objWeb3 = objWeb3;
         this.setDefaultExtensionSettings();
         this.init();
     }
@@ -87,7 +88,8 @@ class EtherAddressLookup {
             // Ethereum Address Replace
             '$1<a title="See this address on the blockchain explorer" ' +
             'href="' + this.strBlockchainExplorer + '/$2" ' +
-            'class="ext-etheraddresslookup-link" ' +
+            'data-address="$2"' +
+            'class="ext-etheraddresslookup-link ext-etheraddresslookup-0xaddress" ' +
             'target="'+ this.target +'">' +
             '<div class="ext-etheraddresslookup-blockie" data-ether-address="$2" ></div> $2' +
             '</a>$3',
@@ -139,6 +141,8 @@ class EtherAddressLookup {
                 this.blacklistedDomainCheck();
             }
             this.convertAddressToLink();
+
+            this.setAddressOnHoverBehaviour();
         }
     }
 
@@ -334,10 +338,28 @@ class EtherAddressLookup {
         }
         return false;
     }
+
+    //Sets the on hover behaviour for the address
+    // - get the address stats with rpc
+    setAddressOnHoverBehaviour()
+    {
+        var objNodes = document.getElementsByClassName("ext-etheraddresslookup-0xaddress");
+        for (var i = 0; i < objNodes.length; i++) {
+            objNodes[i].addEventListener('mouseover', this.event_0xAddressHover, false);
+        }
+    }
+
+    event_0xAddressHover()
+    {
+        var strRpcProvider = "https://instantly-clear-sloth.quiknode.io/fc551b4e-b3bf-4b0b-b438-aeb6c9c311f5/pF749Rxn3Mn8vgaCD4FM_A==/";
+        var web3 = new Web3(new Web3.providers.HttpProvider(strRpcProvider));
+        var strAccountBalance = web3.fromWei(web3.eth.getBalance(this.getAttribute("data-address")).toString(10), "ether") + " Ether"
+        console.log(this.getAttribute("data-address") + " - " + strAccountBalance);
+    }
 }
 
 window.addEventListener("load", function() {
-    let objEtherAddressLookup = new EtherAddressLookup();
+    let objEtherAddressLookup = new EtherAddressLookup(Web3);
 });
 
 //Send message from the extension to here.
