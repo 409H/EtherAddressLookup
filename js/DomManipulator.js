@@ -361,15 +361,22 @@ class EtherAddressLookup {
         //Get the RPC provider for the user
         objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
-            var strAccountBalance = web3.fromWei(web3.eth.getBalance(this.getAttribute("data-address")).toString(10), "ether") + " Ether";
-            console.log(this.getAttribute("data-address") + " - " + strAccountBalance);
+            var str0xAddress = this.getAttribute("data-address");
+            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toFixed(6).toLocaleString();
+            var intTransactionCount = parseInt(web3.eth.getTransactionCount(str0xAddress)).toLocaleString();
+            var blIsContractAddress = web3.eth.getCode(str0xAddress) == "0x" ? false: true;
 
             var objHoverNode = document.createElement("div");
             objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
 
             var objHoverNodeContent = document.createElement("div");
             objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
-            objHoverNodeContent.innerHTML = strAccountBalance;
+            objHoverNodeContent.innerHTML = "<p><strong>ETH:</strong> "+ strAccountBalance +"</p>";
+            objHoverNodeContent.innerHTML += "<p><strong>Transactions:</strong> "+ intTransactionCount +"</p>";
+            if(blIsContractAddress) {
+                objHoverNodeContent.innerHTML += "<p><small>This is a contract address</small></p>";
+            }
+            objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
 
             objHoverNode.appendChild(objHoverNodeContent);
             this.appendChild(objHoverNode);
