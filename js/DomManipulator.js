@@ -354,11 +354,26 @@ class EtherAddressLookup {
     //It will do the logic to call the web3 rpc to get the address balance.
     event_0xAddressHover()
     {
+        if(this.children.length > 1 && this.children[1].className == "ext-etheraddresslookup-address_stats_hover") {
+            return false;
+        }
+
         //Get the RPC provider for the user
         objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
             var strAccountBalance = web3.fromWei(web3.eth.getBalance(this.getAttribute("data-address")).toString(10), "ether") + " Ether";
             console.log(this.getAttribute("data-address") + " - " + strAccountBalance);
+
+            var objHoverNode = document.createElement("div");
+            objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
+
+            var objHoverNodeContent = document.createElement("div");
+            objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
+            objHoverNodeContent.innerHTML = strAccountBalance;
+
+            objHoverNode.appendChild(objHoverNodeContent);
+            this.appendChild(objHoverNode);
+            return false;
         }.bind(this));
     }
 }
