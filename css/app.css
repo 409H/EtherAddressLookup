@@ -97,3 +97,27 @@
     display: inline-block;
     margin-bottom: -0.2em;
 }
+
+.ext-etheraddresslookup-address_stats_hover {
+    position: relative;
+}
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+    display: none;
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    background-color: #fff;
+    padding: .5em;
+    z-index: 99999;
+    width: auto;
+}
+
+.ext-etheraddresslookup-address_stats_hover_content {
+    position: relative;
+    width: auto;
+}
+
+.ext-etheraddresslookup-0xaddress:hover .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+    display: inline-block;
+}
