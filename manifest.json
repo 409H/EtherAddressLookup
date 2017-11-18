@@ -46,5 +46,9 @@
     "16": "images/ether-16x16.png",
     "48": "images/ether-48x48.png",
     "128": "images/ether-128x128.png"
-  }
+  },
+
+  "web_accessible_resources": [
+    "images/powered-by-quiknode.png"
+  ]
 }
