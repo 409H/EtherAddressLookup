@@ -14,6 +14,7 @@ class EtherAddressLookup {
     {
         this.blHighlight = false;
         this.strBlockchainExplorer = "https://etherscan.io/address";
+        this.strRpcProvider = "https://localhost:8545";
 
         this.intSettingsCount = 0;
         this.intSettingsTotalCount = 2;
@@ -349,12 +350,16 @@ class EtherAddressLookup {
         }
     }
 
+    //The event handler for 0x address mouseover.
+    //It will do the logic to call the web3 rpc to get the address balance.
     event_0xAddressHover()
     {
-        var strRpcProvider = "https://instantly-clear-sloth.quiknode.io/fc551b4e-b3bf-4b0b-b438-aeb6c9c311f5/pF749Rxn3Mn8vgaCD4FM_A==/";
-        var web3 = new Web3(new Web3.providers.HttpProvider(strRpcProvider));
-        var strAccountBalance = web3.fromWei(web3.eth.getBalance(this.getAttribute("data-address")).toString(10), "ether") + " Ether"
-        console.log(this.getAttribute("data-address") + " - " + strAccountBalance);
+        //Get the RPC provider for the user
+        objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
+            var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
+            var strAccountBalance = web3.fromWei(web3.eth.getBalance(this.getAttribute("data-address")).toString(10), "ether") + " Ether";
+            console.log(this.getAttribute("data-address") + " - " + strAccountBalance);
+        }.bind(this));
     }
 }
 
