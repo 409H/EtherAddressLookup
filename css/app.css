@@ -50,10 +50,10 @@
 }
 
 #ext-etheraddresslookup-report {
-	margin-bottom: 20px;
-	padding: 8px 20px 8px 17px;
-	width: 100%;
-	font-size: 10pt;
+    margin-bottom: 20px;
+    padding: 8px 20px 8px 17px;
+    width: 100%;
+    font-size: 10pt;
 }
 
 .ext-etheraddresslookup-center {
@@ -99,8 +99,10 @@
 }
 
 .ext-etheraddresslookup-address_stats_hover {
-    position: relative;
+    z-index: 10;
+    position: absolute;
 }
+
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
     display: none;
     position: absolute;
@@ -110,12 +112,24 @@
     background-color: #fff;
     padding: .5em;
     z-index: 99999;
-    width: auto;
+    width: 200px;
+    height: 120px;
+    border: 2px solid #e4e4e4;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
-.ext-etheraddresslookup-address_stats_hover_content {
-    position: relative;
-    width: auto;
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > p {
+    margin: 5%;
+}
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > a > img {
+    display: inline;
+    width: 100px;
+    height: 22px;
+    bottom: 0%;
+    right: 5%;
+    position: absolute;
+    margin: 0;
 }
 
 .ext-etheraddresslookup-0xaddress:hover .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
