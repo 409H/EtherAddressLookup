@@ -2,9 +2,10 @@ let objBrowser = chrome ? chrome : browser;
 
 class EtherAddressLookup {
 
-    constructor()
+    constructor(objWeb3)
     {
         console.log("Init EAL");
+        this.objWeb3 = objWeb3;
         this.setDefaultExtensionSettings();
         this.init();
     }
@@ -13,6 +14,7 @@ class EtherAddressLookup {
     {
         this.blHighlight = false;
         this.strBlockchainExplorer = "https://etherscan.io/address";
+        this.strRpcProvider = "https://localhost:8545";
 
         this.intSettingsCount = 0;
         this.intSettingsTotalCount = 2;
@@ -85,9 +87,9 @@ class EtherAddressLookup {
         // Register Replace Patterns
         this.replacePatterns = [
             // Ethereum Address Replace
-            '$1<a title="See this address on the blockchain explorer" ' +
-            'href="' + this.strBlockchainExplorer + '/$2" ' +
-            'class="ext-etheraddresslookup-link" ' +
+            '$1<a href="' + this.strBlockchainExplorer + '/$2" ' +
+            'data-address="$2"' +
+            'class="ext-etheraddresslookup-link ext-etheraddresslookup-0xaddress" ' +
             'target="'+ this.target +'">' +
             '<div class="ext-etheraddresslookup-blockie" data-ether-address="$2" ></div> $2' +
             '</a>$3',
@@ -139,6 +141,8 @@ class EtherAddressLookup {
                 this.blacklistedDomainCheck();
             }
             this.convertAddressToLink();
+
+            this.setAddressOnHoverBehaviour();
         }
     }
 
@@ -334,10 +338,58 @@ class EtherAddressLookup {
         }
         return false;
     }
+
+    //Sets the on hover behaviour for the address
+    // - get the address stats with rpc
+    setAddressOnHoverBehaviour()
+    {
+        var objNodes = document.getElementsByClassName("ext-etheraddresslookup-0xaddress");
+        for (var i = 0; i < objNodes.length; i++) {
+            objNodes[i].addEventListener('mouseover', this.event_0xAddressHover, false);
+        }
+    }
+
+    //The event handler for 0x address mouseover.
+    //It will do the logic to call the web3 rpc to get the address balance.
+    event_0xAddressHover()
+    {
+        if(this.children.length > 1 && this.children[1].className == "ext-etheraddresslookup-address_stats_hover") {
+            return false;
+        }
+
+        var objHoverNode = document.createElement("div");
+        objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
+        var objHoverNodeContent = document.createElement("div");
+        objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
+        objHoverNodeContent.innerHTML = "<p><strong>Fetching Data...</strong></p>";
+        objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
+
+        objHoverNode.appendChild(objHoverNodeContent);
+        this.appendChild(objHoverNode);
+
+        //Get the RPC provider for the user
+        objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
+            var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
+            var str0xAddress = this.getAttribute("data-address");
+            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toLocaleString('en-US', {maximumSignificantDigits: 9});
+            var intTransactionCount = parseInt(web3.eth.getTransactionCount(str0xAddress)).toLocaleString();
+            var blIsContractAddress = web3.eth.getCode(str0xAddress) == "0x" ? false: true;
+
+            var objHoverNodeContent = this.children[1].children[0];
+            objHoverNodeContent.innerHTML = "<p><strong>ETH:</strong> "+ strAccountBalance +"</p>";
+            objHoverNodeContent.innerHTML += "<p><strong>Transactions out:</strong> "+ intTransactionCount +"</p>";
+            if(blIsContractAddress) {
+                objHoverNodeContent.innerHTML += "<p><small>This is a contract address</small></p>";
+            }
+            objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
+
+            return false;
+        }.bind(this));
+    }
 }
 
 window.addEventListener("load", function() {
-    let objEtherAddressLookup = new EtherAddressLookup();
+    let objEtherAddressLookup = new EtherAddressLookup(Web3);
 });
 
 //Send message from the extension to here.

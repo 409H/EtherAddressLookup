@@ -50,10 +50,10 @@
 }
 
 #ext-etheraddresslookup-report {
-	margin-bottom: 20px;
-	padding: 8px 20px 8px 17px;
-	width: 100%;
-	font-size: 10pt;
+    margin-bottom: 20px;
+    padding: 8px 20px 8px 17px;
+    width: 100%;
+    font-size: 10pt;
 }
 
 .ext-etheraddresslookup-center {
@@ -96,4 +96,48 @@
     box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
     display: inline-block;
     margin-bottom: -0.2em;
+}
+
+.ext-etheraddresslookup-address_stats_hover {
+    z-index: 10;
+    position: absolute;
+}
+
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+    display: none;
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    top: 10%;
+    background-color: #fff;
+    color: #000;
+    padding: .5em;
+    z-index: 99999;
+    width: 275px;
+    height: 120px;
+    border: 2px solid #e4e4e4;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > p {
+    margin: 5%;
+    font-size: 10pt;
+    text-decoration: none;
+    font-style: normal;
+    font-family: 'Verdana';
+}
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > a > img {
+    display: inline;
+    width: 100px;
+    height: 22px;
+    bottom: 0%;
+    right: 5%;
+    position: absolute;
+    margin: 0;
+}
+
+.ext-etheraddresslookup-0xaddress:hover .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+    display: inline-block;
 }

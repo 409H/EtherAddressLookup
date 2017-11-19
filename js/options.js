@@ -70,6 +70,9 @@ objBrowser.runtime.onMessage.addListener(
                 console.log("Getting whitelisted domain list");
                 strResponse = getWhitelistedDomains();
                 break;
+            case 'rpc_provider' :
+                    strResponse = "https://instantly-clear-sloth.quiknode.io/fc551b4e-b3bf-4b0b-b438-aeb6c9c311f5/pF749Rxn3Mn8vgaCD4FM_A==/";
+                break;
             default:
                 strResponse = "unsupported";
                 break;
