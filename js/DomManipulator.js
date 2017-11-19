@@ -87,8 +87,7 @@ class EtherAddressLookup {
         // Register Replace Patterns
         this.replacePatterns = [
             // Ethereum Address Replace
-            '$1<a title="See this address on the blockchain explorer" ' +
-            'href="' + this.strBlockchainExplorer + '/$2" ' +
+            '$1<a href="' + this.strBlockchainExplorer + '/$2" ' +
             'data-address="$2"' +
             'class="ext-etheraddresslookup-link ext-etheraddresslookup-0xaddress" ' +
             'target="'+ this.target +'">' +
@@ -372,7 +371,7 @@ class EtherAddressLookup {
         objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
             var str0xAddress = this.getAttribute("data-address");
-            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toFixed(6).toLocaleString();
+            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toLocaleString();
             var intTransactionCount = parseInt(web3.eth.getTransactionCount(str0xAddress)).toLocaleString();
             var blIsContractAddress = web3.eth.getCode(str0xAddress) == "0x" ? false: true;
 
@@ -383,7 +382,7 @@ class EtherAddressLookup {
                 objHoverNodeContent.innerHTML += "<p><small>This is a contract address</small></p>";
             }
             objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
-            
+
             return false;
         }.bind(this));
     }
