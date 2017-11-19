@@ -358,6 +358,16 @@ class EtherAddressLookup {
             return false;
         }
 
+        var objHoverNode = document.createElement("div");
+        objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
+        var objHoverNodeContent = document.createElement("div");
+        objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
+        objHoverNodeContent.innerHTML = "<p><strong>Fetching Data...</strong></p>";
+        objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
+
+        objHoverNode.appendChild(objHoverNodeContent);
+        this.appendChild(objHoverNode);
+
         //Get the RPC provider for the user
         objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
@@ -366,20 +376,14 @@ class EtherAddressLookup {
             var intTransactionCount = parseInt(web3.eth.getTransactionCount(str0xAddress)).toLocaleString();
             var blIsContractAddress = web3.eth.getCode(str0xAddress) == "0x" ? false: true;
 
-            var objHoverNode = document.createElement("div");
-            objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
-
-            var objHoverNodeContent = document.createElement("div");
-            objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
+            var objHoverNodeContent = this.children[1].children[0];
             objHoverNodeContent.innerHTML = "<p><strong>ETH:</strong> "+ strAccountBalance +"</p>";
-            objHoverNodeContent.innerHTML += "<p><strong>Transactions:</strong> "+ intTransactionCount +"</p>";
+            objHoverNodeContent.innerHTML += "<p><strong>Transactions out:</strong> "+ intTransactionCount +"</p>";
             if(blIsContractAddress) {
                 objHoverNodeContent.innerHTML += "<p><small>This is a contract address</small></p>";
             }
             objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
-
-            objHoverNode.appendChild(objHoverNodeContent);
-            this.appendChild(objHoverNode);
+            
             return false;
         }.bind(this));
     }
