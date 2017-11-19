@@ -371,7 +371,7 @@ class EtherAddressLookup {
         objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
             var str0xAddress = this.getAttribute("data-address");
-            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toLocaleString();
+            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toLocaleString('en-US', {maximumSignificantDigits: 9});
             var intTransactionCount = parseInt(web3.eth.getTransactionCount(str0xAddress)).toLocaleString();
             var blIsContractAddress = web3.eth.getCode(str0xAddress) == "0x" ? false: true;
 
