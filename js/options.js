@@ -1,3 +1,4 @@
+let objBrowser = chrome ? chrome : browser;
 (function() {
     //Toggle the highlight option and set it in LocalStorage
     var objOptionAddHighlight = document.getElementById('ext-etheraddresslookup-show_style');
@@ -18,7 +19,7 @@
     }
 
     //Get the extension version
-    var objManifest = chrome.runtime.getManifest();
+    var objManifest = objBrowser.runtime.getManifest();
     var objManifestVersion = document.getElementById('ext-manifest_version');
     if(objManifestVersion) {
         objManifestVersion.innerHTML = objManifest.version;
@@ -38,7 +39,7 @@
     }, 180000);
 })();
 
-chrome.runtime.onMessage.addListener(
+objBrowser.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         var strOption = request.func;
         var strResponse = "";
@@ -68,6 +69,9 @@ chrome.runtime.onMessage.addListener(
             case 'whitelist_domain_list' :
                 console.log("Getting whitelisted domain list");
                 strResponse = getWhitelistedDomains();
+                break;
+            case 'rpc_provider' :
+                    strResponse = "https://instantly-clear-sloth.quiknode.io/fc551b4e-b3bf-4b0b-b438-aeb6c9c311f5/pF749Rxn3Mn8vgaCD4FM_A==/";
                 break;
             default:
                 strResponse = "unsupported";

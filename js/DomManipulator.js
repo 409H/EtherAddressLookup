@@ -1,118 +1,319 @@
+let objBrowser = chrome ? chrome : browser;
+
 class EtherAddressLookup {
 
-    constructor()
+    constructor(objWeb3)
     {
+        console.log("Init EAL");
+        this.objWeb3 = objWeb3;
         this.setDefaultExtensionSettings();
         this.init();
-    }
-
-    levenshtein(a, b) {
-      if(a.length == 0) return b.length;
-      if(b.length == 0) return a.length;
-
-      // swap to save some memory O(min(a,b)) instead of O(a)
-      if(a.length > b.length) {
-        var tmp = a;
-        a = b;
-        b = tmp;
-      }
-
-      var row = [];
-      // init the row
-      for(var i = 0; i <= a.length; i++){
-        row[i] = i;
-      }
-
-      // fill in the rest
-      for(var i = 1; i <= b.length; i++){
-        var prev = i;
-        for(var j = 1; j <= a.length; j++){
-          var val;
-          if(b.charAt(i-1) == a.charAt(j-1)){
-            val = row[j-1]; // match
-          } else {
-            val = Math.min(row[j-1] + 1, // substitution
-                           prev + 1,     // insertion
-                           row[j] + 1);  // deletion
-          }
-          row[j - 1] = prev;
-          prev = val;
-        }
-        row[a.length] = prev;
-      }
-
-      return row[a.length];
     }
 
     setDefaultExtensionSettings()
     {
         this.blHighlight = false;
-        this.blBlacklistDomains = true;
         this.strBlockchainExplorer = "https://etherscan.io/address";
+        this.strRpcProvider = "https://localhost:8545";
 
         this.intSettingsCount = 0;
-        this.intSettingsTotalCount = 3;
+        this.intSettingsTotalCount = 2;
     }
 
-    //Gets extension settings and then converts addresses to links
+    /**
+     * @name init
+     * @desc Gets extension settings and applies DOM manipulation
+     */
     init()
     {
+        let objBrowser = chrome ? chrome : browser;
         //Get the highlight option for the user
-        chrome.runtime.sendMessage({func: "highlight_option"}, function(objResponse) {
+        objBrowser.runtime.sendMessage({func: "highlight_option"}, function(objResponse) {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
-                this.blHighlight = (objResponse.resp == 1 ? true : false);
+                this.blHighlight = (objResponse.resp == 1);
             }
             ++this.intSettingsCount;
         }.bind(this));
 
         //Get the blockchain explorer for the user
-        chrome.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
+        objBrowser.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
             this.strBlockchainExplorer = objResponse.resp;
-            ++this.intSettingsCount;
-        }.bind(this));
-
-        //Get the blacklist domains option for the user
-        chrome.runtime.sendMessage({func: "blacklist_domains"}, function(objResponse) {
-            if(objResponse && objResponse.hasOwnProperty("resp")) {
-                this.blBlacklistDomains = (objResponse.resp == 1 ? true : false);
-            }
             ++this.intSettingsCount;
         }.bind(this));
 
         //Update the DOM once all settings have been received...
         setTimeout(function() {
-            if(this.intSettingsCount === this.intSettingsTotalCount) {
-                if(this.blBlacklistDomains) {
-                    this.blacklistedDomainCheck();
-                }
-                this.convertAddressToLink();
-            }
-        }.bind(this), 1)
+            // Needs to happen after user settings have been collected
+            // and in the context of init();
+            this.setSearchAndReplaceSettings();
+            this.setWarningSettings();
+            this.manipulateDOM();
+        }.bind(this), 10);
     }
 
-    //Finds Ethereum addresses and converts to a link to a block explorer
+    /**
+     * @name Set Search And Replace Settings
+     * @desc
+     */
+    setSearchAndReplaceSettings()
+    {
+        // Check user is on their favourite block explorer, on fail target blank.
+        this.target = (this.isBlockchainExplorerSite() ? '_self' : '_blank');
+
+        // Register RegEx Patterns
+        this.regExPatterns = [
+            // Ethereum Address Regex
+            /(^|\s|:|-)((?:0x)[0-9a-fA-F]{40})(\s|$)/gi,
+
+            // ENS Address Regex
+            /(^|\s|:|-)([a-z0-9][a-z0-9-.]+[a-z0-9](?:\.eth))(\s|$)/gi,
+
+            // ENS With ZWCs
+            /(^|\s|:|-)([a-z0-9][a-z0-9-.]*(\u200B|\u200C|\u200D|\uFEFF|\u2028|\u2029|&zwnj;|&#x200c;)[a-z0-9]*(?:\.eth))(\s|$)/gi
+        ];
+
+        // Register RegEx Matching Patterns
+        this.matchPatterns = [
+            // Ethereum Match Pattern
+            /((?:0x)[0-9a-fA-F]{40})/gi,
+
+            // ENS Match Pattern
+            this.regExPatterns[1],
+
+            // ENS With ZWCs
+            this.regExPatterns[2]
+        ];
+
+        // Register Replace Patterns
+        this.replacePatterns = [
+            // Ethereum Address Replace
+            '$1<a href="' + this.strBlockchainExplorer + '/$2" ' +
+            'data-address="$2"' +
+            'class="ext-etheraddresslookup-link ext-etheraddresslookup-0xaddress" ' +
+            'target="'+ this.target +'">' +
+            '<div class="ext-etheraddresslookup-blockie" data-ether-address="$2" ></div> $2' +
+            '</a>$3',
+
+            // ENS Address Replace
+            '$1<a title="See this address on the blockchain explorer" ' +
+            'href="' + this.strBlockchainExplorer + '/$2" ' +
+            'class="ext-etheraddresslookup-link" ' +
+            'target="'+ this.target +'">$2</a>$3',
+
+            // ENS With ZWCs Replace
+            '$1<slot title="WARNING! This ENS address has ZWCs. Someone may be trying to scam you." ' +
+            'class="ext-etheraddresslookup-warning">$2</slot>$3'
+        ];
+    }
+
+    /**
+     * @name Set Warning Settings
+     * @desc
+     */
+    setWarningSettings()
+    {
+        // The block explorers that can handle ENS addresses
+        this.ENSCompatiableExplorers = [
+            "https://etherscan.io/address",
+            "https://etherchain.org/account"
+        ];
+
+        // Does the user's favorite explorer support an ENS address
+        for(var i=0; i<this.ENSCompatiableExplorers.length; i++){
+            if(this.strBlockchainExplorer == this.ENSCompatiableExplorers[i]){
+                this.ENSCompatiable = true;
+                break;
+            }
+            this.ENSCompatiable = false;
+        }
+
+        // On failure give the user a warning.
+        if(!this.ENSCompatiable){
+            this.replacePatterns[1] = '$1<a title="Notification! We have spotted an ENS address, your current block explorer can\'t parse this address. Please choose a compatible block explorer." ' +
+                'class="ext-etheraddresslookup-link ext-etheraddresslookup-warning" href="#">$2</a>$3';
+        }
+    }
+
+    manipulateDOM()
+    {
+        if(true || this.intSettingsCount === this.intSettingsTotalCount) {
+            if(this.blBlacklistDomains) {
+                this.blacklistedDomainCheck();
+            }
+            this.convertAddressToLink();
+
+            this.setAddressOnHoverBehaviour();
+        }
+    }
+
+    /**
+     * @name Convert Address To Link
+     * @desc Finds Ethereum addresses and converts to a link to a block explorer
+     */
     convertAddressToLink()
     {
-        var arrWhitelistedTags = new Array("code", "span", "p", "td", "li", "em", "i", "b", "strong");
-        var strRegex = /(^|\s|:|-)((?:0x)?[0-9a-fA-F]{40})(?:\s|$)/gi;
+        var arrWhitelistedTags = ["code", "span", "p", "td", "li", "em", "i", "b", "strong", "small"];
 
         //Get the whitelisted nodes
         for(var i=0; i<arrWhitelistedTags.length; i++) {
             var objNodes = document.getElementsByTagName(arrWhitelistedTags[i]);
             //Loop through the whitelisted content
             for(var x=0; x<objNodes.length; x++) {
-                var strContent = objNodes[x].innerHTML;
-                if( /((?:0x)?[0-9a-fA-F]{40})/gi.exec(strContent) !== null) {
-                    objNodes[x].innerHTML = strContent.replace(
-                        new RegExp(strRegex, "gi"),
-                        '$1<a title="See this address on the blockchain explorer" href="'+ this.strBlockchainExplorer +'/$2" class="ext-etheraddresslookup-link" target="_blank">$2</a>'
-                    );
+
+                if(this.hasIgnoreAttributes(objNodes[x])){
+                    continue;
                 }
+
+                this.convertAddresses(objNodes[x]);
             }
         }
 
+        this.tidyUpSlots();
+        this.addBlockies();
+
         if(this.blHighlight) {
             this.addHighlightStyle();
+        }
+    }
+
+    /**
+     * @name Convert Addresses
+     * @desc Takes a Node and checks if any of its children are textNodes. On success replace textNode with slot node
+     * @desc slot node contains regex replaced content; see generateReplacementContent()
+     * @param {Node} objNode
+     */
+    convertAddresses(objNode)
+    {
+        // Some nodes have non-textNode children
+        // we need to ensure regex is applied only to text otherwise we will mess the html up
+        for(var i=0; i < objNode.childNodes.length; i++){
+            // Only check textNodes to prevent applying RegEx against element attributes
+            if(objNode.childNodes[i].nodeType == 3){ // nodeType 3 = a text node
+
+                var child = objNode.childNodes[i];
+                var childContent = child.textContent;
+
+                // Only start replacing stuff if the we get a RegEx match.
+                if(this.isPatternMatched(childContent)) {
+                    // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot
+                    var replacement = document.createElement('slot');
+                    replacement.setAttribute('class', 'ext-etheraddresslookup-temporary');
+                    replacement.innerHTML = this.generateReplacementContent(childContent);
+                    objNode.replaceChild(replacement, child);
+                }
+            }
+        }
+    }
+
+    /**
+     * @name Generate Replacement Content
+     * @desc Takes string and replaces any regex pattern matches with the associated replace patterns
+     * @param {string} content
+     * @returns {string}
+     */
+    generateReplacementContent(content)
+    {
+        for(var i=0; i < this.regExPatterns.length; i++){
+            content = content.replace(this.regExPatterns[i], this.replacePatterns[i]);
+        }
+        return content;
+    }
+
+    /**
+     * @name Has Ignore Attributes
+     * @desc Checks if a node contains any attribute that we want to avoid manipulating
+     * @param {Element} node
+     * @returns {boolean}
+     */
+    hasIgnoreAttributes(node)
+    {
+        var ignoreAttributes = {
+            "class": ["ng-binding"]
+        };
+
+        // Loop through all attributes we want to test for ignoring
+        for(var attributeName in ignoreAttributes){
+            // Filter out the object's default properties
+            if (ignoreAttributes.hasOwnProperty(attributeName)) {
+
+                // Check this node has the attribute we are currently checking for
+                if(node.hasAttribute(attributeName)){
+
+                    // This node's value for the attribute we are checking
+                    var nodeAttributeValue = node.getAttribute(attributeName);
+                    // The values we want to ignore for this attribute
+                    var badAttributeValueList = ignoreAttributes[attributeName];
+
+                    // Loop through the attribute values we want to ignore
+                    for(var i=0; i < badAttributeValueList.length; i++){
+                        // If we find an indexOf, this value is present in the attribute
+                        if(nodeAttributeValue.indexOf(badAttributeValueList[i]) !== -1){
+                            return true;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @name Is Pattern Matched
+     * @desc Checks content matches any of the object's matchPatterns
+     * @param {string} content
+     * @returns {boolean}
+     */
+    isPatternMatched(content)
+    {
+        for(var i=0; i < this.matchPatterns.length; i++){
+            if(this.matchPatterns[i].exec(content) !== null){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @name Is Blockchain Explorer Site
+     * @desc Check if the current website is the user's selected block explorer
+     * @returns {boolean}
+     */
+    isBlockchainExplorerSite()
+    {
+        var objBlockchainExplorer = document.createElement("a");
+        objBlockchainExplorer.href = this.strBlockchainExplorer;
+        return (objBlockchainExplorer.hostname === window.location.hostname);
+    }
+
+    /**
+     * @name Tidy Slots
+     * @desc Searches document for slots adds the slot's child nodes to its parent then removes the slot
+     */
+    tidyUpSlots()
+    {
+        var slots = document.querySelectorAll("slot.ext-etheraddresslookup-temporary");
+        for(var i=0; i < slots.length; i++){
+            while(slots[i].childNodes.length > 0){
+                slots[i].parentNode.insertBefore(slots[i].firstChild, slots[i]);
+            }
+            slots[i].parentNode.removeChild(slots[i]);
+        }
+    }
+
+    addBlockies()
+    {
+        var blockieDivs = document.querySelectorAll("div.ext-etheraddresslookup-blockie");
+        for(var i = 0; i < blockieDivs.length; i++){
+
+            blockieDivs[i].style.backgroundImage = 'url(' + blockies.create({
+                // toLowerCase is used because standard blockies are based on none-checksum Ethereum addresses
+                seed:blockieDivs[i].getAttribute('data-ether-address').toLowerCase(),
+                size: 8,
+                scale: 16
+            }).toDataURL() +')';
         }
     }
 
@@ -138,73 +339,61 @@ class EtherAddressLookup {
         return false;
     }
 
-    //Detects if the current tab is in the blacklisted domains file
-    blacklistedDomainCheck()
+    //Sets the on hover behaviour for the address
+    // - get the address stats with rpc
+    setAddressOnHoverBehaviour()
     {
-        var self = this;
-        var arrBlacklistedDomains = [];
-        var arrWhitelistedDomains = ["www.myetherwallet.com", "myetherwallet.com"];
-        chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
-            if(objResponse && objResponse.hasOwnProperty("resp")) {
-                arrBlacklistedDomains = objResponse.resp;
+        var objNodes = document.getElementsByClassName("ext-etheraddresslookup-0xaddress");
+        for (var i = 0; i < objNodes.length; i++) {
+            objNodes[i].addEventListener('mouseover', this.event_0xAddressHover, false);
+        }
+    }
+
+    //The event handler for 0x address mouseover.
+    //It will do the logic to call the web3 rpc to get the address balance.
+    event_0xAddressHover()
+    {
+        if(this.children.length > 1 && this.children[1].className == "ext-etheraddresslookup-address_stats_hover") {
+            return false;
+        }
+
+        var objHoverNode = document.createElement("div");
+        objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
+        var objHoverNodeContent = document.createElement("div");
+        objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
+        objHoverNodeContent.innerHTML = "<p><strong>Fetching Data...</strong></p>";
+        objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
+
+        objHoverNode.appendChild(objHoverNodeContent);
+        this.appendChild(objHoverNode);
+
+        //Get the RPC provider for the user
+        objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
+            var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
+            var str0xAddress = this.getAttribute("data-address");
+            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toLocaleString('en-US', {maximumSignificantDigits: 9});
+            var intTransactionCount = parseInt(web3.eth.getTransactionCount(str0xAddress)).toLocaleString();
+            var blIsContractAddress = web3.eth.getCode(str0xAddress) == "0x" ? false: true;
+
+            var objHoverNodeContent = this.children[1].children[0];
+            objHoverNodeContent.innerHTML = "<p><strong>ETH:</strong> "+ strAccountBalance +"</p>";
+            objHoverNodeContent.innerHTML += "<p><strong>Transactions out:</strong> "+ intTransactionCount +"</p>";
+            if(blIsContractAddress) {
+                objHoverNodeContent.innerHTML += "<p><small>This is a contract address</small></p>";
             }
-        }.bind(arrBlacklistedDomains));
+            objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
 
-        chrome.runtime.sendMessage({func: "whitelist_domain_list"}, function(objResponse) {
-            if(objResponse && objResponse.hasOwnProperty("resp")) {
-                arrWhitelistedDomains = objResponse.resp;
-            }
-        }.bind(arrWhitelistedDomains));
-
-        setTimeout(function() {
-            if(arrBlacklistedDomains.length > 0) {
-                var strCurrentTab = window.location.hostname;
-
-                //Domain is whitelisted, don't check the blacklist.
-                if(arrWhitelistedDomains.includes(strCurrentTab)) {
-                    console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
-                    return;
-                }
-
-                //Levenshtien - @sogoiii
-                var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
-                var source = strCurrentTab.replace(/\./g,'');
-                var intHolisticMetric = self.levenshtein(source, 'myetherwallet');
-                var intHolisticLimit = 7 // How different can the word be?
-                var blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
-
-                if (isBlacklisted || blHolisticStatus ) {
-                    document.body.innerHTML = ""; //Clear the DOM.
-                    document.body.cssText = "margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;font-family:arial,sans-serif";
-                    var objBlacklistedDomain = document.createElement("div");
-                    objBlacklistedDomain.style.cssText = "position:absolute;top:0%;left:0%;width:100%;height:100%;background:#00c2c1;color:#fff;text-align:center;font-size:100%;"
-
-                    var objBlacklistedDomainText = document.createElement("div");
-                    objBlacklistedDomainText.style.cssText = "margin-left:auto;margin-right:auto;width:50%;padding:5%;margin-top:5%;";
-                    objBlacklistedDomainText.innerHTML = "<img src='https://github.com/409H/EtherAddressLookup/raw/master/images/icon.png?raw=true' style='margin-left:auto;margin-right:auto;margin-bottom:1.5em'/>" +
-                        "<br /><h3 style='font-size:130%;font-weight:800;color:#fff'>ATTENTION</h3>We have detected this domain to have malicious " +
-                        "intent and have prevented you from interacting with it.<br /><br /><br />" +
-                        "<div style='margin-left:auto;margin-right:auto;width:50%'>" +
-                        "<span style='font-size:10pt;'>This is because you have enabled <em>'Warn of blacklisted domains'</em> setting on EtherAddressLookup Chrome " +
-                        "Extension. You can turn this setting off to interact with this site but it's advised not to." +
-                        "<br /><br />We blacklisted it for a reason.</span></div>";
-                    objBlacklistedDomainText.innerHTML += "<br /><span style='font-size:10pt;'>You can donate to the developers " +
-                        "address if you want to: 0x661b5dc032bedb210f225df4b1aa2bdd669b38bc</span>";
-
-                    objBlacklistedDomain.appendChild(objBlacklistedDomainText);
-                    document.body.appendChild(objBlacklistedDomain);
-                }
-            }
-        }.bind(arrBlacklistedDomains), 500)
+            return false;
+        }.bind(this));
     }
 }
 
 window.addEventListener("load", function() {
-    let objEtherAddressLookup = new EtherAddressLookup();
+    let objEtherAddressLookup = new EtherAddressLookup(Web3);
 });
 
 //Send message from the extension to here.
-chrome.runtime.onMessage.addListener(
+objBrowser.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         let objEtherAddressLookup = new EtherAddressLookup();
         if(typeof request.func !== "undefined") {
