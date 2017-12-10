@@ -72,6 +72,10 @@ objBrowser.runtime.onMessage.addListener(
                 console.log("Getting blacklisted domain list");
                 strResponse = getBlacklistedDomains("eal");
                 break;
+            case '3p_blacklist_domain_list' :
+                console.log("Getting 3p blacklisted domain list");
+                strResponse = getBlacklistedDomains("3p");
+                break;
             case 'use_3rd_party_blacklists' :
                 //This option is enabled by default
                 if(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist") === null) {
@@ -139,15 +143,9 @@ function getBlacklistedDomains(strType)
     strType = strType || "eal";
     if(strType == "eal") {
         var objEalDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
-        if (objEalDomains == null || typeof objEalDomains == "undefined") {
-            return objEalBlacklistedDomains.eal.domains;
-        }
-        return objEalDomains.domains;
+        return objEalDomains;
     } else {
         var objEalDomains = localStorage.getItem("ext-etheraddresslookup-3p_blacklist_domains_list");
-        if (objEalDomains == null || typeof objEalDomains == "undefined") {
-            return objEalBlacklistedDomains.third_party;
-        }
         return objEalDomains;
     }
 }
