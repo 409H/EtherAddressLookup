@@ -18,6 +18,12 @@ let objBrowser = chrome ? chrome : browser;
         objBlacklistDomains.addEventListener('click', toggleBlacklistDomains);
     }
 
+    //Toggle the use 3rd party blacklist domains option and set it in LocalStorage
+    var objBlacklistDomains = document.getElementById('ext-etheraddresslookup-3rd_party_blacklist_domains');
+    if(objBlacklistDomains) {
+        objBlacklistDomains.addEventListener('click', toggle3rdPartyBlacklistDomains);
+    }
+
     //Get the extension version
     var objManifest = objBrowser.runtime.getManifest();
     var objManifestVersion = document.getElementById('ext-manifest_version');
@@ -64,7 +70,15 @@ objBrowser.runtime.onMessage.addListener(
                 break;
             case 'blacklist_domain_list' :
                 console.log("Getting blacklisted domain list");
-                strResponse = getBlacklistedDomains();
+                strResponse = getBlacklistedDomains("eal");
+                break;
+            case 'use_3rd_party_blacklists' :
+                //This option is enabled by default
+                if(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist") === null) {
+                    strResponse = 1;
+                } else {
+                    strResponse = localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist");
+                }
                 break;
             case 'whitelist_domain_list' :
                 console.log("Getting whitelisted domain list");
@@ -82,25 +96,86 @@ objBrowser.runtime.onMessage.addListener(
     }
 );
 
-//@todo - make these nicer and so they're not duplicated
-function getBlacklistedDomains()
+function getBlacklistedDomains(strType)
 {
-    var objBlacklistedDomains = {"timestamp":0,"domains":[]};
+    var objEalBlacklistedDomains = {
+        "eal": {
+            "timestamp": 0,
+            "domains": [],
+            "format": "plain",
+            "repo": "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json",
+            "identifer": "eal"
+        },
+        "third_party": {
+            "iosiro": {
+                "timestamp": 0,
+                "domains": [],
+                "format": "plain",
+                "repo": "https://raw.githubusercontent.com/iosiro/counter_phishing_blacklist/master/blacklists/domains.json",
+                "identifer": "iosiro"
+            },
+            "segasec": {
+                "timestamp": 0,
+                "domains": [],
+                "format": "sha256",
+                "repo": "https://raw.githubusercontent.com/Segasec/PhishingFeed/master/phishing-domains-sha256.json",
+                "identifer": "segasec"
+            }
+        }
+    };
     //See if we need to get the blacklisted domains - ie: do we have them cached?
     if(localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list") === null) {
-        objBlacklistedDomains = getBlacklistedDomainsFromSource();
+        updateAllBlacklists(objEalBlacklistedDomains);
     } else {
         var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
         //Check to see if the cache is older than 5 minutes, if so re-cache it.
         objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
         console.log("Domains last fetched: " + (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) + " seconds ago");
-        if ((Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) > 180) {
-            console.log("Caching blacklisted domains again.");
-            objBlacklistedDomains = getBlacklistedDomainsFromSource();
+        if (objBlacklistedDomains.timestamp == 0 || (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) > 180) {
+            updateAllBlacklists(objEalBlacklistedDomains);
         }
     }
 
-    return objBlacklistedDomains.domains;
+    strType = strType || "eal";
+    if(strType == "eal") {
+        var objEalDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
+        if (objEalDomains == null || typeof objEalDomains == "undefined") {
+            return objEalBlacklistedDomains.eal.domains;
+        }
+        return objEalDomains.domains;
+    } else {
+        var objEalDomains = localStorage.getItem("ext-etheraddresslookup-3p_blacklist_domains_list");
+        if (objEalDomains == null || typeof objEalDomains == "undefined") {
+            return objEalBlacklistedDomains.third_party;
+        }
+        return objEalDomains;
+    }
+}
+
+function updateAllBlacklists(objEalBlacklistedDomains)
+{
+    getBlacklistedDomainsFromSource(objEalBlacklistedDomains.eal).then(function (arrDomains) {
+        objEalBlacklistedDomains.eal.timestamp = Math.floor(Date.now() / 1000);
+        objEalBlacklistedDomains.eal.domains = arrDomains;
+
+        localStorage.setItem("ext-etheraddresslookup-blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.eal));
+    });
+
+    getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.iosiro).then(function (arrDomains) {
+        objEalBlacklistedDomains.third_party.iosiro.timestamp = Math.floor(Date.now() / 1000);
+        objEalBlacklistedDomains.third_party.iosiro.domains = arrDomains;
+
+        localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
+        return objEalBlacklistedDomains.eal.domains;
+    });
+
+    getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.segasec).then(function (arrDomains) {
+        objEalBlacklistedDomains.third_party.segasec.timestamp = Math.floor(Date.now() / 1000);
+        objEalBlacklistedDomains.third_party.segasec.domains = arrDomains;
+
+        localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
+        return objEalBlacklistedDomains.eal.domains;
+    });
 }
 
 function getWhitelistedDomains()
@@ -123,23 +198,16 @@ function getWhitelistedDomains()
     return objWhitelistedDomains.domains;
 }
 
-function getBlacklistedDomainsFromSource()
+async function getBlacklistedDomainsFromSource(objBlacklist)
 {
-    console.log("Getting blacklist from GitHub now");
-    var objAjax = new XMLHttpRequest();
-    objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json", true);
-    objAjax.send();
-    objAjax.onreadystatechange = function () {
-        if (objAjax.readyState === 4) {
-            var arrBlacklistedDomains = JSON.parse(objAjax.responseText);
-            var objBlacklist = {};
-            objBlacklist.timestamp = Math.floor(Date.now() / 1000);
-            objBlacklist.domains = arrBlacklistedDomains;
-            localStorage.setItem("ext-etheraddresslookup-blacklist_domains_list", JSON.stringify(objBlacklist));
-            return objBlacklist;
-        }
+    try {
+        console.log("Getting blacklist from GitHub now: "+ objBlacklist.repo);
+        let objResponse = await fetch(objBlacklist.repo);
+        return objResponse.json();
     }
-    return {"timestamp":0,"domains":[]};
+    catch(objError) {
+        console.log("Failed to get blacklist for "+ objBlacklist.repo, objError);
+    }
 }
 
 function getWhitelistedDomainsFromSource()
