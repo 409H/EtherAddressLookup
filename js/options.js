@@ -68,6 +68,14 @@ objBrowser.runtime.onMessage.addListener(
                     strResponse = localStorage.getItem("ext-etheraddresslookup-blacklist_domains");
                 }
                 break;
+            case '3rd_party_blacklist_domains' :
+                //This option is enabled by defailt
+                if(localStorage.getItem("ext-etheraddresslookup-3rd_party_blacklist_domains") === null) {
+                    strResponse = 1;
+                } else {
+                    strResponse = localStorage.getItem("ext-etheraddresslookup-3rd_party_blacklist_domains");
+                }
+                break;
             case 'blacklist_domain_list' :
                 console.log("Getting blacklisted domain list");
                 strResponse = getBlacklistedDomains("eal");
