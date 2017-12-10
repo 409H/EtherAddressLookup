@@ -119,7 +119,7 @@ function showBookmarks()
             }
             var objLink = document.createElement("span");
             objLink.className = 'ext-etheraddresslookup-bookmark_icon';
-            objLink.innerHTML = "<a href='"+ arrBookmarks[i].url +"' target='_blank'><img src='"+ arrBookmarks[i].icon +"' class=\"ext-etheraddresslookup-bookmark_icon\"></a>";
+            objLink.innerHTML = "<a href='"+ arrBookmarks[i].url +"' target='_blank'><img src='"+ arrBookmarks[i].icon +"' title='"+ arrBookmarks[i].url +"' class=\"ext-etheraddresslookup-bookmark_icon\"></a>";
             document.getElementById("ext-etheraddresslookup-bookmarks").appendChild(objLink);
         }
     }
