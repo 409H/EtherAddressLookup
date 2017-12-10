@@ -31,14 +31,14 @@
         function doBlacklistCheck() {
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
-
+                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+                
                 //Domain is whitelisted, don't check the blacklist.
                 if(arrWhitelistedDomains.includes(strCurrentTab)) {
                     console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
                     return;
                 }
 
-                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
                 var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
 
                 //Only do Levenshtein if it's not blacklisted
