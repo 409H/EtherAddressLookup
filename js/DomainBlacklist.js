@@ -62,24 +62,30 @@
                 }
             }
 
-            //Now do the 3rd party domain list check
-            objBrowser.runtime.sendMessage({func: "3p_blacklist_domain_list"}, function(objResponse) {
+            //Now do the 3rd party domain list check if they have that option enabled.
+            objBrowser.runtime.sendMessage({func: "3rd_party_blacklist_domains"}, function(objResponse) {
                 if(objResponse && objResponse.hasOwnProperty("resp")) {
-                    var obj3rdPartyLists = JSON.parse(objResponse.resp);
-                    var strCurrentTab = window.location.hostname;
-                    var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+                    if(objResponse.resp == 1) {
+                        objBrowser.runtime.sendMessage({func: "3p_blacklist_domain_list"}, function(objResponse) {
+                            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                                var obj3rdPartyLists = JSON.parse(objResponse.resp);
+                                var strCurrentTab = window.location.hostname;
+                                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
 
-                    for(var str3rdPartyIdentifier in obj3rdPartyLists) {
+                                for(var str3rdPartyIdentifier in obj3rdPartyLists) {
 
-                        if(obj3rdPartyLists[str3rdPartyIdentifier].format == "sha256") {
-                            strCurrentTab = sha256(strCurrentTab);
-                        }
+                                    if(obj3rdPartyLists[str3rdPartyIdentifier].format == "sha256") {
+                                        strCurrentTab = sha256(strCurrentTab);
+                                    }
 
-                        if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
-                            console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
-                            window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing-"+ str3rdPartyIdentifier +".html#"+ (window.location.href);
-                            return false;
-                        }
+                                    if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
+                                        console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
+                                        window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing-"+ str3rdPartyIdentifier +".html#"+ (window.location.href);
+                                        return false;
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             });
