@@ -65,7 +65,6 @@ function getBlacklistStats()
     var objTotal3pCountText = document.getElementById("ext-etheraddresslookup-3p_blacklist_domains_total_count");
     var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-3p_blacklist_domains_list");
     objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
-    console.log(objBlacklistedDomains.iosiro);
     var intTotalBlacklisted = 0;
     for(var str3pName in objBlacklistedDomains) {
         intTotalBlacklisted += objBlacklistedDomains[str3pName].domains.length;
