@@ -71,7 +71,7 @@ objBrowser.runtime.onMessage.addListener(
                 strResponse = getWhitelistedDomains();
                 break;
             case 'rpc_provider' :
-                    strResponse = "https://instantly-clear-sloth.quiknode.io/fc551b4e-b3bf-4b0b-b438-aeb6c9c311f5/pF749Rxn3Mn8vgaCD4FM_A==/";
+                    strResponse = "https://freely-central-lark.quiknode.io/9fe4c4a0-2ea2-4ac1-ab64-f92990cd2914/118-xxADc8hKSSB9joCb-g==/";
                 break;
             default:
                 strResponse = "unsupported";
