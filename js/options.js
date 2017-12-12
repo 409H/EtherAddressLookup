@@ -130,7 +130,7 @@ function getBlacklistedDomains(strType)
                 "timestamp": 0,
                 "domains": [],
                 "format": "sha256",
-                "repo": "https://raw.githubusercontent.com/Segasec/PhishingFeed/master/phishing-domains-sha256.json",
+                "repo": "https://segasec.github.io/PhishingFeed/phishing-domains-sha256.json",
                 "identifer": "segasec"
             }
         }
@@ -167,21 +167,23 @@ function updateAllBlacklists(objEalBlacklistedDomains)
         localStorage.setItem("ext-etheraddresslookup-blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.eal));
     });
 
-    getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.iosiro).then(function (arrDomains) {
-        objEalBlacklistedDomains.third_party.iosiro.timestamp = Math.floor(Date.now() / 1000);
-        objEalBlacklistedDomains.third_party.iosiro.domains = arrDomains;
+    if( [null, 1].indexOf(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist")) >= 0) {
+        getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.iosiro).then(function (arrDomains) {
+            objEalBlacklistedDomains.third_party.iosiro.timestamp = Math.floor(Date.now() / 1000);
+            objEalBlacklistedDomains.third_party.iosiro.domains = arrDomains;
 
-        localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
-        return objEalBlacklistedDomains.eal.domains;
-    });
+            localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
+            return objEalBlacklistedDomains.eal.domains;
+        });
 
-    getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.segasec).then(function (arrDomains) {
-        objEalBlacklistedDomains.third_party.segasec.timestamp = Math.floor(Date.now() / 1000);
-        objEalBlacklistedDomains.third_party.segasec.domains = arrDomains;
+        getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.segasec).then(function (arrDomains) {
+            objEalBlacklistedDomains.third_party.segasec.timestamp = Math.floor(Date.now() / 1000);
+            objEalBlacklistedDomains.third_party.segasec.domains = arrDomains;
 
-        localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
-        return objEalBlacklistedDomains.eal.domains;
-    });
+            localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
+            return objEalBlacklistedDomains.eal.domains;
+        });
+    }
 }
 
 function getWhitelistedDomains()
