@@ -17,6 +17,16 @@ function toggleBlacklistDomains()
     refreshBlacklistDomains();
 }
 
+//Sets the local storage to remember their use 3rd party blacklist setting
+function toggle3rdPartyBlacklistDomains()
+{
+    var obj3rdPartyBlacklists = document.getElementById("ext-etheraddresslookup-3rd_party_blacklist_domains");
+    var intBlacklistDomains = obj3rdPartyBlacklists.checked ? 1 : 0;
+    localStorage.setItem("ext-etheraddresslookup-3rd_party_blacklist_domains", intBlacklistDomains);
+
+    refreshBlacklistDomains();
+}
+
 function refreshBlacklistDomains()
 {
     chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
@@ -30,6 +40,14 @@ function refreshBlacklistDomains()
     } else {
         document.getElementById("ext-etheraddresslookup-blacklist_domains").checked = (intBlacklistDomains == 1 ? true : false);
     }
+
+    //Check/uncheck use 3rd party blacklists
+    var intUse3rdPartyBlacklists = localStorage.getItem("ext-etheraddresslookup-3rd_party_blacklist_domains");
+    if(intUse3rdPartyBlacklists === null) {
+        document.getElementById("ext-etheraddresslookup-3rd_party_blacklist_domains").checked = true;
+    } else {
+        document.getElementById("ext-etheraddresslookup-3rd_party_blacklist_domains").checked = (intUse3rdPartyBlacklists == 1 ? true : false);
+    }
 }
 
 function getBlacklistStats()
@@ -42,10 +60,25 @@ function getBlacklistStats()
 
     objLastUpdatedText.innerText = timeDifference(Math.floor(Date.now()/1000), intLastUpdated);
     objTotalCountText.innerText = new Intl.NumberFormat().format(objBlacklistedDomains.domains.length);
+
+    //Now get the 3p blacklist stats
+    var objTotal3pCountText = document.getElementById("ext-etheraddresslookup-3p_blacklist_domains_total_count");
+    var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-3p_blacklist_domains_list");
+    objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
+    var intTotalBlacklisted = 0;
+    for(var str3pName in objBlacklistedDomains) {
+        intTotalBlacklisted += objBlacklistedDomains[str3pName].domains.length;
+    }
+    objTotal3pCountText.innerText = "+" + new Intl.NumberFormat().format(intTotalBlacklisted);
+
 }
 
 function timeDifference(current, previous)
 {
+    if(previous == 0) {
+        return "Not fetched";
+    }
+
     var elapsed = parseInt(current) - parseInt(previous);
     if(elapsed > 59) {
         return Math.floor(elapsed / 60) + ' minutes ago';

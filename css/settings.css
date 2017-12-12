@@ -19,7 +19,7 @@ body {
     .pure-g .pure-u-1-3 p, .pure-g .pure-u-2-3 p, .pure-g .pure-u-1-1 p {
       font-size: 10pt;
       font-weight: 500;
-      color: #b4b4b4; }
+      color: #717171; }
       .pure-g .pure-u-1-3 p .label, .pure-g .pure-u-2-3 p .label, .pure-g .pure-u-1-1 p .label {
         font-weight: 700; }
 
@@ -27,7 +27,7 @@ body {
   width: 100%; }
 
 .note {
-  color: #b4b4b4;
+  color: #757575;
   font-style: italic;
   font-size: 10pt; }
   .note.ext-etheraddresslookup-history_good {

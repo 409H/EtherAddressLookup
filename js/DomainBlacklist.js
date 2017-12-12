@@ -31,20 +31,23 @@
         function doBlacklistCheck() {
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
+                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+
+                var objBlacklistedDomains = JSON.parse(arrBlacklistedDomains);
+                arrBlacklistedDomains = objBlacklistedDomains.domains;
 
                 //Domain is whitelisted, don't check the blacklist.
-                if(arrWhitelistedDomains.includes(strCurrentTab)) {
+                if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
                     console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
-                    return;
+                    return false;
                 }
 
-                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
-                var isBlacklisted = arrBlacklistedDomains.includes(strCurrentTab);
+                var isBlacklisted = arrBlacklistedDomains.indexOf(strCurrentTab) >= 0 ? true : false;
 
                 //Only do Levenshtein if it's not blacklisted
                 //Levenshtein - @sogoiii
                 var blHolisticStatus = false;
-                if(isBlacklisted === false) {
+                if(isBlacklisted === false && arrWhitelistedDomains.indexOf(strCurrentTab) < 0) {
                     var strCurrentTab = punycode.toUnicode(strCurrentTab);
                     var source = strCurrentTab.replace(/\./g, '');
                     var intHolisticMetric = levenshtein(source, 'myetherwallet');
@@ -52,11 +55,40 @@
                     blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
                 }
 
-                if (isBlacklisted || blHolisticStatus ) {
+                if (isBlacklisted || blHolisticStatus) {
+                    console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
                     window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
                     return false;
                 }
             }
+
+            //Now do the 3rd party domain list check if they have that option enabled.
+            objBrowser.runtime.sendMessage({func: "3rd_party_blacklist_domains"}, function(objResponse) {
+                if(objResponse && objResponse.hasOwnProperty("resp")) {
+                    if(objResponse.resp == 1) {
+                        objBrowser.runtime.sendMessage({func: "3p_blacklist_domain_list"}, function(objResponse) {
+                            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                                var obj3rdPartyLists = JSON.parse(objResponse.resp);
+                                var strCurrentTab = window.location.hostname;
+                                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+
+                                for(var str3rdPartyIdentifier in obj3rdPartyLists) {
+
+                                    if(obj3rdPartyLists[str3rdPartyIdentifier].format == "sha256") {
+                                        strCurrentTab = sha256(strCurrentTab);
+                                    }
+
+                                    if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
+                                        console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
+                                        window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing-"+ str3rdPartyIdentifier +".html#"+ (window.location.href);
+                                        return false;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
 

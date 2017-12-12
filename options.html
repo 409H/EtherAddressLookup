@@ -27,14 +27,16 @@
     <br/>
 
     <label class="fancy-checkbox">
-        <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains"
-               id="ext-etheraddresslookup-blacklist_domains">
+        <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains" id="ext-etheraddresslookup-blacklist_domains">
         <span>Warn of blacklisted domains</span>
     </label>
     <div id="ext-etheraddresslookup-blacklist_domains_stats">
+        <input type="checkbox" name="ext-etheraddresslookup-3rd_party_blacklist_domains" id="ext-etheraddresslookup-3rd_party_blacklist_domains"> Use 3rd party blacklists <br /> <br />
         <small>Last updated: <span id="ext-etheraddresslookup-blacklist_domains_last_updated">N/A</span></small>
         <br/>
-        <small>Domains Blacklisted: <span id="ext-etheraddresslookup-blacklist_domains_total_count">0</span></small>
+        <small>Domains Blacklisted: <span id="ext-etheraddresslookup-blacklist_domains_total_count">0</span>
+                                    (<span id="ext-etheraddresslookup-3p_blacklist_domains_total_count">0</span>)
+        </small>
     </div>
 
     <br/>
@@ -51,7 +53,7 @@
         <small>* ENS address compatible.</small>
     </div>
 
-    <br/><br/>
+    <br/>
     <div id="footer">
         <div class="ext-etheraddresslookup-center">
             <a href="/settings.html" target="_blank">More Settings</a> &mdash;
