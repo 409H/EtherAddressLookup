@@ -77,44 +77,11 @@ a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the ch
 * Thanks to the team at MyEtherWallet for helping keep the domain blacklist up-to-date!
 * Thanks to the team at [Cryptominded](https://cryptominded.com/) for the store graphics!
 * Thanks to MrLuit for providing [https://etherscamdb.info](https://etherscamdb.info) and the report domain functionality (v1.5)
+* Thanks to [Samyoul](https://github.com/Samyoul) for continued support and development!
+* To everyone who reports bad domains to us through the various channels!
 
 ----
 
 ## Changelog
 
-### v1.8
-
-* Improved Levenshtien edit distance check for MyEtherWallet and punycode domains.
-
-### v1.7
-
-* Added the ability for EAL to check your browser history to see if you have been on a domain that has since been blacklisted.
-
-### v1.6
-
-* Added the ability to bookmark up to 6 domains with their favicon showing.
-
-### v1.5
-
-* Added report domain button.
-
-### v1.4
-
-* Added support for Firefox.
-
-### v1.3
-
-* Due to the recent phishing campaigns going on, we have decided to start a [domain blacklist](https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json), and 
-the extension will try to help you from being phished by removing the ability for you to interact with the blacklisted 
-domain by wiping the DOM and displaying a notice. This functionality is toggleable, but it's best to keep it on.
-  * If you find a domain that look suspicious and/or confirmed stealing private keys/being malicious, send 
-a [pull request](https://github.com/409H/EtherAddressLookup/compare) or [open an issue](https://github.com/409H/EtherAddressLookup/issues/new).
-
-### v1.2
-
-* You can now select your favourite blockchain explorer for links to direct you to.
-
-### v1.0
-
-* This extension will search the DOM for any Ether address (a hexidecimal string) and add a link to it to your favourite
-blockchain explorer. It will give you the option to add a highlight option so you can easily find addresses.
+Read the changelog [on my blog](https://harrydenley.com/ethaddresslookup-chrome-extension-release/).
