@@ -55,7 +55,8 @@
                     blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
                 }
 
-                if (isBlacklisted || blHolisticStatus) {
+                //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
+                if ( arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted || blHolisticStatus)) {
                     console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
                     window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
                     return false;
