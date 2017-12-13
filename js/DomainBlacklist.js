@@ -36,6 +36,11 @@
                 var objBlacklistedDomains = JSON.parse(arrBlacklistedDomains);
                 arrBlacklistedDomains = objBlacklistedDomains.domains;
 
+                if(arrBlacklistedDomains.length === 0) {
+                    console.log("No domains blacklisted at this time");
+                    return false;
+                }
+
                 //Domain is whitelisted, don't check the blacklist.
                 if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
                     console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
