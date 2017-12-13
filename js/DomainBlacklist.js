@@ -29,23 +29,19 @@
         }.bind(arrBlacklistedDomains));
 
         function doBlacklistCheck() {
+
+            //Domain is whitelisted, don't check the blacklist.
+            if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
+                console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
+                return false;
+            }
+
             if(arrBlacklistedDomains.length > 0) {
                 var strCurrentTab = window.location.hostname;
                 var strCurrentTab = strCurrentTab.replace(/www\./g,'');
 
                 var objBlacklistedDomains = JSON.parse(arrBlacklistedDomains);
                 arrBlacklistedDomains = objBlacklistedDomains.domains;
-
-                if(arrBlacklistedDomains.length === 0) {
-                    console.log("No domains blacklisted at this time");
-                    return false;
-                }
-
-                //Domain is whitelisted, don't check the blacklist.
-                if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
-                    console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
-                    return false;
-                }
 
                 var isBlacklisted = arrBlacklistedDomains.indexOf(strCurrentTab) >= 0 ? true : false;
 
