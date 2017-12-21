@@ -44,10 +44,21 @@
     <label>Preferred Blockchain Explorer</label>
     <select class="form-control" name="ext-etheraddresslookup-choose_blockchain"
             id="ext-etheraddresslookup-choose_blockchain">
-        <option value="https://etherscan.io/address">Etherscan.io *</option>
-        <option value="https://etherchain.org/account">Etherchain.org *</option>
-        <option value="https://ethplorer.io/address">Ethplorer.io</option>
-        <option value="http://ethergraphs.com/dashboard">Ethergraphs.com</option>
+        <optgroup label="Mainnet">
+            <option value="https://etherscan.io/address">Etherscan.io *</option>
+            <option value="https://etherchain.org/account">Etherchain.org *</option>
+            <option value="https://ethplorer.io/address">Ethplorer.io</option>
+            <option value="http://ethergraphs.com/dashboard">Ethergraphs.com</option>
+        </optgroup>
+        <optgroup label="Rinkeby">
+            <option value="https://rinkeby.etherscan.io/address">Etherscan.io *</option>
+        </optgroup>
+        <optgroup label="Ropsten">
+            <option value="https://ropsten.etherscan.io/address">Etherscan.io *</option>
+        </optgroup>
+        <optgroup label="Kovan">
+            <option value="https://kovan.etherscan.io/address">Etherscan.io *</option>
+        </optgroup>
     </select>
     <div class="note">
         <small>* ENS address compatible.</small>
