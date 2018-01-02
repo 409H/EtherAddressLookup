@@ -86,6 +86,32 @@
     </div>
 
     <div class="pure-g">
+        <div class="pure-u-1-1">
+            <h3>RPC Node</h3>
+            <p>Here you can set the RPC node (ie: <code>localhost:8545</code>) for address lookups. EAL supplies a mainnet
+                one for you that is maintained by Quiknode, but you may want to use your own.</p>
+            <p>Overwriting the default node will be helpful if you want lookups done on a testnet.</p>
+            <div class="warning margin-15 hide-me" id="ext-etheraddresslookup-rpcnode_errors"></div>
+            <div class="success margin-15 hide-me" id="ext-etheraddresslookup-rpcnode_success">
+                RPC Node setting has been updated. <br />
+                <span id="ext-etheraddresslookup-rpcnode_connected_status"></span>
+                <span id="ext-etheraddresslookup-rpcnode_eth_version"></span>
+                <span id="ext-etheraddresslookup-rpcnode_api_version"></span>
+                <span id="ext-etheraddresslookup-rpcnode_network_version"></span>
+            </div>
+            <form method="post" action="" class="pure-form pure-form-aligned" id="ext-etheraddresslookup-rpcnode_modify_form">
+                <div class="pure-control-group">
+                    <label for="ext-etheraddresslookup-rpcnode_modify_url">RPC Node:</label>
+                    <input type="text" name="rpcnode" placeholder="localhost:8545" id="ext-etheraddresslookup-rpcnode_modify_url">
+                </div>
+
+                <button type="reset" class="pure-button pure-button-secondary" id="ext-etheraddresslookup-rpcnode_reset_form">Reset to Default</button>
+                <button type="submit" class="pure-button pure-button-primary">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="pure-g">
         <div class="pure-u-2-3">
             <h3>Special Thanks</h3>
             <p>I'd like to dedicate this block to thank the 3rd party teams for maintaining their blacklists.</p>
@@ -108,8 +134,10 @@
             <p>Thanks, <br />&mdash; Harry.</p>
         </div>
     </div>
+<script src="js/app/lib/web3-light.min.js"></script>
 <script src="js/app/toggleBookmarks.js"></script>
 <script src="js/app/lib/URI.min.js"></script>
 <script src="js/app/historyInspector.js"></script>
+<script src="js/app/rpcNodeSelector.js"></script>
 </body>
 </html>
