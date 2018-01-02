@@ -97,7 +97,14 @@ objBrowser.runtime.onMessage.addListener(
                 strResponse = getWhitelistedDomains();
                 break;
             case 'rpc_provider' :
-                    strResponse = "https://freely-central-lark.quiknode.io/9fe4c4a0-2ea2-4ac1-ab64-f92990cd2914/118-xxADc8hKSSB9joCb-g==/";
+                    if(localStorage.getItem("ext-etheraddresslookup-rpc_node") === null) {
+                        strResponse = "https://freely-central-lark.quiknode.io/9fe4c4a0-2ea2-4ac1-ab64-f92990cd2914/118-xxADc8hKSSB9joCb-g==/";
+                    } else {
+                        strResponse = localStorage.getItem("ext-etheraddresslookup-rpc_node");
+                    }
+                break;
+            case 'rpc_default_provider' :
+                strResponse = "https://freely-central-lark.quiknode.io/9fe4c4a0-2ea2-4ac1-ab64-f92990cd2914/118-xxADc8hKSSB9joCb-g==/";
                 break;
             default:
                 strResponse = "unsupported";
