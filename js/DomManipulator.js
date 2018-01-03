@@ -364,6 +364,8 @@ class EtherAddressLookup {
         var objHoverNodeContent = document.createElement("div");
         objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
         objHoverNodeContent.innerHTML = "<p id='ext-etheraddresslookup-fetching_data_"+intUniqueId+"'><strong>Fetching Data...</strong></p>";
+        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId+"' class='ext-etheraddresslookup-address_stats_hover_node_error'></div>";
+        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId+"' class='ext-etheraddresslookup-address_stats_hover_node_ok'></div>";
         objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-address_balance_"+intUniqueId+"'></span>";
         objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-transactions_out_"+intUniqueId+"'></span>";
         objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-contract_address_"+intUniqueId+"'></span>";
@@ -386,7 +388,9 @@ class EtherAddressLookup {
                 var intTransactionCount = "";
                 if(error) {
                     intTransactionCount = -1;
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
                 } else {
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
                     intTransactionCount = parseInt(result).toLocaleString();
                 }
 
@@ -403,7 +407,9 @@ class EtherAddressLookup {
                 var flEthBalance = "";
                 if(error) {
                     flEthBalance = -1;
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
                 } else {
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
                     flEthBalance = web3.fromWei(result.toString(10), "ether").toLocaleString("en-US", {maximumSignificantDigits: 9});
                 }
 
@@ -421,7 +427,9 @@ class EtherAddressLookup {
 
                 if(error) {
                     objContractAddress.innerHTML += "<small>Unable to determine if contract</small>";
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
                 } else {
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
                     var blIsContractAddress = result == "0x" ? false : true;
                     if (blIsContractAddress) {
                         objContractAddress.innerHTML += "<small>This is a contract address</small>";
