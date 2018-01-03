@@ -104,6 +104,7 @@
 }
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+    all: initial;
     display: none;
     position: absolute;
     bottom: 5%;
@@ -122,12 +123,13 @@
 }
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > span {
-    padding: 10%;
-    margin-top: 5%;
+    all: initial;
     font-size: 10pt;
     text-decoration: none;
     font-style: normal;
     font-family: 'Verdana';
+    display: block;
+    line-height: 2em;
 }
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > a > img {
     display: inline;
