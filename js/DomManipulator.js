@@ -364,8 +364,8 @@ class EtherAddressLookup {
         var objHoverNodeContent = document.createElement("div");
         objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
         objHoverNodeContent.innerHTML = "<p id='ext-etheraddresslookup-fetching_data_"+intUniqueId+"'><strong>Fetching Data...</strong></p>";
-        objHoverNodeContent.innerHTML += "<br /><span id='ext-etheraddresslookup-address_balance_"+intUniqueId+"'></span><br />";
-        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-transactions_out_"+intUniqueId+"'></span><br />";
+        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-address_balance_"+intUniqueId+"'></span>";
+        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-transactions_out_"+intUniqueId+"'></span>";
         objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-contract_address_"+intUniqueId+"'></span>";
 
         objHoverNode.appendChild(objHoverNodeContent);
