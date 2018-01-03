@@ -121,8 +121,9 @@
     overflow-y: hidden;
 }
 
-.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > p {
-    margin: 5%;
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > span {
+    padding: 10%;
+    margin-top: 5%;
     font-size: 10pt;
     text-decoration: none;
     font-style: normal;
