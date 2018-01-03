@@ -357,12 +357,16 @@ class EtherAddressLookup {
             return false;
         }
 
+        let intUniqueId = (new Date()).getTime();
+
         var objHoverNode = document.createElement("div");
         objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
         var objHoverNodeContent = document.createElement("div");
         objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
-        objHoverNodeContent.innerHTML = "<p><strong>Fetching Data...</strong></p>";
-        objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
+        objHoverNodeContent.innerHTML = "<p id='ext-etheraddresslookup-fetching_data_"+intUniqueId+"'><strong>Fetching Data...</strong></p>";
+        objHoverNodeContent.innerHTML += "<br /><span id='ext-etheraddresslookup-address_balance_"+intUniqueId+"'></span><br />";
+        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-transactions_out_"+intUniqueId+"'></span><br />";
+        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-contract_address_"+intUniqueId+"'></span>";
 
         objHoverNode.appendChild(objHoverNodeContent);
         this.appendChild(objHoverNode);
@@ -371,17 +375,63 @@ class EtherAddressLookup {
         objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
             var str0xAddress = this.getAttribute("data-address");
-            var strAccountBalance = parseFloat(web3.fromWei(web3.eth.getBalance(str0xAddress).toString(10), "ether")).toLocaleString('en-US', {maximumSignificantDigits: 9});
-            var intTransactionCount = parseInt(web3.eth.getTransactionCount(str0xAddress)).toLocaleString();
-            var blIsContractAddress = web3.eth.getCode(str0xAddress) == "0x" ? false: true;
+            let objHoverNodeContent = this.children[1].children[0];
 
-            var objHoverNodeContent = this.children[1].children[0];
-            objHoverNodeContent.innerHTML = "<p><strong>ETH:</strong> "+ strAccountBalance +"</p>";
-            objHoverNodeContent.innerHTML += "<p><strong>Transactions out:</strong> "+ intTransactionCount +"</p>";
-            if(blIsContractAddress) {
-                objHoverNodeContent.innerHTML += "<p><small>This is a contract address</small></p>";
+            //Get transaction count
+            web3.eth.getTransactionCount(str0xAddress, function(error, result) {
+                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
+                    objHoverNodeContent.children[0].style.display = 'none';
+                }
+
+                var intTransactionCount = "";
+                if(error) {
+                    intTransactionCount = -1;
+                } else {
+                    intTransactionCount = parseInt(result).toLocaleString();
+                }
+
+                var objTransactionCount = objHoverNodeContent.querySelector("#ext-etheraddresslookup-transactions_out_"+intUniqueId);
+                objTransactionCount.innerHTML = "<strong>Transactions out:</strong> "+ intTransactionCount;
+            });
+
+            //Get the account balance
+            web3.eth.getBalance(str0xAddress, function(error, result) {
+                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
+                    objHoverNodeContent.children[0].style.display = 'none';
+                }
+
+                var flEthBalance = "";
+                if(error) {
+                    flEthBalance = -1;
+                } else {
+                    flEthBalance = web3.fromWei(result.toString(10), "ether").toLocaleString("en-US", {maximumSignificantDigits: 9});
+                }
+
+                var objAddressBalance = objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_balance_"+intUniqueId);
+                objAddressBalance.innerHTML += "<strong>ETH:</strong> "+ flEthBalance;
+            });
+
+            //See if the address is a contract
+            web3.eth.getCode(str0xAddress, function(error, result) {
+                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
+                    objHoverNodeContent.children[0].style.display = 'none';
+                }
+
+                var objContractAddress = objHoverNodeContent.querySelector("#ext-etheraddresslookup-contract_address_"+intUniqueId);
+
+                if(error) {
+                    objContractAddress.innerHTML += "<small>Unable to determine if contract</small>";
+                } else {
+                    var blIsContractAddress = result == "0x" ? false : true;
+                    if (blIsContractAddress) {
+                        objContractAddress.innerHTML += "<small>This is a contract address</small>";
+                    }
+                }
+            });
+
+            if(objResponse.resp.includes("quiknode.io")) {
+                objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='" + chrome.runtime.getURL("/images/powered-by-quiknode.png") + "' /></a>";
             }
-            objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='"+ chrome.runtime.getURL("/images/powered-by-quiknode.png") +"' /></a>";
 
             return false;
         }.bind(this));
