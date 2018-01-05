@@ -13,6 +13,7 @@ class EtherAddressLookup {
     setDefaultExtensionSettings()
     {
         this.blHighlight = false;
+        this.blPerformAddressLookups = true;
         this.strBlockchainExplorer = "https://etherscan.io/address";
         this.strRpcProvider = "https://localhost:8545";
 
@@ -38,6 +39,12 @@ class EtherAddressLookup {
         //Get the blockchain explorer for the user
         objBrowser.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
             this.strBlockchainExplorer = objResponse.resp;
+            ++this.intSettingsCount;
+        }.bind(this));
+
+        //Get the perform address lookup option
+        objBrowser.runtime.sendMessage({func: "perform_address_lookups"}, function(objResponse) {
+            this.blPerformAddressLookups = objResponse.resp;
             ++this.intSettingsCount;
         }.bind(this));
 
@@ -142,7 +149,9 @@ class EtherAddressLookup {
             }
             this.convertAddressToLink();
 
-            this.setAddressOnHoverBehaviour();
+            if(this.blPerformAddressLookups > 0) {
+                this.setAddressOnHoverBehaviour();
+            }
         }
     }
 
