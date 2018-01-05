@@ -104,6 +104,7 @@
 }
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+    all: initial;
     display: none;
     position: absolute;
     bottom: 5%;
@@ -121,12 +122,14 @@
     overflow-y: hidden;
 }
 
-.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > p {
-    margin: 5%;
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > span {
+    all: initial;
     font-size: 10pt;
     text-decoration: none;
     font-style: normal;
     font-family: 'Verdana';
+    display: block;
+    line-height: 2em;
 }
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > a > img {
     display: inline;
@@ -140,4 +143,27 @@
 
 .ext-etheraddresslookup-0xaddress:hover .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
     display: inline-block;
+}
+
+.ext-etheraddresslookup-address_stats_hover_node_error {
+    all: initial;
+    background: #d02626;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    right: 5%;
+    display: none;
+    z-index: 2;
+}
+.ext-etheraddresslookup-address_stats_hover_node_ok {
+    all: initial;
+    background: #32a735;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    right: 5%;
+    display: none;
+    z-index: 1;
 }
