@@ -8,7 +8,7 @@
 </head>
 <body id="ext-etheraddresslookup-popup">
 <div id="content">
-    <h3 class="text-center">EtherAddressLookup</h3>
+    <h4 class="text-center">EtherAddressLookup</h4>
 
     <div id="ext-etheraddresslookup-bookmarks" class="ext-etheraddresslookup-center">
         <!--- populated by js/app/toggleBookmarks.js showBookmarks() -->
@@ -24,7 +24,10 @@
         <span>Highlight Matches</span>
     </label>
 
-    <br/>
+    <label class="fancy-checkbox">
+        <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-perform_address_lookups">
+        <span>Perform address lookups</span>
+    </label>
 
     <label class="fancy-checkbox">
         <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains" id="ext-etheraddresslookup-blacklist_domains">
@@ -85,6 +88,7 @@
 <script src="js/app/chooseBlockchain.js"></script>
 <script src="js/app/toggleBlacklistDomains.js"></script>
 <script src="js/app/toggleBookmarks.js"></script>
+<script src="/js/app/toggleAddressLookups.js"></script>
 
 <script src="js/options.js"></script>
 </body>
