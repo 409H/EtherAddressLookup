@@ -12,6 +12,12 @@ let objBrowser = chrome ? chrome : browser;
         objOptionBlockchainExplorer.addEventListener('change', toggleBlockchainExplorer);
     }
 
+    //Toggle the address lookups option and set it in LocalStorage
+    var objAddressLookups = document.getElementById('ext-etheraddresslookup-perform_address_lookups');
+    if(objAddressLookups) {
+        objAddressLookups.addEventListener('click', togglePerformAddressLookups);
+    }
+
     //Toggle the blacklist domains option and set it in LocalStorage
     var objBlacklistDomains = document.getElementById('ext-etheraddresslookup-blacklist_domains');
     if(objBlacklistDomains) {
@@ -105,6 +111,14 @@ objBrowser.runtime.onMessage.addListener(
                 break;
             case 'rpc_default_provider' :
                 strResponse = "https://freely-central-lark.quiknode.io/9fe4c4a0-2ea2-4ac1-ab64-f92990cd2914/118-xxADc8hKSSB9joCb-g==/";
+                break;
+            case 'perform_address_lookups' :
+                //This option is enabled by default
+                if(localStorage.getItem("ext-etheraddresslookup-perform_address_lookups") === null) {
+                    strResponse = 1;
+                } else {
+                    strResponse = localStorage.getItem("ext-etheraddresslookup-perform_address_lookups");
+                }
                 break;
             default:
                 strResponse = "unsupported";
