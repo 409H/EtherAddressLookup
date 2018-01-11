@@ -26,16 +26,16 @@ body {
 .pure-table {
   width: 100%; }
 
-.note {
+.ext-etheraddresslookup-note {
   color: #757575;
   font-style: italic;
   font-size: 10pt; }
-  .note.ext-etheraddresslookup-history_good {
+  .ext-etheraddresslookup-note.ext-etheraddresslookup-history_good {
     margin: 5px;
     color: #fff;
     background: #00c2c1;
     padding: 2px; }
-  .note.ext-etheraddresslookup-history_bad {
+  .ext-etheraddresslookup-note.ext-etheraddresslookup-history_bad {
     margin: 5px;
     color: #fff;
     background: #c2654c;

@@ -102,7 +102,7 @@ function showBookmarks()
             var objCellLink = objRow.insertCell(1);
             objCellLink.appendChild(document.createTextNode(arrBookmarks[i].url));
             if( arrBookmarks[i].url.length === 0 ) {
-                objCellLink.innerHTML = "<span class='note'>Unused bookmark</span>";
+                objCellLink.innerHTML = "<span class='ext-etheraddresslookup-note'>Unused bookmark</span>";
             }
 
             //Add a modify links
