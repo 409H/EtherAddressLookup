@@ -1,55 +1,68 @@
 {
-  "manifest_version": 2,
-
-  "name": "EtherAddressLookup",
-  "short_name": "EtherAddressLookup",
-  "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
-  "version": "1.14.1",
-
-  "browser_action": {
-    "default_icon": "images/icon.png",
-    "default_popup": "options.html",
-    "default_title": "EtherAddressLookup"
-  },
-
-  "permissions": [
-    "activeTab"
-  ],
-
-  "optional_permissions": [
-    "history"
-  ],
-
-  "content_scripts":[{
-    "run_at": "document_start",
-    "matches": ["http://*/*", "https://*/*"],
-    "js": [
-      "js/app/lib/punycode.min.js",
-      "js/app/lib/blockies.min.js",
-      "js/app/lib/sha256.min.js",
-      "js/DomainBlacklist.js"
-    ]
-  },{
-    "run_at": "document_end",
-    "matches": ["http://*/*", "https://*/*"],
-    "js": [
-      "js/app/lib/web3-light.min.js",
-      "js/DomManipulator.js"
-    ],
-    "css": ["css/app.css"]
-  }],
-
-  "background": {
-    "scripts": ["js/options.js"]
-  },
-
-  "icons": {
-    "16": "images/ether-16x16.png",
-    "48": "images/ether-48x48.png",
-    "128": "images/ether-128x128.png"
-  },
-
-  "web_accessible_resources": [
-    "images/powered-by-quiknode.png"
-  ]
+	"name": "EtherAddressLookup",
+	"version": "1.14.1",
+	"author": "EtherAddressLookup",
+	"browser_action": {
+		"default_icon": {
+			"20": "images/ether-20x20.png",
+			"40": "images/ether-40x40.png"
+		},
+		"default_popup": "options.html",
+		"default_title": "EtherAddressLookup"
+	},
+	"content_scripts": [
+		{
+			"run_at": "document_start",
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"js/app/lib/punycode.min.js",
+				"js/app/lib/blockies.min.js",
+				"js/app/lib/sha256.min.js",
+				"js/DomainBlacklist.js"
+			]
+		},
+		{
+			"run_at": "document_end",
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"js/app/lib/web3-light.min.js",
+				"js/DomManipulator.js"
+			],
+			"css": [
+				"css/app.css"
+			]
+		}
+	],
+	"description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
+	"options_page": "settings.html",
+	"optional_permissions": [
+		"history"
+	],
+	"permissions": [
+		"activeTab"
+	],
+	"background": {
+		"page": "background.html",
+		"persistent": true
+	},
+	"icons": {
+		"16": "images/ether-16x16.png",
+		"48": "images/ether-48x48.png",
+		"128": "images/ether-128x128.png"
+	},
+	"manifest_version": 2,
+	"short_name": "EtherAddressLookup",
+	"web_accessible_resources": [
+		"images/powered-by-quiknode.png"
+	],
+	"-ms-preload": {
+		"backgroundScript": "backgroundScriptsAPIBridge.js",
+		"contentScript": "contentScriptsAPIBridge.js"
+	}
 }
