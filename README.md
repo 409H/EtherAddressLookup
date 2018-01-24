@@ -1,3 +1,4 @@
+
 ## EtherAddressLookup
 
 #### Automatically adds links to strings that look like Ethereum addresses so you can quickly look them up on your favourite block explorer. 
@@ -8,7 +9,9 @@ The blacklists found in this repo serve both the EAL Chrome Extension & MetaMask
 
 Announcement Post: http://harrydenley.com/ethaddresslookup-chrome-extension-release/
 
-Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc)
+Ether/ERC20 donation address:
+To original author : [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](https://etherscan.io/address/0x661b5dc032bedb210f225df4b1aa2bdd669b38bc)
+To autor of this Fork (Migration to MS Edge) : [`0x6AA06778e08798305be42F0A8C1Db4bDeE28f06F`](https://etherscan.io/address/0x6AA06778e08798305be42F0A8C1Db4bDeE28f06F)
 
 #### Install Chrome Extension Here: https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn
 
@@ -33,6 +36,9 @@ As a community resource, everyone is encouraged to make a PR to add or update th
 
 
 ## Installations
+### Microsoft Edge
+
+The extension is currently being migrated
 
 ### Chrome & Firefox Extension
 
@@ -42,6 +48,10 @@ here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhm
 (Note that this will have automatic updates)
 
 ### Manual Installation
+
+#### Edge
+* Clone/download [the repo](https://github.com/Golapadeog/EtherAddressLookup-Edge).
+* Follow [this steps](https://docs.microsoft.com/en-us/microsoft-edge/extensions/guides/debugging-extensions) to install an unknow extension
 
 #### Chrome
 * Clone/download [the repo](https://github.com/409H/EtherAddressLookup).
