@@ -288,7 +288,7 @@ class EtherAddressLookup {
     isPatternMatched(content)
     {
         for(var i=0; i < this.matchPatterns.length; i++){
-            if(this.matchPatterns[i].exec(content) !== null){
+            if(content.match(this.matchPatterns[i]) !== null){
                 return true;
             }
         }
