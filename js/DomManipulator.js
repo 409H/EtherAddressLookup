@@ -48,14 +48,24 @@ class EtherAddressLookup {
             ++this.intSettingsCount;
         }.bind(this));
 
+        //setTimeout causes a CSP error : https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11320214/
+        //because Edge doesn't ignore the website CSP rules for extensions
+        this.updateDOM();
+
+        /*
         //Update the DOM once all settings have been received...
         setTimeout(function() {
             // Needs to happen after user settings have been collected
             // and in the context of init();
-            this.setSearchAndReplaceSettings();
-            this.setWarningSettings();
-            this.manipulateDOM();
+            this.updateDOM();
         }.bind(this), 10);
+        */
+    }
+
+    updateDOM(){
+        this.setSearchAndReplaceSettings();
+        this.setWarningSettings();
+        this.manipulateDOM();
     }
 
     /**
