@@ -34,7 +34,7 @@ class EtherAddressLookup {
                 this.blHighlight = (objResponse.resp == 1);
             }
             ++this.intSettingsCount;
-        }.bind(this));
+    }.bind(this));
 
         //Get the blockchain explorer for the user
         objBrowser.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
