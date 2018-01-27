@@ -30,6 +30,7 @@ class EtherAddressLookup {
         }, function(objResponse) {
             if (objResponse && objResponse.hasOwnProperty("resp")) {
                 this.blHighlight = (objResponse.resp == 1);
+                this.updateDOM();
             }
         }.bind(this));
 
@@ -38,6 +39,7 @@ class EtherAddressLookup {
             func: "blockchain_explorer"
         }, function(objResponse) {
             this.strBlockchainExplorer = objResponse.resp;
+            this.updateDOM();
         }.bind(this));
 
         //Get the perform address lookup option
@@ -45,6 +47,7 @@ class EtherAddressLookup {
             func: "perform_address_lookups"
         }, function(objResponse) {
             this.blPerformAddressLookups = objResponse.resp;
+            this.updateDOM();
         }.bind(this));
 
         //setTimeout causes a CSP error : https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11320214/
