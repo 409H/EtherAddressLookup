@@ -2,22 +2,19 @@ let objBrowser = chrome ? chrome : browser;
 
 class EtherAddressLookup {
 
-    constructor(objWeb3)
-    {
+    constructor(objWeb3) {
         console.log("Init EAL");
         this.objWeb3 = objWeb3;
         this.setDefaultExtensionSettings();
         this.init();
     }
 
-    setDefaultExtensionSettings()
-    {
+    setDefaultExtensionSettings() {
         this.blHighlight = false;
         this.blPerformAddressLookups = true;
         this.strBlockchainExplorer = "https://etherscan.io/address";
         this.strRpcProvider = "https://localhost:8545";
 
-        this.intSettingsCount = 0;
         this.intSettingsTotalCount = 2;
     }
 
@@ -25,27 +22,29 @@ class EtherAddressLookup {
      * @name init
      * @desc Gets extension settings and applies DOM manipulation
      */
-    init()
-    {
+    init() {
         let objBrowser = chrome ? chrome : browser;
         //Get the highlight option for the user
-        objBrowser.runtime.sendMessage({func: "highlight_option"}, function(objResponse) {
-            if(objResponse && objResponse.hasOwnProperty("resp")) {
+        objBrowser.runtime.sendMessage({
+            func: "highlight_option"
+        }, function(objResponse) {
+            if (objResponse && objResponse.hasOwnProperty("resp")) {
                 this.blHighlight = (objResponse.resp == 1);
             }
-            ++this.intSettingsCount;
-    }.bind(this));
+        }.bind(this));
 
         //Get the blockchain explorer for the user
-        objBrowser.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
+        objBrowser.runtime.sendMessage({
+            func: "blockchain_explorer"
+        }, function(objResponse) {
             this.strBlockchainExplorer = objResponse.resp;
-            ++this.intSettingsCount;
         }.bind(this));
 
         //Get the perform address lookup option
-        objBrowser.runtime.sendMessage({func: "perform_address_lookups"}, function(objResponse) {
+        objBrowser.runtime.sendMessage({
+            func: "perform_address_lookups"
+        }, function(objResponse) {
             this.blPerformAddressLookups = objResponse.resp;
-            ++this.intSettingsCount;
         }.bind(this));
 
         //setTimeout causes a CSP error : https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11320214/
@@ -62,7 +61,7 @@ class EtherAddressLookup {
         */
     }
 
-    updateDOM(){
+    updateDOM() {
         this.setSearchAndReplaceSettings();
         this.setWarningSettings();
         this.manipulateDOM();
@@ -72,8 +71,7 @@ class EtherAddressLookup {
      * @name Set Search And Replace Settings
      * @desc
      */
-    setSearchAndReplaceSettings()
-    {
+    setSearchAndReplaceSettings() {
         // Check user is on their favourite block explorer, on fail target blank.
         this.target = (this.isBlockchainExplorerSite() ? '_self' : '_blank');
 
@@ -107,7 +105,7 @@ class EtherAddressLookup {
             '$1<a href="' + this.strBlockchainExplorer + '/$2" ' +
             'data-address="$2"' +
             'class="ext-etheraddresslookup-link ext-etheraddresslookup-0xaddress" ' +
-            'target="'+ this.target +'">' +
+            'target="' + this.target + '">' +
             '<div class="ext-etheraddresslookup-blockie" data-ether-address="$2" ></div> $2' +
             '</a>$3',
 
@@ -115,7 +113,7 @@ class EtherAddressLookup {
             '$1<a title="See this address on the blockchain explorer" ' +
             'href="' + this.strBlockchainExplorer + '/$2" ' +
             'class="ext-etheraddresslookup-link" ' +
-            'target="'+ this.target +'">$2</a>$3',
+            'target="' + this.target + '">$2</a>$3',
 
             // ENS With ZWCs Replace
             '$1<slot title="WARNING! This ENS address has ZWCs. Someone may be trying to scam you." ' +
@@ -127,8 +125,7 @@ class EtherAddressLookup {
      * @name Set Warning Settings
      * @desc
      */
-    setWarningSettings()
-    {
+    setWarningSettings() {
         // The block explorers that can handle ENS addresses
         this.ENSCompatiableExplorers = [
             "https://etherscan.io/address",
@@ -136,8 +133,8 @@ class EtherAddressLookup {
         ];
 
         // Does the user's favorite explorer support an ENS address
-        for(var i=0; i<this.ENSCompatiableExplorers.length; i++){
-            if(this.strBlockchainExplorer == this.ENSCompatiableExplorers[i]){
+        for (var i = 0; i < this.ENSCompatiableExplorers.length; i++) {
+            if (this.strBlockchainExplorer == this.ENSCompatiableExplorers[i]) {
                 this.ENSCompatiable = true;
                 break;
             }
@@ -145,23 +142,20 @@ class EtherAddressLookup {
         }
 
         // On failure give the user a warning.
-        if(!this.ENSCompatiable){
+        if (!this.ENSCompatiable) {
             this.replacePatterns[1] = '$1<a title="Notification! We have spotted an ENS address, your current block explorer can\'t parse this address. Please choose a compatible block explorer." ' +
                 'class="ext-etheraddresslookup-link ext-etheraddresslookup-warning" href="#">$2</a>$3';
         }
     }
 
-    manipulateDOM()
-    {
-        if(true || this.intSettingsCount === this.intSettingsTotalCount) {
-            if(this.blBlacklistDomains) {
-                this.blacklistedDomainCheck();
-            }
-            this.convertAddressToLink();
+    manipulateDOM() {
+        if (this.blBlacklistDomains) {
+            this.blacklistedDomainCheck();
+        }
+        this.convertAddressToLink();
 
-            if(this.blPerformAddressLookups > 0) {
-                this.setAddressOnHoverBehaviour();
-            }
+        if (this.blPerformAddressLookups > 0) {
+            this.setAddressOnHoverBehaviour();
         }
     }
 
@@ -169,17 +163,16 @@ class EtherAddressLookup {
      * @name Convert Address To Link
      * @desc Finds Ethereum addresses and converts to a link to a block explorer
      */
-    convertAddressToLink()
-    {
+    convertAddressToLink() {
         var arrWhitelistedTags = ["code", "span", "p", "td", "li", "em", "i", "b", "strong", "small"];
 
         //Get the whitelisted nodes
-        for(var i=0; i<arrWhitelistedTags.length; i++) {
+        for (var i = 0; i < arrWhitelistedTags.length; i++) {
             var objNodes = document.getElementsByTagName(arrWhitelistedTags[i]);
             //Loop through the whitelisted content
-            for(var x=0; x<objNodes.length; x++) {
+            for (var x = 0; x < objNodes.length; x++) {
 
-                if(this.hasIgnoreAttributes(objNodes[x])){
+                if (this.hasIgnoreAttributes(objNodes[x])) {
                     continue;
                 }
 
@@ -190,7 +183,7 @@ class EtherAddressLookup {
         this.tidyUpSlots();
         this.addBlockies();
 
-        if(this.blHighlight) {
+        if (this.blHighlight) {
             this.addHighlightStyle();
         }
     }
@@ -201,19 +194,18 @@ class EtherAddressLookup {
      * @desc slot node contains regex replaced content; see generateReplacementContent()
      * @param {Node} objNode
      */
-    convertAddresses(objNode)
-    {
+    convertAddresses(objNode) {
         // Some nodes have non-textNode children
         // we need to ensure regex is applied only to text otherwise we will mess the html up
-        for(var i=0; i < objNode.childNodes.length; i++){
+        for (var i = 0; i < objNode.childNodes.length; i++) {
             // Only check textNodes to prevent applying RegEx against element attributes
-            if(objNode.childNodes[i].nodeType == 3){ // nodeType 3 = a text node
+            if (objNode.childNodes[i].nodeType == 3) { // nodeType 3 = a text node
 
                 var child = objNode.childNodes[i];
                 var childContent = child.textContent;
 
                 // Only start replacing stuff if the we get a RegEx match.
-                if(this.isPatternMatched(childContent)) {
+                if (this.isPatternMatched(childContent)) {
                     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot
                     var replacement = document.createElement('slot');
                     replacement.setAttribute('class', 'ext-etheraddresslookup-temporary');
@@ -230,9 +222,8 @@ class EtherAddressLookup {
      * @param {string} content
      * @returns {string}
      */
-    generateReplacementContent(content)
-    {
-        for(var i=0; i < this.regExPatterns.length; i++){
+    generateReplacementContent(content) {
+        for (var i = 0; i < this.regExPatterns.length; i++) {
             content = content.replace(this.regExPatterns[i], this.replacePatterns[i]);
         }
         return content;
@@ -244,19 +235,18 @@ class EtherAddressLookup {
      * @param {Element} node
      * @returns {boolean}
      */
-    hasIgnoreAttributes(node)
-    {
+    hasIgnoreAttributes(node) {
         var ignoreAttributes = {
             "class": ["ng-binding"]
         };
 
         // Loop through all attributes we want to test for ignoring
-        for(var attributeName in ignoreAttributes){
+        for (var attributeName in ignoreAttributes) {
             // Filter out the object's default properties
             if (ignoreAttributes.hasOwnProperty(attributeName)) {
 
                 // Check this node has the attribute we are currently checking for
-                if(node.hasAttribute(attributeName)){
+                if (node.hasAttribute(attributeName)) {
 
                     // This node's value for the attribute we are checking
                     var nodeAttributeValue = node.getAttribute(attributeName);
@@ -264,9 +254,9 @@ class EtherAddressLookup {
                     var badAttributeValueList = ignoreAttributes[attributeName];
 
                     // Loop through the attribute values we want to ignore
-                    for(var i=0; i < badAttributeValueList.length; i++){
+                    for (var i = 0; i < badAttributeValueList.length; i++) {
                         // If we find an indexOf, this value is present in the attribute
-                        if(nodeAttributeValue.indexOf(badAttributeValueList[i]) !== -1){
+                        if (nodeAttributeValue.indexOf(badAttributeValueList[i]) !== -1) {
                             return true;
                         }
                     }
@@ -285,10 +275,9 @@ class EtherAddressLookup {
      * @param {string} content
      * @returns {boolean}
      */
-    isPatternMatched(content)
-    {
-        for(var i=0; i < this.matchPatterns.length; i++){
-            if(content.match(this.matchPatterns[i]) !== null){
+    isPatternMatched(content) {
+        for (var i = 0; i < this.matchPatterns.length; i++) {
+            if (content.match(this.matchPatterns[i]) !== null) {
                 return true;
             }
         }
@@ -300,8 +289,7 @@ class EtherAddressLookup {
      * @desc Check if the current website is the user's selected block explorer
      * @returns {boolean}
      */
-    isBlockchainExplorerSite()
-    {
+    isBlockchainExplorerSite() {
         var objBlockchainExplorer = document.createElement("a");
         objBlockchainExplorer.href = this.strBlockchainExplorer;
         return (objBlockchainExplorer.hostname === window.location.hostname);
@@ -311,34 +299,31 @@ class EtherAddressLookup {
      * @name Tidy Slots
      * @desc Searches document for slots adds the slot's child nodes to its parent then removes the slot
      */
-    tidyUpSlots()
-    {
+    tidyUpSlots() {
         var slots = document.querySelectorAll("slot.ext-etheraddresslookup-temporary");
-        for(var i=0; i < slots.length; i++){
-            while(slots[i].childNodes.length > 0){
+        for (var i = 0; i < slots.length; i++) {
+            while (slots[i].childNodes.length > 0) {
                 slots[i].parentNode.insertBefore(slots[i].firstChild, slots[i]);
             }
             slots[i].parentNode.removeChild(slots[i]);
         }
     }
 
-    addBlockies()
-    {
+    addBlockies() {
         var blockieDivs = document.querySelectorAll("div.ext-etheraddresslookup-blockie");
-        for(var i = 0; i < blockieDivs.length; i++){
+        for (var i = 0; i < blockieDivs.length; i++) {
 
             blockieDivs[i].style.backgroundImage = 'url(' + blockies.create({
                 // toLowerCase is used because standard blockies are based on none-checksum Ethereum addresses
-                seed:blockieDivs[i].getAttribute('data-ether-address').toLowerCase(),
+                seed: blockieDivs[i].getAttribute('data-ether-address').toLowerCase(),
                 size: 8,
                 scale: 16
-            }).toDataURL() +')';
+            }).toDataURL() + ')';
         }
     }
 
     //Removes the highlight style from Ethereum addresses
-    removeHighlightStyle()
-    {
+    removeHighlightStyle() {
         var objEtherAddresses = document.getElementsByClassName("ext-etheraddresslookup-link");
         for (var i = 0; i < objEtherAddresses.length; i++) {
             objEtherAddresses[i].classList.add("ext-etheraddresslookup-link-no_highlight");
@@ -348,8 +333,7 @@ class EtherAddressLookup {
     }
 
     //Adds the highlight style
-    addHighlightStyle()
-    {
+    addHighlightStyle() {
         var objEtherAddresses = document.getElementsByClassName("ext-etheraddresslookup-link");
         for (var i = 0; i < objEtherAddresses.length; i++) {
             objEtherAddresses[i].classList.add("ext-etheraddresslookup-link-highlight");
@@ -360,8 +344,7 @@ class EtherAddressLookup {
 
     //Sets the on hover behaviour for the address
     // - get the address stats with rpc
-    setAddressOnHoverBehaviour()
-    {
+    setAddressOnHoverBehaviour() {
         var objNodes = document.getElementsByClassName("ext-etheraddresslookup-0xaddress");
         for (var i = 0; i < objNodes.length; i++) {
             objNodes[i].addEventListener('mouseover', this.event_0xAddressHover, false);
@@ -370,9 +353,8 @@ class EtherAddressLookup {
 
     //The event handler for 0x address mouseover.
     //It will do the logic to call the web3 rpc to get the address balance.
-    event_0xAddressHover()
-    {
-        if(this.children.length > 1 && this.children[1].className == "ext-etheraddresslookup-address_stats_hover") {
+    event_0xAddressHover() {
+        if (this.children.length > 1 && this.children[1].className == "ext-etheraddresslookup-address_stats_hover") {
             return false;
         }
 
@@ -382,73 +364,77 @@ class EtherAddressLookup {
         objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
         var objHoverNodeContent = document.createElement("div");
         objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
-        objHoverNodeContent.innerHTML = "<p id='ext-etheraddresslookup-fetching_data_"+intUniqueId+"'><strong>Fetching Data...</strong></p>";
-        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId+"' class='ext-etheraddresslookup-address_stats_hover_node_error'></div>";
-        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId+"' class='ext-etheraddresslookup-address_stats_hover_node_ok'></div>";
-        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-address_balance_"+intUniqueId+"'></span>";
-        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-transactions_out_"+intUniqueId+"'></span>";
-        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-contract_address_"+intUniqueId+"'></span>";
+        objHoverNodeContent.innerHTML = "<p id='ext-etheraddresslookup-fetching_data_" + intUniqueId + "'><strong>Fetching Data...</strong></p>";
+        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_error_" + intUniqueId + "' class='ext-etheraddresslookup-address_stats_hover_node_error'></div>";
+        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_ok_" + intUniqueId + "' class='ext-etheraddresslookup-address_stats_hover_node_ok'></div>";
+        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-address_balance_" + intUniqueId + "'></span>";
+        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-transactions_out_" + intUniqueId + "'></span>";
+        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-contract_address_" + intUniqueId + "'></span>";
 
         objHoverNode.appendChild(objHoverNodeContent);
         this.appendChild(objHoverNode);
 
         //Get the RPC provider for the user
-        objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
+        objBrowser.runtime.sendMessage({
+            func: "rpc_provider"
+        }, function(objResponse) {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
             var str0xAddress = this.getAttribute("data-address");
             let objHoverNodeContent = this.children[1].children[0];
 
             //Get transaction count
             web3.eth.getTransactionCount(str0xAddress, function(error, result) {
-                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
+                if (objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_" + intUniqueId) {
                     objHoverNodeContent.children[0].style.display = 'none';
                 }
 
                 var intTransactionCount = "";
-                if(error) {
+                if (error) {
                     intTransactionCount = -1;
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_" + intUniqueId).style.display = "inline";
                 } else {
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_" + intUniqueId).style.display = "inline";
                     intTransactionCount = parseInt(result).toLocaleString();
                 }
 
-                var objTransactionCount = objHoverNodeContent.querySelector("#ext-etheraddresslookup-transactions_out_"+intUniqueId);
-                objTransactionCount.innerHTML = "<strong>Transactions out:</strong> "+ intTransactionCount;
+                var objTransactionCount = objHoverNodeContent.querySelector("#ext-etheraddresslookup-transactions_out_" + intUniqueId);
+                objTransactionCount.innerHTML = "<strong>Transactions out:</strong> " + intTransactionCount;
             });
 
             //Get the account balance
             web3.eth.getBalance(str0xAddress, function(error, result) {
-                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
+                if (objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_" + intUniqueId) {
                     objHoverNodeContent.children[0].style.display = 'none';
                 }
 
                 var flEthBalance = "";
-                if(error) {
+                if (error) {
                     flEthBalance = -1;
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_" + intUniqueId).style.display = "inline";
                 } else {
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
-                    flEthBalance = web3.fromWei(result.toString(10), "ether").toLocaleString("en-US", {maximumSignificantDigits: 9});
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_" + intUniqueId).style.display = "inline";
+                    flEthBalance = web3.fromWei(result.toString(10), "ether").toLocaleString("en-US", {
+                        maximumSignificantDigits: 9
+                    });
                 }
 
-                var objAddressBalance = objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_balance_"+intUniqueId);
-                objAddressBalance.innerHTML += "<strong>ETH:</strong> "+ flEthBalance;
+                var objAddressBalance = objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_balance_" + intUniqueId);
+                objAddressBalance.innerHTML += "<strong>ETH:</strong> " + flEthBalance;
             });
 
             //See if the address is a contract
             web3.eth.getCode(str0xAddress, function(error, result) {
-                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
+                if (objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_" + intUniqueId) {
                     objHoverNodeContent.children[0].style.display = 'none';
                 }
 
-                var objContractAddress = objHoverNodeContent.querySelector("#ext-etheraddresslookup-contract_address_"+intUniqueId);
+                var objContractAddress = objHoverNodeContent.querySelector("#ext-etheraddresslookup-contract_address_" + intUniqueId);
 
-                if(error) {
+                if (error) {
                     objContractAddress.innerHTML += "<small>Unable to determine if contract</small>";
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_" + intUniqueId).style.display = "inline";
                 } else {
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
+                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_" + intUniqueId).style.display = "inline";
                     var blIsContractAddress = result == "0x" ? false : true;
                     if (blIsContractAddress) {
                         objContractAddress.innerHTML += "<small>This is a contract address</small>";
@@ -456,7 +442,7 @@ class EtherAddressLookup {
                 }
             });
 
-            if(objResponse.resp.includes("quiknode.io")) {
+            if (objResponse.resp.includes("quiknode.io")) {
                 objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='" + chrome.runtime.getURL("/images/powered-by-quiknode.png") + "' /></a>";
             }
 
@@ -473,13 +459,17 @@ window.addEventListener("load", function() {
 objBrowser.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         let objEtherAddressLookup = new EtherAddressLookup();
-        if(typeof request.func !== "undefined") {
-            if(typeof objEtherAddressLookup[request.func] == "function") {
+        if (typeof request.func !== "undefined") {
+            if (typeof objEtherAddressLookup[request.func] == "function") {
                 objEtherAddressLookup[request.func]();
-                sendResponse({status: "ok"});
+                sendResponse({
+                    status: "ok"
+                });
                 return true;
             }
         }
-        sendResponse({status: "fail"});
+        sendResponse({
+            status: "fail"
+        });
     }
 );
