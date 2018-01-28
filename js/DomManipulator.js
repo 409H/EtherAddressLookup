@@ -40,6 +40,7 @@ class EtherAddressLookup {
         }, function(objResponse) {
             this.strBlockchainExplorer = objResponse.resp;
             this.updateDOM();
+            this.updateLinks();
         }.bind(this));
 
         //Get the perform address lookup option
@@ -62,6 +63,13 @@ class EtherAddressLookup {
             this.updateDOM();
         }.bind(this), 10);
         */
+    }
+
+    updateLinks(){
+        var ethLinks =   document.getElementsByClassName("ext-etheraddresslookup-link");
+        for(var i = 0; i < ethLinks.length; i++){
+            ethLinks[i].href = this.strBlockchainExplorer + "/" + ethLinks[i].getAttribute("data-address");
+        }
     }
 
     updateDOM() {
