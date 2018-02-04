@@ -56,11 +56,11 @@ function getBookmarks()
             "url": "https://etherscan.io"
         });
         arrBookmarks.push({
-            "icon": "images/bookmarks/etherchain.jpg",
+            "icon": "images/bookmarks/etherchain.png",
             "url": "https://etherchain.org"
         });
         arrBookmarks.push({
-            "icon": "images/bookmarks/ethplorer.jpg",
+            "icon": "images/bookmarks/ethplorer.png",
             "url": "https://ethplorer.io"
         });
         arrBookmarks.push({
