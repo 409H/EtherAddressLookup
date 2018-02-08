@@ -11,87 +11,79 @@
     });
 
     //Detects if the current tab is in the blacklisted domains file
-    function blacklistedDomainCheck()
-    {
+    function blacklistedDomainCheck() {
         let objBrowser = chrome ? chrome : browser;
         var arrBlacklistedDomains = [];
         var arrWhitelistedDomains = ["www.myetherwallet.com", "myetherwallet.com"];
-        objBrowser.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
-            if(objResponse && objResponse.hasOwnProperty("resp")) {
-                arrBlacklistedDomains = objResponse.resp;
-                objBrowser.runtime.sendMessage({func: "whitelist_domain_list"}, function(objResponse) {
-                    if(objResponse && objResponse.hasOwnProperty("resp")) {
-                        arrWhitelistedDomains = objResponse.resp;
-                        return doBlacklistCheck();
-                    }
-                }.bind(arrWhitelistedDomains));
+        objBrowser.runtime.sendMessage({func: "blacklist_whitelist_domain_list"}, function (objResponse) {
+            if (objResponse && objResponse.hasOwnProperty("resp")) {
+                var objDomainLists = JSON.parse(objResponse.resp);
+                var arrWhitelistedDomains = objDomainLists.whitelist;
+                var arrBlacklistedDomains = objDomainLists.blacklist;
+                return doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains);
             }
-        }.bind(arrBlacklistedDomains));
+        });
+    }
 
-        function doBlacklistCheck() {
-            var strCurrentTab = window.location.hostname;
-            var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+    function doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains) {
+        var strCurrentTab = window.location.hostname;
+        strCurrentTab = strCurrentTab.replace(/www\./g,'');
 
-            //Domain is whitelisted, don't check the blacklist.
-            if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0 || strCurrentTab === "myetherwallet.com") {
-                console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
+        //Domain is whitelisted, don't check the blacklist.
+        if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0 || strCurrentTab === "myetherwallet.com") {
+            console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
+            return false;
+        }
+
+        if(arrBlacklistedDomains.length > 0) {
+            var isBlacklisted = arrBlacklistedDomains.indexOf(strCurrentTab) >= 0 ? true : false;
+
+            //Only do Levenshtein if it's not blacklisted
+            //Levenshtein - @sogoiii
+            var blHolisticStatus = false;
+            if(isBlacklisted === false && arrWhitelistedDomains.indexOf(strCurrentTab) < 0) {
+                var strCurrentTab = punycode.toUnicode(strCurrentTab);
+                var source = strCurrentTab.replace(/\./g, '');
+                var intHolisticMetric = levenshtein(source, 'myetherwallet');
+                var intHolisticLimit = 7 // How different can the word be?
+                blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
+            }
+
+            //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
+            if ( arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted === true || blHolisticStatus === true)) {
+                console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
+                window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
                 return false;
             }
+        }
 
-            if(arrBlacklistedDomains.length > 0) {
+        //Now do the 3rd party domain list check if they have that option enabled.
+        objBrowser.runtime.sendMessage({func: "3rd_party_blacklist_domains"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                if(objResponse.resp == 1) {
+                    objBrowser.runtime.sendMessage({func: "3p_blacklist_domain_list"}, function(objResponse) {
+                        if(objResponse && objResponse.hasOwnProperty("resp")) {
+                            var obj3rdPartyLists = JSON.parse(objResponse.resp);
+                            var strCurrentTab = window.location.hostname;
+                            var strCurrentTab = strCurrentTab.replace(/www\./g,'');
 
-                var objBlacklistedDomains = JSON.parse(arrBlacklistedDomains);
-                arrBlacklistedDomains = objBlacklistedDomains.domains;
+                            for(var str3rdPartyIdentifier in obj3rdPartyLists) {
 
-                var isBlacklisted = arrBlacklistedDomains.indexOf(strCurrentTab) >= 0 ? true : false;
+                                if(obj3rdPartyLists[str3rdPartyIdentifier].format == "sha256") {
+                                    strCurrentTab = sha256(strCurrentTab);
+                                }
 
-                //Only do Levenshtein if it's not blacklisted
-                //Levenshtein - @sogoiii
-                var blHolisticStatus = false;
-                if(isBlacklisted === false && arrWhitelistedDomains.indexOf(strCurrentTab) < 0) {
-                    var strCurrentTab = punycode.toUnicode(strCurrentTab);
-                    var source = strCurrentTab.replace(/\./g, '');
-                    var intHolisticMetric = levenshtein(source, 'myetherwallet');
-                    var intHolisticLimit = 7 // How different can the word be?
-                    blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
-                }
-
-                //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
-                if ( arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted || blHolisticStatus)) {
-                    console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
-                    window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
-                    return false;
-                }
-            }
-
-            //Now do the 3rd party domain list check if they have that option enabled.
-            objBrowser.runtime.sendMessage({func: "3rd_party_blacklist_domains"}, function(objResponse) {
-                if(objResponse && objResponse.hasOwnProperty("resp")) {
-                    if(objResponse.resp == 1) {
-                        objBrowser.runtime.sendMessage({func: "3p_blacklist_domain_list"}, function(objResponse) {
-                            if(objResponse && objResponse.hasOwnProperty("resp")) {
-                                var obj3rdPartyLists = JSON.parse(objResponse.resp);
-                                var strCurrentTab = window.location.hostname;
-                                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
-
-                                for(var str3rdPartyIdentifier in obj3rdPartyLists) {
-
-                                    if(obj3rdPartyLists[str3rdPartyIdentifier].format == "sha256") {
-                                        strCurrentTab = sha256(strCurrentTab);
-                                    }
-
-                                    if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
-                                        console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
-                                        window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing-"+ str3rdPartyIdentifier +".html#"+ (window.location.href);
-                                        return false;
-                                    }
+                                if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
+                                    console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
+                                    window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing-"+ str3rdPartyIdentifier +".html#"+ (window.location.href);
+                                    return false;
                                 }
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     }
 
     function levenshtein(a, b) {
