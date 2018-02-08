@@ -120,6 +120,13 @@ objBrowser.runtime.onMessage.addListener(
                     strResponse = localStorage.getItem("ext-etheraddresslookup-perform_address_lookups");
                 }
                 break;
+            case 'blacklist_whitelist_domain_list' :
+                var objDomainLists = {"blacklist": "", "whitelist": ""};
+                var objBlacklist = JSON.parse(getBlacklistedDomains("eal"));
+                objDomainLists.blacklist = objBlacklist.domains;
+                objDomainLists.whitelist = getWhitelistedDomains();
+                strResponse = JSON.stringify(objDomainLists);
+                break;
             default:
                 strResponse = "unsupported";
                 break;
@@ -212,15 +219,27 @@ function getWhitelistedDomains()
     var objWhitelistedDomains = {"timestamp":0,"domains":[]};
     //See if we need to get the blacklisted domains - ie: do we have them cached?
     if(localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list") === null) {
-        objWhitelistedDomains = getWhitelistedDomainsFromSource();
+        getWhitelistedDomainsFromSource().then(function (arrDomains) {
+            objWhitelistedDomains.timestamp = Math.floor(Date.now() / 1000);
+            objWhitelistedDomains.domains = arrDomains;
+
+            localStorage.setItem("ext-etheraddresslookup-whitelist_domains_list", JSON.stringify(objWhitelistedDomains));
+            return objWhitelistedDomains.domains;
+        });
     } else {
         var objWhitelistedDomains = localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list");
         //Check to see if the cache is older than 5 minutes, if so re-cache it.
         objWhitelistedDomains = JSON.parse(objWhitelistedDomains);
         console.log("Whitelisted domains last fetched: " + (Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) + " seconds ago");
-        if ((Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) > 180) {
-            console.log("Caching blacklisted domains again.");
-            objWhitelistedDomains = getWhitelistedDomainsFromSource();
+        if ((Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) > 300) {
+            console.log("Caching whitelisted domains again.");
+            getWhitelistedDomainsFromSource().then(function (arrDomains) {
+                objWhitelistedDomains.timestamp = Math.floor(Date.now() / 1000);
+                objWhitelistedDomains.domains = arrDomains;
+
+                localStorage.setItem("ext-etheraddresslookup-whitelist_domains_list", JSON.stringify(objWhitelistedDomains));
+                return objWhitelistedDomains.domains;
+            });
         }
     }
 
@@ -239,21 +258,14 @@ async function getBlacklistedDomainsFromSource(objBlacklist)
     }
 }
 
-function getWhitelistedDomainsFromSource()
+async function getWhitelistedDomainsFromSource()
 {
-    console.log("Getting whitelist from GitHub now");
-    var objAjax = new XMLHttpRequest();
-    objAjax.open("GET", "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json", true);
-    objAjax.send();
-    objAjax.onreadystatechange = function () {
-        if (objAjax.readyState === 4) {
-            var arrWhitelistedDomains = JSON.parse(objAjax.responseText);
-            var objWhitelist = {};
-            objWhitelist.timestamp = Math.floor(Date.now() / 1000);
-            objWhitelist.domains = arrWhitelistedDomains;
-            localStorage.setItem("ext-etheraddresslookup-whitelist_domains_list", JSON.stringify(objWhitelist));
-            return objWhitelist;
-        }
+    try {
+        console.log("Getting whitelist from GitHub now: https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json");
+        let objResponse = await fetch("https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json");
+        return objResponse.json();
     }
-    return {"timestamp":0,"domains":[]};
+    catch(objError) {
+        console.log("Failed to get whitelist for https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json", objError);
+    }
 }
