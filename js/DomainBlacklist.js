@@ -30,7 +30,7 @@
         strCurrentTab = strCurrentTab.replace(/www\./g,'');
 
         //Domain is whitelisted, don't check the blacklist.
-        if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0 || strCurrentTab === "myetherwallet.com") {
+        if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
             console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
             return false;
         }
