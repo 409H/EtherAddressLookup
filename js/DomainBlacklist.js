@@ -25,7 +25,8 @@
         });
     }
 
-    function doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains) {
+    function doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains)
+    {
         var strCurrentTab = window.location.hostname;
         strCurrentTab = strCurrentTab.replace(/www\./g,'');
 
@@ -47,6 +48,11 @@
                 var intHolisticMetric = levenshtein(source, 'myetherwallet');
                 var intHolisticLimit = 7 // How different can the word be?
                 blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
+                if(blHolisticStatus === false) {
+                    //Do edit distance against mycrypto
+                    var intHolisticMetric = levenshtein(source, 'mycrypto');
+                    blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
+                }
             }
 
             //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
