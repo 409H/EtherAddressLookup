@@ -171,7 +171,7 @@ function getBlacklistedDomains(strType)
         //Check to see if the cache is older than 5 minutes, if so re-cache it.
         objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
         console.log("Domains last fetched: " + (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) + " seconds ago");
-        if (objBlacklistedDomains.timestamp == 0 || (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) > 180) {
+        if (objBlacklistedDomains.timestamp == 0 || (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) > 300) {
             updateAllBlacklists(objEalBlacklistedDomains);
         }
     }
