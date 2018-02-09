@@ -167,3 +167,13 @@
     display: none;
     z-index: 1;
 }
+
+#ext-etheraddresslookup-tip_box {
+    background: #00c2c1;
+    padding: 1px;
+    color: #fff;
+}
+#ext-etheraddresslookup-tip_box a {
+    color: #fff;
+    text-decoration: underline;
+}
