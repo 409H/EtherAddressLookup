@@ -51,7 +51,7 @@
                 if(blHolisticStatus === false) {
                     //Do edit distance against mycrypto
                     var intHolisticMetric = levenshtein(source, 'mycrypto');
-                    blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
+                    blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < 3) ? true : false;
                 }
             }
 
