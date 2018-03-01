@@ -42,10 +42,9 @@
 	"description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
 	"options_page": "settings.html",
 	"optional_permissions": [
-		"history"
 	],
 	"permissions": [
-		"activeTab"
+		"storage", "<all_urls>"
 	],
 	"background": {
 		"page": "background.html",
