@@ -13,7 +13,7 @@
                     permissions: ['history']
                 }, function (blGranted) {
                     if (blGranted) {
-                        console.log("Granted history permission");
+                        consoleLogger.log("Granted history permission");
                         doHistoryInspection();
                     } else {
                         exitNoPermission();
@@ -92,9 +92,9 @@ function removePermission()
         permissions: ['history']
     }, function(removed) {
         if (removed) {
-            console.log("Removed history permission.")
+            consoleLogger.log("Removed history permission.")
         } else {
-            console.log("Cannot remove history permission!");
+            consoleLogger.log("Cannot remove history permission!");
         }
     });
 }

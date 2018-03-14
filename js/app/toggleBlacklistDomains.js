@@ -30,7 +30,7 @@ function toggle3rdPartyBlacklistDomains()
 function refreshBlacklistDomains()
 {
     chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
-        console.log("BDL-001");
+        consoleLogger.log("BDL-001");
     });
 
     var intBlacklistDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains");

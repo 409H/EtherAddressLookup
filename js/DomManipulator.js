@@ -4,7 +4,7 @@ class EtherAddressLookup {
 
     constructor(objWeb3)
     {
-        console.log("Init EAL");
+        consoleLogger.log("Init EAL");
         this.objWeb3 = objWeb3;
         this.setDefaultExtensionSettings();
         this.init();
