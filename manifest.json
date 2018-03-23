@@ -24,6 +24,7 @@
     "run_at": "document_start",
     "matches": ["http://*/*", "https://*/*"],
     "js": [
+      "js/app/consoleLogger.js",
       "js/app/lib/punycode.min.js",
       "js/app/lib/blockies.min.js",
       "js/app/lib/sha256.min.js",
@@ -40,7 +41,7 @@
   }],
 
   "background": {
-    "scripts": ["js/options.js"]
+    "scripts": ["js/app/consoleLogger.js","js/options.js"]
   },
 
   "icons": {

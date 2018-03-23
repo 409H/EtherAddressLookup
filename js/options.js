@@ -40,13 +40,13 @@ let objBrowser = chrome ? chrome : browser;
     //init getting blacklisted domains
     getBlacklistedDomains();
     setInterval(function() {
-        console.log("Re-caching blacklisted domains");
+        consoleLogger.log("Re-caching blacklisted domains");
         getBlacklistedDomains();
     }, 180000);
 
     getWhitelistedDomains();
     setInterval(function() {
-        console.log("Re-caching whitelisted domains");
+        consoleLogger.log("Re-caching whitelisted domains");
         getWhitelistedDomains();
     }, 180000);
 })();
@@ -83,11 +83,11 @@ objBrowser.runtime.onMessage.addListener(
                 }
                 break;
             case 'blacklist_domain_list' :
-                console.log("Getting blacklisted domain list");
+                consoleLogger.log("Getting blacklisted domain list");
                 strResponse = getBlacklistedDomains("eal");
                 break;
             case '3p_blacklist_domain_list' :
-                console.log("Getting 3p blacklisted domain list");
+                consoleLogger.log("Getting 3p blacklisted domain list");
                 strResponse = getBlacklistedDomains("3p");
                 break;
             case 'use_3rd_party_blacklists' :
@@ -99,7 +99,7 @@ objBrowser.runtime.onMessage.addListener(
                 }
                 break;
             case 'whitelist_domain_list' :
-                console.log("Getting whitelisted domain list");
+                consoleLogger.log("Getting whitelisted domain list");
                 strResponse = getWhitelistedDomains();
                 break;
             case 'rpc_provider' :
@@ -170,7 +170,7 @@ function getBlacklistedDomains(strType)
         var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
         //Check to see if the cache is older than 5 minutes, if so re-cache it.
         objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
-        console.log("Domains last fetched: " + (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) + " seconds ago");
+        consoleLogger.log("Domains last fetched: " + (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) + " seconds ago");
         if (objBlacklistedDomains.timestamp == 0 || (Math.floor(Date.now() / 1000) - objBlacklistedDomains.timestamp) > 300) {
             updateAllBlacklists(objEalBlacklistedDomains);
         }
@@ -230,9 +230,9 @@ function getWhitelistedDomains()
         var objWhitelistedDomains = localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list");
         //Check to see if the cache is older than 5 minutes, if so re-cache it.
         objWhitelistedDomains = JSON.parse(objWhitelistedDomains);
-        console.log("Whitelisted domains last fetched: " + (Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) + " seconds ago");
+        consoleLogger.log("Whitelisted domains last fetched: " + (Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) + " seconds ago");
         if ((Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) > 300) {
-            console.log("Caching whitelisted domains again.");
+            consoleLogger.log("Caching whitelisted domains again.");
             getWhitelistedDomainsFromSource().then(function (arrDomains) {
                 objWhitelistedDomains.timestamp = Math.floor(Date.now() / 1000);
                 objWhitelistedDomains.domains = arrDomains;
@@ -249,23 +249,23 @@ function getWhitelistedDomains()
 async function getBlacklistedDomainsFromSource(objBlacklist)
 {
     try {
-        console.log("Getting blacklist from GitHub now: "+ objBlacklist.repo);
+        consoleLogger.log("Getting blacklist from GitHub now: "+ objBlacklist.repo);
         let objResponse = await fetch(objBlacklist.repo);
         return objResponse.json();
     }
     catch(objError) {
-        console.log("Failed to get blacklist for "+ objBlacklist.repo, objError);
+        consoleLogger.log("Failed to get blacklist for "+ objBlacklist.repo, objError);
     }
 }
 
 async function getWhitelistedDomainsFromSource()
 {
     try {
-        console.log("Getting whitelist from GitHub now: https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json");
+        consoleLogger.log("Getting whitelist from GitHub now: https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json");
         let objResponse = await fetch("https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json");
         return objResponse.json();
     }
     catch(objError) {
-        console.log("Failed to get whitelist for https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json", objError);
+        consoleLogger.log("Failed to get whitelist for https://raw.githubusercontent.com/409H/EtherAddressLookup/master/whitelists/domains.json", objError);
     }
 }

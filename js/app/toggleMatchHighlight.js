@@ -21,7 +21,7 @@ function refreshHighlightOption() {
         chrome.tabs.sendMessage(tabs[0].id, {
             "func":strMethod
         }, function(response) {
-            console.log(response);
+            consoleLogger.log(response);
         });
     });
 }

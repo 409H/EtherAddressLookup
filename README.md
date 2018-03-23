@@ -80,6 +80,10 @@ a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the ch
 * Thanks to [Samyoul](https://github.com/Samyoul) for continued support and development!
 * To everyone who reports bad domains to us through the various channels!
 
+## Debugging
+
+To enable debugging you need to create a cookie called `eal_debug` on the desired host you're debugging. Debugging provides additional output regarding internals of the EtherAddressLookup plugin.
+
 ----
 
 ## Changelog

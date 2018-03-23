@@ -68,7 +68,7 @@ class RpcNodeSelector
         var objRpcSuccessNode = document.getElementById("ext-etheraddresslookup-rpcnode_success");
         objRpcSuccessNode.classList.remove("hide-me");
 
-        console.log("RPC Node Version: "+ strVersion);
+        consoleLogger.log("RPC Node Version: "+ strVersion);
         return true;
     }
 

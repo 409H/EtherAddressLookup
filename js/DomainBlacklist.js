@@ -32,7 +32,7 @@
 
         //Domain is whitelisted, don't check the blacklist.
         if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
-            console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
+            consoleLogger.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
             return false;
         }
 
@@ -57,7 +57,7 @@
 
             //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
             if ( arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted === true || blHolisticStatus === true)) {
-                console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
+                consoleLogger.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
                 window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
                 return false;
             }
@@ -80,7 +80,7 @@
                                 }
 
                                 if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
-                                    console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
+                                    consoleLogger.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
                                     window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing-"+ str3rdPartyIdentifier +".html#"+ (window.location.href);
                                     return false;
                                 }
