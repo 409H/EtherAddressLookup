@@ -387,7 +387,7 @@ class EtherAddressLookup {
             var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
             var str0xAddress = this.getAttribute("data-address");
             let objHoverNodeContent = this.children[1].children[0];
-            web3.eth.getTransactionCount("0x99d467ac2d3fb2719a130f0a7dea4596eb2840c2",function(E,r){console.log(E);console.log(r)});
+
             //Get transaction count
             web3.eth.getTransactionCount(str0xAddress, function(error, result) {
                 if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
