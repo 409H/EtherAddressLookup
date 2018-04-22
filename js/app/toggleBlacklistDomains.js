@@ -29,7 +29,8 @@ function toggle3rdPartyBlacklistDomains()
 
 function refreshBlacklistDomains()
 {
-    chrome.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
+    var objBrowser = chrome ? chrome : browser;
+    objBrowser.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
         console.log("BDL-001");
     });
 
