@@ -31,7 +31,7 @@ function refreshBlacklistDomains()
 {
     var objBrowser = chrome ? chrome : browser;
     objBrowser.runtime.sendMessage({func: "blacklist_domain_list"}, function(objResponse) {
-        console.log("BDL-001");
+        console.log("BDL-001 - Fetched blacklisted domains");
     });
 
     var intBlacklistDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains");
