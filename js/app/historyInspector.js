@@ -1,33 +1,34 @@
 (function () {
     var objHistoryInspector = document.getElementById("ext-etheraddresslookup-history_inspect");
-
     //Perform the history inspection
-    objHistoryInspector.addEventListener("click", function (objEvent) {
-        //See if we need to request permission
-        chrome.permissions.contains({
-            permissions: ['history']
-        }, function (blResult) {
-            //No permission to history, ask for it.
-            if (blResult === false) {
-                chrome.permissions.request({
-                    permissions: ['history']
-                }, function (blGranted) {
-                    if (blGranted) {
-                        console.log("Granted history permission");
-                        doHistoryInspection();
-                    } else {
-                        exitNoPermission();
-                    }
-                });
-            } else {
-                doHistoryInspection();
-            }
+    if(typeof chrome !== 'undefined') {
+        objHistoryInspector.addEventListener('click', event => {
+            chrome.permissions.request({permissions: ['history']}, function(blGranted) {
+                if (blGranted) {
+                    console.log("Granted history permission");
+                    doHistoryInspection();
+                } else {
+                    exitNoPermission();
+                }
+            });
         });
-    });
+    } else {
+        objHistoryInspector.addEventListener('click', event => {
+            browser.permissions.request({permissions: ['history']}).then((blGranted) => {
+                if (blGranted) {
+                    console.log("Granted history permission");
+                    doHistoryInspection();
+                } else {
+                    exitNoPermission();
+                }
+            });
+        });
+    }
 })();
 
 function doHistoryInspection() {
-    chrome.history.search({text: "", maxResults: 500}, function (objHistoryItems) {
+    var objBrowser = chrome ? chrome : browser;
+    objBrowser.history.search({text: "", maxResults: 500}, function (objHistoryItems) {
         var blRedirected = false;
         var intTotalWarnings = 0;
         var strReportText = "";
@@ -88,7 +89,8 @@ function exitNoPermission()
 
 function removePermission()
 {
-    chrome.permissions.remove({
+    var objBrowser = chrome ? chrome : browser;
+    objBrowser.permissions.remove({
         permissions: ['history']
     }, function(removed) {
         if (removed) {
