@@ -48,8 +48,8 @@ function getBookmarks()
     if(strBookmarks === null) {
         var arrBookmarks = new Array();
         arrBookmarks.push({
-            "icon": "images/bookmarks/myetherwallet.png",
-            "url": "https://myetherwallet.com"
+            "icon": "https://www.google.com/s2/favicons?domain=https://mycrypto.com",
+            "url": "https://mycrypto.com"
         });
         arrBookmarks.push({
             "icon": "images/bookmarks/etherscan.png",
