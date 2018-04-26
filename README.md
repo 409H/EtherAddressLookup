@@ -12,6 +12,8 @@ Ether/ERC20 donation address: [`0x661b5dc032bedb210f225df4b1aa2bdd669b38bc`](htt
 
 #### Install Chrome Extension Here: https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn
 
+### Install Firefox Extension Here: https://addons.mozilla.org/en-US/firefox/addon/etheraddresslookup/
+
 ## Found a Phishing URL? Is your website getting erroneously blocked? You have the power to fix it, not just talk about it!
 
 As a community resource, everyone is encouraged to make a PR to add or update these lists. This process is far easier than you might imagine!
