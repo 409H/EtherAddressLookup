@@ -37,7 +37,7 @@ As a community resource, everyone is encouraged to make a PR to add or update th
 ### Chrome & Firefox Extension
 
 The `master` branch is bundled on every release and pushed to the Chrome & Firefox Extension store, you can view/download it 
-here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn) for Chrome, and _coming soon_ for Firefox (though manual installation is supported - it's just not listed officially on the AMO site, going through review stages.).
+here: [https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn](https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn) for Chrome, and [https://addons.mozilla.org/en-US/firefox/addon/etheraddresslookup/](https://addons.mozilla.org/en-US/firefox/addon/etheraddresslookup/) for Firefox.
 
 (Note that this will have automatic updates)
 
