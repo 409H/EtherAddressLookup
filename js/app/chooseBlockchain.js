@@ -21,11 +21,16 @@ function refreshBlockchainExplorer() {
 
     //Notify the tab to do a class method
     var strMethod = "changeBlockchainExplorer";
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
+    var objBrowser = chrome ? chrome : browser;
+    objBrowser.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        objBrowser.tabs.sendMessage(tabs[0].id, {
             "func":strMethod
-        }, function(response) {
-            console.log(response);
+        }, function(objResponse) {
+            if(objResponse.status) {
+                console.log("Response from tab: " + objResponse.status);
+            } else {
+                console.log("Cannot "+ strMethod +" on tab.");
+            }
         });
     });
 }

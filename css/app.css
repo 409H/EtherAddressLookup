@@ -148,13 +148,16 @@
 .ext-etheraddresslookup-address_stats_hover_node_error {
     all: initial;
     background: #d02626;
-    border-radius: 50%;
+    border-radius: 5em;
     height: 10px;
-    width: 10px;
+    width: auto;
     position: absolute;
     right: 5%;
     display: none;
     z-index: 2;
+    color: #fff;
+    padding: 3px;
+    font-size: 8pt;
 }
 .ext-etheraddresslookup-address_stats_hover_node_ok {
     all: initial;
