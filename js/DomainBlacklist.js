@@ -27,10 +27,24 @@
 
     function doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains)
     {
-        var strCurrentTab = window.location.hostname;
-        strCurrentTab = strCurrentTab.replace(/www\./g,'');
+        //See if we are blocking all punycode domains.
+        objBrowser.runtime.sendMessage({func: "block_punycode_domains"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                var strCurrentTab = window.location.hostname;
+                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+
+                if(objResponse.resp == 1) {
+                    if(strCurrentTab.startsWith("xn--")) {
+                        window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href)+"#punycode";
+                        return false;
+                    }
+                }
+            }
+        });
 
         //Domain is whitelisted, don't check the blacklist.
+        var strCurrentTab = window.location.hostname;
+        strCurrentTab = strCurrentTab.replace(/www\./g,'');
         if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
             console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
             return false;
