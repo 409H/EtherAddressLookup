@@ -30,6 +30,12 @@ let objBrowser = chrome ? chrome : browser;
         objBlacklistDomains.addEventListener('click', toggle3rdPartyBlacklistDomains);
     }
 
+    //Toggle the use of blacklisting all punycode domains and set it in LocalStorage
+    var objBlacklistPunycodeDomains = document.getElementById('ext-etheraddresslookup-block_punycode_blacklist_domains');
+    if(objBlacklistPunycodeDomains) {
+        objBlacklistPunycodeDomains.addEventListener('click', toggleBlockPunycodeDomains);
+    }
+
     //Get the extension version
     var objManifest = objBrowser.runtime.getManifest();
     var objManifestVersion = document.getElementById('ext-manifest_version');
@@ -96,6 +102,14 @@ objBrowser.runtime.onMessage.addListener(
                     strResponse = 1;
                 } else {
                     strResponse = localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist");
+                }
+                break;
+            case 'block_punycode_domains' :
+                //This option is enabled by default
+                if(localStorage.getItem("ext-etheraddresslookup-block_punycode_blacklist_domains") === null) {
+                    strResponse = 1;
+                } else {
+                    strResponse = localStorage.getItem("ext-etheraddresslookup-block_punycode_blacklist_domains");
                 }
                 break;
             case 'whitelist_domain_list' :
