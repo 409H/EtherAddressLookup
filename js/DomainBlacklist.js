@@ -34,10 +34,13 @@
                 var strCurrentTab = strCurrentTab.replace(/www\./g,'');
 
                 if(objResponse.resp == 1) {
-                    if(strCurrentTab.startsWith("xn--")) {
-                        window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href)+"#punycode";
-                        return false;
-                    }
+                    var arrDomainParts = strCurrentTab.split(".");
+                    arrDomainParts.forEach(strDomainPart => {
+                        if (strDomainPart.startsWith("xn--")) {
+                            window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#" + (window.location.href) + "#punycode";
+                            return false;
+                        }
+                    });
                 }
             }
         });
