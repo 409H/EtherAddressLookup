@@ -27,6 +27,16 @@ function toggle3rdPartyBlacklistDomains()
     refreshBlacklistDomains();
 }
 
+//Sets the local storage to remember if we are blocking all punycode domains or not
+function toggleBlockPunycodeDomains()
+{
+    var objBlockPunycodeDomains = document.getElementById("ext-etheraddresslookup-block_punycode_blacklist_domains");
+    var intBlockPunycodeDomains = objBlockPunycodeDomains.checked ? 1 : 0;
+    localStorage.setItem("ext-etheraddresslookup-block_punycode_blacklist_domains", intBlockPunycodeDomains);
+
+    refreshBlacklistDomains();
+}
+
 function refreshBlacklistDomains()
 {
     var objBrowser = chrome ? chrome : browser;
@@ -48,6 +58,14 @@ function refreshBlacklistDomains()
         document.getElementById("ext-etheraddresslookup-3rd_party_blacklist_domains").checked = true;
     } else {
         document.getElementById("ext-etheraddresslookup-3rd_party_blacklist_domains").checked = (intUse3rdPartyBlacklists == 1 ? true : false);
+    }
+
+    //Check/uncheck use block punycode domains
+    var intBlockPunycodeDomains = localStorage.getItem("ext-etheraddresslookup-block_punycode_blacklist_domains");
+    if(intBlockPunycodeDomains === null) {
+        document.getElementById("ext-etheraddresslookup-block_punycode_blacklist_domains").checked = true;
+    } else {
+        document.getElementById("ext-etheraddresslookup-block_punycode_blacklist_domains").checked = (intBlockPunycodeDomains == 1 ? true : false);
     }
 }
 
