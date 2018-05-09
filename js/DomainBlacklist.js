@@ -27,10 +27,27 @@
 
     function doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains)
     {
-        var strCurrentTab = window.location.hostname;
-        strCurrentTab = strCurrentTab.replace(/www\./g,'');
+        //See if we are blocking all punycode domains.
+        objBrowser.runtime.sendMessage({func: "block_punycode_domains"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                var strCurrentTab = window.location.hostname;
+                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+
+                if(objResponse.resp == 1) {
+                    var arrDomainParts = strCurrentTab.split(".");
+                    arrDomainParts.forEach(strDomainPart => {
+                        if (strDomainPart.startsWith("xn--")) {
+                            window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#" + (window.location.href) + "#punycode";
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
 
         //Domain is whitelisted, don't check the blacklist.
+        var strCurrentTab = window.location.hostname;
+        strCurrentTab = strCurrentTab.replace(/www\./g,'');
         if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
             console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
             return false;
@@ -46,7 +63,7 @@
                 var strCurrentTab = punycode.toUnicode(strCurrentTab);
                 var source = strCurrentTab.replace(/\./g, '');
                 var intHolisticMetric = levenshtein(source, 'myetherwallet');
-                var intHolisticLimit = 7 // How different can the word be?
+                var intHolisticLimit = 5; // How different can the word be?
                 blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
                 if(blHolisticStatus === false) {
                     //Do edit distance against mycrypto
@@ -58,7 +75,7 @@
             //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
             if ( arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted === true || blHolisticStatus === true)) {
                 console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
-                window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href);
+                window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
                 return false;
             }
         }
