@@ -63,7 +63,7 @@
                 var strCurrentTab = punycode.toUnicode(strCurrentTab);
                 var source = strCurrentTab.replace(/\./g, '');
                 var intHolisticMetric = levenshtein(source, 'myetherwallet');
-                var intHolisticLimit = 7 // How different can the word be?
+                var intHolisticLimit = 5; // How different can the word be?
                 blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
                 if(blHolisticStatus === false) {
                     //Do edit distance against mycrypto
