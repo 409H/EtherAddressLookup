@@ -40,6 +40,11 @@
   </head>
   <body>
     <div class="centered">
+      
+      <div id="notice-punycode" style="display:none;">
+        This domain is blocked because you have blocked all punycode domains (this is default behaviour). If you want to access this domain and you're sure it's safe, please disable the behaviour in the EtherAddressLookup settings.
+      </div>
+      
       <i class="em em-warning" id="warn"></i>
       <h3>ATTENTION</h3>
       <p id="subtitle">We have detected this domain to have malicious intent and have prevented you from interacting with it.</p>
@@ -66,6 +71,16 @@
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     ga('create', 'UA-68598031-1', 'auto');
     ga('send', 'pageview');
+      
+      //Show the user why it's blocked
+      var b = window.location.href.split("#");
+      if(b[b.length-1].toLowerCase() === "punycode") {
+        var objPunycodeNotice = document.getElementById("notice-punycode");
+        objPunycodeNotice.style.display = 'block';
+      } else {
+        console.log("Domain is blocked because of "+ b[b.length-1]);
+      }
+      
 </script>
   </body>
 </html>
