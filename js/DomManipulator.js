@@ -56,6 +56,16 @@ class EtherAddressLookup {
             this.setWarningSettings();
             this.manipulateDOM();
         }.bind(this), 10);
+
+        //See if they have the signature injection enabled
+        objBrowser.runtime.sendMessage({func: "signature_inject"}, function(objResponse) {
+            if(objResponse.resp === "1") {
+                var strSignature = "<!--- EAL IS INSTALLED -->";
+                if (document.body.innerHTML.indexOf(strSignature) === -1) {
+                    document.body.innerHTML += strSignature;
+                }
+            }
+        });
     }
 
     /**
