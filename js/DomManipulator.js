@@ -61,8 +61,11 @@ class EtherAddressLookup {
         objBrowser.runtime.sendMessage({func: "signature_inject"}, function(objResponse) {
             if(objResponse.resp === "1") {
                 var strSignature = "<!--- EAL IS INSTALLED -->";
-                if (document.body.innerHTML.indexOf(strSignature) === -1) {
-                    document.body.innerHTML += strSignature;
+                if (document.getElementById("ext-etheraddresslookup-signature") === null) {
+                    var objSignatureDiv = document.createElement('div');
+                    objSignatureDiv.id = "ext-etheraddresslookup-signature";
+                    objSignatureDiv.innerHTML = strSignature;
+                    document.body.appendChild(objSignatureDiv);
                 }
             }
         });
