@@ -1,17 +1,25 @@
 let objBrowser = chrome ? chrome : browser;
 
-class EtherAddressLookup {
+const EXT_PREFIX = 'ext-etheraddresslookup';
+const HOVER_POPUP_CLASS_NAME = `${EXT_PREFIX}-address_stats_hover`;
+const ADDRESS_DISPLAY_POPUP_CLASS_NAME = 'display-popup';
+const ATTRIBUTE_ADDRESS_UNIQUE_ID = `data-${EXT_PREFIX}-address-unique-id`;
+const LABEL_LOADED_ATTRIBUTE = `data-${EXT_PREFIX}-label-loaded`;
 
-    constructor(objWeb3)
+class EtherAddressLookup {
+    constructor(objWeb3, labels)
     {
-        console.log("Init EAL");
         this.objWeb3 = objWeb3;
+        this._labels = labels;
+
         this.setDefaultExtensionSettings();
         this.init();
+
+        this.event_0xAddressMouseEnter = this.event_0xAddressMouseEnter.bind(this);
+        this.event_0xAddressMouseLeave = this.event_0xAddressMouseLeave.bind(this);
     }
 
-    setDefaultExtensionSettings()
-    {
+    setDefaultExtensionSettings() {
         this.blHighlight = false;
         this.blPerformAddressLookups = true;
         this.strBlockchainExplorer = "https://etherscan.io/address";
@@ -143,15 +151,14 @@ class EtherAddressLookup {
 
     manipulateDOM()
     {
-        if(true || this.intSettingsCount === this.intSettingsTotalCount) {
-            if(this.blBlacklistDomains) {
-                this.blacklistedDomainCheck();
-            }
-            this.convertAddressToLink();
+        if (this.blBlacklistDomains) {
+            this.blacklistedDomainCheck();
+        }
 
-            if(this.blPerformAddressLookups > 0) {
-                this.setAddressOnHoverBehaviour();
-            }
+        this.convertAddressToLink();
+
+        if (this.blPerformAddressLookups > 0) {
+            this.setAddressOnHoverBehaviour();
         }
     }
 
@@ -354,125 +361,167 @@ class EtherAddressLookup {
     {
         var objNodes = document.getElementsByClassName("ext-etheraddresslookup-0xaddress");
         for (var i = 0; i < objNodes.length; i++) {
-            objNodes[i].addEventListener('mouseover', this.event_0xAddressHover, false);
+            objNodes[i].addEventListener('mouseenter', this.event_0xAddressMouseEnter, false);
+            objNodes[i].addEventListener('mouseleave', this.event_0xAddressMouseLeave, false);
         }
+    }
+
+    event_0xAddressMouseLeave(event) {
+        const addressElement = event.target;
+
+        this.hidePopupTimer = setTimeout(() => {
+            addressElement.classList.remove(ADDRESS_DISPLAY_POPUP_CLASS_NAME);
+        }, 100);
     }
 
     //The event handler for 0x address mouseover.
     //It will do the logic to call the web3 rpc to get the address balance.
-    event_0xAddressHover()
-    {
-        if(this.children.length > 1 && this.children[1].className == "ext-etheraddresslookup-address_stats_hover") {
-            return false;
+    event_0xAddressMouseEnter(event) {
+        const addressElement = event.target;
+        const address = addressElement.getAttribute("data-address");
+
+        let uniqueAddressId = addressElement.getAttribute(ATTRIBUTE_ADDRESS_UNIQUE_ID);
+
+        if (!uniqueAddressId) {
+            uniqueAddressId = (new Date()).getTime();
+
+            addressElement.setAttribute(ATTRIBUTE_ADDRESS_UNIQUE_ID, uniqueAddressId);
         }
 
-        let intUniqueId = (new Date()).getTime();
+        if (!addressElement.classList.contains(ADDRESS_DISPLAY_POPUP_CLASS_NAME)) {
+            addressElement.classList.add(ADDRESS_DISPLAY_POPUP_CLASS_NAME);
+        }
 
-        var objHoverNode = document.createElement("div");
-        objHoverNode.className = "ext-etheraddresslookup-address_stats_hover";
-        var objHoverNodeContent = document.createElement("div");
-        objHoverNodeContent.className = "ext-etheraddresslookup-address_stats_hover_content";
-        objHoverNodeContent.innerHTML = "<p id='ext-etheraddresslookup-fetching_data_"+intUniqueId+"'><strong>Fetching Data...</strong></p>";
-        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId+"' class='ext-etheraddresslookup-address_stats_hover_node_error'></div>";
-        objHoverNodeContent.innerHTML += "<div id='ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId+"' class='ext-etheraddresslookup-address_stats_hover_node_ok'></div>";
-        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-address_balance_"+intUniqueId+"'></span>";
-        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-transactions_out_"+intUniqueId+"'></span>";
-        objHoverNodeContent.innerHTML += "<span id='ext-etheraddresslookup-contract_address_"+intUniqueId+"'></span>";
-
-        objHoverNode.appendChild(objHoverNodeContent);
-        this.appendChild(objHoverNode);
-
-        //Get the RPC provider for the user
-        objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
-            var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
-            var str0xAddress = this.getAttribute("data-address");
-            let objHoverNodeContent = this.children[1].children[0];
-
-            //Get transaction count
-            web3.eth.getTransactionCount(str0xAddress, function(error, result) {
-                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
-                    objHoverNodeContent.children[0].style.display = 'none';
-                }
-
-                var intTransactionCount = "";
-                if(error) {
-                    intTransactionCount = -1;
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).innerText = "There were RPC errors";
-                } else {
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
-                    intTransactionCount = parseInt(result).toLocaleString();
-                }
-
-                var objTransactionCount = objHoverNodeContent.querySelector("#ext-etheraddresslookup-transactions_out_"+intUniqueId);
-                objTransactionCount.innerHTML = "<strong>Transactions out:</strong> "+ intTransactionCount;
-            });
-
-            //Get the account balance
-            web3.eth.getBalance(str0xAddress, function(error, result) {
-                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
-                    objHoverNodeContent.children[0].style.display = 'none';
-                }
-
-                var flEthBalance = "";
-                if(error) {
-                    flEthBalance = -1;
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).innerText = "There were RPC errors";
-                } else {
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
-                    flEthBalance = web3.fromWei(result.toString(10), "ether").toLocaleString("en-US", {maximumSignificantDigits: 9});
-                }
-
-                var objAddressBalance = objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_balance_"+intUniqueId);
-                objAddressBalance.innerHTML += "<strong>ETH:</strong> "+ flEthBalance;
-            });
-
-            //See if the address is a contract
-            web3.eth.getCode(str0xAddress, function(error, result) {
-                if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+intUniqueId) {
-                    objHoverNodeContent.children[0].style.display = 'none';
-                }
-
-                var objContractAddress = objHoverNodeContent.querySelector("#ext-etheraddresslookup-contract_address_"+intUniqueId);
-
-                if(error) {
-                    objContractAddress.innerHTML += "<small>Unable to determine if contract</small>";
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).style.display = "inline";
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+intUniqueId).innerText = "There were RPC errors";
-                } else {
-                    objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+intUniqueId).style.display = "inline";
-                    var blIsContractAddress = result == "0x" ? false : true;
-                    if (blIsContractAddress) {
-                        objContractAddress.innerHTML += "<small>This is a contract address</small>";
-                    }
-                }
-            });
-
-            if(objResponse.resp.includes("quiknode.io")) {
-                objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='" + objBrowser.runtime.getURL("/images/powered-by-quiknode.png") + "' /></a>";
+        if (addressElement.children.length > 1 && addressElement.children[1].className === HOVER_POPUP_CLASS_NAME) {
+            if (this.hidePopupTimer) {
+                clearTimeout(this.hidePopupTimer);
             }
+        } else {
+            var objHoverNode = document.createElement("div");
+            objHoverNode.className = HOVER_POPUP_CLASS_NAME;
+            const objHoverNodeContent = document.createElement("div");
+            objHoverNodeContent.className = `${HOVER_POPUP_CLASS_NAME}_content`;
+            objHoverNodeContent.innerHTML = `
+                <p id='${EXT_PREFIX}-fetching_data_${uniqueAddressId}'>
+                    <strong>Fetching Data...</strong>
+                </p>
+                <div id='${EXT_PREFIX}-address_stats_hover_node_error_${uniqueAddressId}' class='${EXT_PREFIX}-address_stats_hover_node_error'></div>
+                <div id='${EXT_PREFIX}-address_stats_hover_node_ok_${uniqueAddressId}' class='${EXT_PREFIX}-address_stats_hover_node_ok'></div>
+                <span id='${EXT_PREFIX}-address_balance_${uniqueAddressId}'></span>
+                <span id='${EXT_PREFIX}-transactions_out_${uniqueAddressId}'></span>
+                <span id='${EXT_PREFIX}-contract_address_${uniqueAddressId}'></span>
+                <span class="${EXT_PREFIX}-label_${uniqueAddressId}" ${LABEL_LOADED_ATTRIBUTE}="false"></span>`;
 
-            return false;
-        }.bind(this));
+
+            objHoverNode.appendChild(objHoverNodeContent);
+            addressElement.appendChild(objHoverNode);
+
+            //Get the RPC provider for the user
+            objBrowser.runtime.sendMessage({ func: "rpc_provider" }, (objResponse) => {
+                var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
+                var str0xAddress = addressElement.getAttribute("data-address");
+                let objHoverNodeContent = addressElement.children[1].children[0];
+
+                //Get transaction count
+                web3.eth.getTransactionCount(str0xAddress, function(error, result) {
+                    if(objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+uniqueAddressId) {
+                        objHoverNodeContent.children[0].style.display = 'none';
+                    }
+
+                    var intTransactionCount = "";
+                    if(error) {
+                        intTransactionCount = -1;
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).style.display = "inline";
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).innerText = "There were RPC errors";
+                    } else {
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).style.display = "inline";
+                        intTransactionCount = parseInt(result).toLocaleString();
+                    }
+
+                    var objTransactionCount = objHoverNodeContent.querySelector("#ext-etheraddresslookup-transactions_out_"+uniqueAddressId);
+                    objTransactionCount.innerHTML = "<strong>Transactions out:</strong> "+ intTransactionCount;
+                });
+
+                //Get the account balance
+                web3.eth.getBalance(str0xAddress, function(error, result) {
+                    if (objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+uniqueAddressId) {
+                        objHoverNodeContent.children[0].style.display = 'none';
+                    }
+
+                    var flEthBalance = "";
+                    if (error) {
+                        flEthBalance = -1;
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).style.display = "inline";
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).innerText = "There were RPC errors";
+                    } else {
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).style.display = "inline";
+                        flEthBalance = web3.fromWei(result.toString(10), "ether").toLocaleString("en-US", {maximumSignificantDigits: 9});
+                    }
+
+                    var objAddressBalance = objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_balance_"+uniqueAddressId);
+                    objAddressBalance.innerHTML += "<strong>ETH:</strong> "+ flEthBalance;
+                });
+
+                //See if the address is a contract
+                web3.eth.getCode(str0xAddress, function(error, result) {
+                    if (objHoverNodeContent.children[0].id == "ext-etheraddresslookup-fetching_data_"+uniqueAddressId) {
+                        objHoverNodeContent.children[0].style.display = 'none';
+                    }
+
+                    var objContractAddress = objHoverNodeContent.querySelector("#ext-etheraddresslookup-contract_address_"+uniqueAddressId);
+
+                    if (error) {
+                        objContractAddress.innerHTML += "<small>Unable to determine if contract</small>";
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).style.display = "inline";
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).innerText = "There were RPC errors";
+                    } else {
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).style.display = "inline";
+                        var blIsContractAddress = result == "0x" ? false : true;
+                        if (blIsContractAddress) {
+                            objContractAddress.innerHTML += "<small>This is a contract address</small>";
+                        }
+                    }
+                });
+
+                if (objResponse.resp.includes("quiknode.io")) {
+                    objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='" + objBrowser.runtime.getURL("/images/powered-by-quiknode.png") + "' /></a>";
+                }
+
+            });
+        }
+
+        setTimeout(() => {
+            this.addLabelsHTML(address, uniqueAddressId);
+        }, 0);
+
+        return false;
+    }
+
+    async addLabelsHTML(address, id) {
+        const labelElement = document.querySelector(`.${EXT_PREFIX}-label_${id}`);
+
+        const labelLoaded = labelElement.getAttribute(LABEL_LOADED_ATTRIBUTE) === 'true';
+
+        if (labelLoaded) {
+            return;
+        }
+
+        const retrievedLabel = await this._labels.getLabelForAddress(address);
+
+        if (retrievedLabel) {
+            const { color, label } = retrievedLabel;
+
+            labelElement.innerHTML = this._labels.getTemplate(label, color);
+        } else {
+            labelElement.innerHTML = '';
+        }
+
+        labelElement.setAttribute(LABEL_LOADED_ATTRIBUTE, 'true');
+    }
+
+    resetLoadedLabels() {
+        document.querySelectorAll(`[${LABEL_LOADED_ATTRIBUTE}]`).forEach(element => {
+            element.setAttribute(LABEL_LOADED_ATTRIBUTE, 'false');
+        });
     }
 }
-
-window.addEventListener("load", function() {
-    let objEtherAddressLookup = new EtherAddressLookup(Web3);
-});
-
-//Send message from the extension to here.
-objBrowser.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        let objEtherAddressLookup = new EtherAddressLookup();
-        if(typeof request.func !== "undefined") {
-            if(typeof objEtherAddressLookup[request.func] == "function") {
-                objEtherAddressLookup[request.func]();
-                sendResponse({status: "ok"});
-                return true;
-            }
-        }
-        sendResponse({status: "fail"});
-    }
-);

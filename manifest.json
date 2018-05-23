@@ -37,6 +37,7 @@
       "js/app/lib/web3-light.min.js",
       "js/DomManipulator.js",
       "js/labels.js",
+      "js/main.js",
       "js/app/lib/nat-twbs-modal-popover.js"
     ],
     "css": ["css/app.css"]

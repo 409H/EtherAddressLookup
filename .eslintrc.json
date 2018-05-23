@@ -1,0 +1,28 @@
+{
+    "extends": ["eslint:recommended"],
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        },
+        "experimentalDecorators": true
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+        "webextensions": true
+    },
+    "rules": {
+        "linebreak-style": 0,
+        "object-curly-spacing": ["warn", "always"],
+        "no-trailing-spaces": "warn",
+        "keyword-spacing": "warn",
+        "no-extra-semi": "error",
+        "semi": ["error", "always"],
+        "no-console": "off",
+        "no-unused-vars": "warn",
+        "no-undef": "warn"
+    }
+}
