@@ -25,6 +25,7 @@ class Labels {
         // Do we have a labels attribute, if not set them up
         if (!(LABELLED_ADDRESSES_KEY in storageObject)){
             storageObject = this.initialise(storageObject);
+            this.set(storageObject);
         }
 
         return storageObject[LABELLED_ADDRESSES_KEY];
@@ -71,6 +72,7 @@ class Labels {
 
     initialise(object) {
         object[LABELS_KEY] = [];
+        object[LABELLED_ADDRESSES_KEY] = [];
 
         return object;
     }
