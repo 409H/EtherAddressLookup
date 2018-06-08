@@ -38,7 +38,6 @@
 
     #content {
         padding: 15px;
-        margin-top: 15px;
 
         #footer {
             font-size: 70%;
@@ -51,6 +50,7 @@
     color: #c2c6c7;
     line-height: 10pt;
     padding-left: 3.5em;
+    margin-bottom: 10px;
 }
 
 #ext-etheraddresslookup-report {
@@ -437,6 +437,7 @@
 
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-item {
     margin-bottom: -1px;
+    font-size: 10pt;
 }
 
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link {
@@ -471,6 +472,7 @@
 
 .ext-etheraddresslookup-tab-content > .ext-etheraddresslookup-tab-pane {
     display: none;
+    font-size: 10pt;
 }
 
 .ext-etheraddresslookup-tab-content > .active {

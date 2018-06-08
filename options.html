@@ -38,6 +38,11 @@
             <!-- OPTIONS PANEL -->
             <div class="ext-etheraddresslookup-tab-pane fade active show" id="ext-etheraddresslookup-options" role="tabpanel" aria-labelledby="ext-etheraddresslookup-options-tab" aria-expanded="true">
                 <label class="fancy-checkbox">
+                    <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-show_style">
+                    <span>Highlight Matches</span>
+                </label>
+
+                <label class="fancy-checkbox">
                     <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-perform_address_lookups">
                     <span>Perform address lookups</span>
                 </label>
@@ -55,8 +60,6 @@
                                                 (<span id="ext-etheraddresslookup-3p_blacklist_domains_total_count">0</span>)
                     </small>
                 </div>
-
-                <br />
 
                 <label>Preferred Blockchain Explorer</label>
                 <select class="form-control" name="ext-etheraddresslookup-choose_blockchain"
@@ -138,7 +141,6 @@
         </div>
     </div>
 
-    <br/>
     <div id="footer">
         <div class="ext-etheraddresslookup-center">
             <a href="/settings.html" target="_blank">More Settings</a> &mdash;
