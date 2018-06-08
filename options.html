@@ -19,55 +19,126 @@
 
     <br/>
 
-    <label class="fancy-checkbox">
-        <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-show_style">
-        <span>Highlight Matches</span>
-    </label>
+    <div>
+        <ul class="ext-etheraddresslookup-nav ext-etheraddresslookup-nav-tabs" id="ext-etheraddresslookup-tab" role="tablist" style="margin-bottom: 1rem">
+            <li class="ext-etheraddresslookup-nav-item">
+                <a class="ext-etheraddresslookup-nav-link active" id="ext-etheraddresslookup-options-tab" data-toggle="ext-etheraddresslookup-tab" data-duration="350" data-height="true" href="#ext-etheraddresslookup-options" role="tab" aria-controls="ext-etheraddresslookup-options" aria-expanded="true">
+                    Options
+                </a>
+            </li>
+            <li class="ext-etheraddresslookup-nav-item">
+                <a class="ext-etheraddresslookup-nav-link" id="ext-etheraddresslookup-labels-tab" data-toggle="ext-etheraddresslookup-tab" data-duration="350" data-height="true" href="#ext-etheraddresslookup-labels" role="tab" aria-controls="ext-etheraddresslookup-labels" aria-expanded="false">
+                    Labels
+                </a>
+            </li>
+        </ul>
 
-    <label class="fancy-checkbox">
-        <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-perform_address_lookups">
-        <span>Perform address lookups</span>
-    </label>
+        <div class="ext-etheraddresslookup-tab-content" id="ext-etheraddresslookup-tab-content">
 
-    <label class="fancy-checkbox">
-        <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains" id="ext-etheraddresslookup-blacklist_domains">
-        <span>Warn of blacklisted domains</span>
-    </label>
-    <div id="ext-etheraddresslookup-blacklist_domains_stats">
-        <input type="checkbox" name="ext-etheraddresslookup-3rd_party_blacklist_domains" id="ext-etheraddresslookup-3rd_party_blacklist_domains"> Use 3rd party blacklists <br />
-        <input type="checkbox" name="ext-etheraddresslookup-block_punycode_blacklist_domains" id="ext-etheraddresslookup-block_punycode_blacklist_domains"> Block all punycode domains <br /> <br />
-        <small>Last updated: <span id="ext-etheraddresslookup-blacklist_domains_last_updated">N/A</span></small>
-        <br/>
-        <small>Domains Blacklisted: <span id="ext-etheraddresslookup-blacklist_domains_total_count">0</span>
-                                    (<span id="ext-etheraddresslookup-3p_blacklist_domains_total_count">0</span>)
-        </small>
+            <!-- OPTIONS PANEL -->
+            <div class="ext-etheraddresslookup-tab-pane fade active show" id="ext-etheraddresslookup-options" role="tabpanel" aria-labelledby="ext-etheraddresslookup-options-tab" aria-expanded="true">
+                <label class="fancy-checkbox">
+                    <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-perform_address_lookups">
+                    <span>Perform address lookups</span>
+                </label>
+
+                <label class="fancy-checkbox">
+                    <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains" id="ext-etheraddresslookup-blacklist_domains">
+                    <span>Warn of blacklisted domains</span>
+                </label>
+                <div id="ext-etheraddresslookup-blacklist_domains_stats">
+                    <input type="checkbox" name="ext-etheraddresslookup-3rd_party_blacklist_domains" id="ext-etheraddresslookup-3rd_party_blacklist_domains"> Use 3rd party blacklists <br />
+                    <input type="checkbox" name="ext-etheraddresslookup-block_punycode_blacklist_domains" id="ext-etheraddresslookup-block_punycode_blacklist_domains"> Block all punycode domains <br /> <br />
+                    <small>Last updated: <span id="ext-etheraddresslookup-blacklist_domains_last_updated">N/A</span></small>
+                    <br/>
+                    <small>Domains Blacklisted: <span id="ext-etheraddresslookup-blacklist_domains_total_count">0</span>
+                                                (<span id="ext-etheraddresslookup-3p_blacklist_domains_total_count">0</span>)
+                    </small>
+                </div>
+
+                <br />
+
+                <label>Preferred Blockchain Explorer</label>
+                <select class="form-control" name="ext-etheraddresslookup-choose_blockchain"
+                        id="ext-etheraddresslookup-choose_blockchain">
+                    <optgroup label="Mainnet">
+                        <option value="https://etherscan.io/address">Etherscan.io *</option>
+                        <option value="https://etherchain.org/account">Etherchain.org *</option>
+                        <option value="https://ethplorer.io/address">Ethplorer.io</option>
+                        <option value="http://ethergraphs.com/dashboard">Ethergraphs.com</option>
+                    </optgroup>
+                    <optgroup label="Rinkeby">
+                        <option value="https://rinkeby.etherscan.io/address">Etherscan.io *</option>
+                    </optgroup>
+                    <optgroup label="Ropsten">
+                        <option value="https://ropsten.etherscan.io/address">Etherscan.io *</option>
+                    </optgroup>
+                    <optgroup label="Kovan">
+                        <option value="https://kovan.etherscan.io/address">Etherscan.io *</option>
+                    </optgroup>
+                </select>
+                <div class="ext-etheraddresslookup-note">
+                    <small>* ENS address compatible.</small>
+                </div>
+            </div>
+
+            <!-- LABELS PANEL -->
+            <div class="ext-etheraddresslookup-tab-pane fade " id="ext-etheraddresslookup-labels" role="tabpanel" aria-labelledby="ext-etheraddresslookup-labels-tab" aria-expanded="false">
+                <!-- New Label -->
+                <div id="ext-etheraddresslookup-new-labels">
+
+                    <p><b>New Label:</b></p>
+                    <form id="ext-etheraddresslookup-new-label-form">
+                        <input
+                            class="form-control"
+                            type="text"
+                            name="ext-etheraddresslookup-label-name"
+                            id="ext-etheraddresslookup-label-name"
+                            placeholder="Label Name"
+                        />
+                        <input
+                            class="form-control"
+                            type="text"
+                            name="ext-etheraddresslookup-label-address"
+                            id="ext-etheraddresslookup-label-address"
+                            placeholder="ETH Wallet Address"
+                        />
+                        <select
+                            class="form-control"
+                            name="ext-etheraddresslookup-label-color"
+                            id="ext-etheraddresslookup-label-color"
+                        >
+                            <option style="background-color: #dc3545;" value="dc3545">Red</option>
+                            <option style="background-color: #ffad13;" value="ffad13">Orange</option>
+                            <option style="background-color: #ffdc00;" value="ffdc00">Yellow</option>
+                            <option style="background-color: #28a745;" value="28a745">Green</option>
+                            <option style="background-color: #17a2b8;" value="17a2b8">Blue</option>
+                            <option style="background-color: #6634b8;" value="6634b8">Purple</option>
+                            <option style="background-color: #000000;" value="000000">Black</option>
+                            <option style="background-color: #808080;" value="808080">Grey</option>
+                            <option style="background-color: #ffffff;color:#303030;" value="ffffff">White</option>
+                        </select>
+                        <button class="btn btn-success btn-small" type="submit">Save</button>
+                    </form>
+
+                </div>
+
+                <hr/>
+
+                <!-- Existing Labels -->
+                <div>
+                    <p><b>Your Labels:</b></p>
+
+                    <div id="ext-etheraddresslookup-current-labels">
+                        <!-- Populated from storage -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <br />
-
-    <label>Preferred Blockchain Explorer</label>
-    <select class="form-control" name="ext-etheraddresslookup-choose_blockchain"
-            id="ext-etheraddresslookup-choose_blockchain">
-        <optgroup label="Mainnet">
-            <option value="https://etherscan.io/address">Etherscan.io *</option>
-            <option value="https://etherchain.org/account">Etherchain.org *</option>
-            <option value="https://ethplorer.io/address">Ethplorer.io</option>
-            <option value="http://ethergraphs.com/dashboard">Ethergraphs.com</option>
-        </optgroup>
-        <optgroup label="Rinkeby">
-            <option value="https://rinkeby.etherscan.io/address">Etherscan.io *</option>
-        </optgroup>
-        <optgroup label="Ropsten">
-            <option value="https://ropsten.etherscan.io/address">Etherscan.io *</option>
-        </optgroup>
-        <optgroup label="Kovan">
-            <option value="https://kovan.etherscan.io/address">Etherscan.io *</option>
-        </optgroup>
-    </select>
-    <div class="ext-etheraddresslookup-note">
-        <small>* ENS address compatible.</small>
-    </div>
-
+    <br/>
     <div id="footer">
         <div class="ext-etheraddresslookup-center">
             <a href="/settings.html" target="_blank">More Settings</a> &mdash;
@@ -93,7 +164,9 @@
 <script src="js/app/toggleBlacklistDomains.js"></script>
 <script src="js/app/toggleBookmarks.js"></script>
 <script src="/js/app/toggleAddressLookups.js"></script>
-
+<script src="js/app/lib/nat-twbs-modal-popover.js"></script>
+<script src="js/labels.js"></script>
+<script src="js/options/labels.js"></script>
 <script src="js/options.js"></script>
 </body>
 </html>

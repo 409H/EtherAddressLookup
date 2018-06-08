@@ -1,10 +1,11 @@
 //On page load it checks/unchecks the checkbox
-(function()
-{
+(function() {
     refreshBlacklistDomains();
 
     getBlacklistStats();
-    setInterval(function() {getBlacklistStats()}, 3000);
+    setInterval(() => {
+        getBlacklistStats();
+    }, 3000);
 })();
 
 //Sets the local storage to remember their match blacklist settings
@@ -73,7 +74,7 @@ function getBlacklistStats()
 {
     var objLastUpdatedText = document.getElementById("ext-etheraddresslookup-blacklist_domains_last_updated");
     var objTotalCountText = document.getElementById("ext-etheraddresslookup-blacklist_domains_total_count");
-    var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
+    let objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
     objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
     var intLastUpdated = objBlacklistedDomains.timestamp;
 
@@ -82,7 +83,7 @@ function getBlacklistStats()
 
     //Now get the 3p blacklist stats
     var objTotal3pCountText = document.getElementById("ext-etheraddresslookup-3p_blacklist_domains_total_count");
-    var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-3p_blacklist_domains_list");
+    objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-3p_blacklist_domains_list");
     objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
     var intTotalBlacklisted = 0;
     for(var str3pName in objBlacklistedDomains) {
