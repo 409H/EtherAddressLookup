@@ -30,8 +30,7 @@
         //See if we are blocking all punycode domains.
         objBrowser.runtime.sendMessage({func: "block_punycode_domains"}, function(objResponse) {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
-                var strCurrentTab = window.location.hostname;
-                var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+                var strCurrentTab = window.location.hostname.replace(/www\./g,'');
 
                 if(objResponse.resp == 1) {
                     var arrDomainParts = strCurrentTab.split(".");
@@ -46,8 +45,7 @@
         });
 
         //Domain is whitelisted, don't check the blacklist.
-        var strCurrentTab = window.location.hostname;
-        strCurrentTab = strCurrentTab.replace(/www\./g,'');
+        let strCurrentTab =  window.location.hostname.replace(/www\./g,'');
         if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
             console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
             return false;
@@ -60,14 +58,14 @@
             //Levenshtein - @sogoiii
             var blHolisticStatus = false;
             if(isBlacklisted === false && arrWhitelistedDomains.indexOf(strCurrentTab) < 0) {
-                var strCurrentTab = punycode.toUnicode(strCurrentTab);
+                strCurrentTab = punycode.toUnicode(strCurrentTab);
                 var source = strCurrentTab.replace(/\./g, '');
-                var intHolisticMetric = levenshtein(source, 'myetherwallet');
+                let intHolisticMetric = levenshtein(source, 'myetherwallet');
                 var intHolisticLimit = 5; // How different can the word be?
                 blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < intHolisticLimit) ? true : false;
                 if(blHolisticStatus === false) {
                     //Do edit distance against mycrypto
-                    var intHolisticMetric = levenshtein(source, 'mycrypto');
+                    intHolisticMetric = levenshtein(source, 'mycrypto');
                     blHolisticStatus = (intHolisticMetric > 0 && intHolisticMetric < 3) ? true : false;
                 }
             }
@@ -87,8 +85,7 @@
                     objBrowser.runtime.sendMessage({func: "3p_blacklist_domain_list"}, function(objResponse) {
                         if(objResponse && objResponse.hasOwnProperty("resp")) {
                             var obj3rdPartyLists = JSON.parse(objResponse.resp);
-                            var strCurrentTab = window.location.hostname;
-                            var strCurrentTab = strCurrentTab.replace(/www\./g,'');
+                            var strCurrentTab = window.location.hostname.replace(/www\./g,'');
 
                             for(var str3rdPartyIdentifier in obj3rdPartyLists) {
 
@@ -122,7 +119,7 @@
 
         var row = [];
         // init the row
-        for(var i = 0; i <= a.length; i++){
+        for(let i = 0; i <= a.length; i++){
             row[i] = i;
         }
 

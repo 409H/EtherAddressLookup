@@ -40,7 +40,7 @@ class RpcNodeSelector
         objRpcSuccessNode.classList.add("hide-me");
 
         if( RpcNodeSelector.rpcEndpointIsAvailable(objRpcValue.value) ) {
-            localStorage.setItem("ext-etheraddresslookup-rpc_node", objRpcValue.value)
+            localStorage.setItem("ext-etheraddresslookup-rpc_node", objRpcValue.value);
         }
 
         objEvent.preventDefault();

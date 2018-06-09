@@ -113,7 +113,7 @@ function showBookmarks()
     }
 
     if(document.getElementById("ext-etheraddresslookup-bookmarks")) {
-        for (var i = 0; i < arrBookmarks.length; i++) {
+        for (let i = 0; i < arrBookmarks.length; i++) {
             if(arrBookmarks[i].icon.length === 0) {
                 continue;
             }
@@ -149,7 +149,7 @@ function showModifyWindow()
         objBookmarks[intId] = {
             "icon": strIconLink,
             "url": document.getElementById("ext-etheraddresslookup-bookmark_modify_url").value
-        }
+        };
 
         localStorage.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
         location.reload();
@@ -162,7 +162,7 @@ function showModifyWindow()
         objBookmarks[intId] = {
             "icon": "",
             "url": ""
-        }
+        };
 
         localStorage.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
         location.reload();
