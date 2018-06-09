@@ -42,6 +42,7 @@ class Labels {
     }
 
     async add(name, address, color) {
+        address = address.toLowerCase();
         await this.addLabelledAddress(address);
 
         return await this.set({
@@ -79,7 +80,7 @@ class Labels {
 
     shortenAddress(address) {
         const beginning = address.slice(0, BEGINNING_AND_END_CHARS_IN_ADDR_TO_SHOW);
-        const end = address.slice(address.length - BEGINNING_AND_END_CHARS_IN_ADDR_TO_SHOW, address.length - 1);
+        const end = address.slice(address.length - BEGINNING_AND_END_CHARS_IN_ADDR_TO_SHOW, address.length);
 
         return `${beginning}...${end}`;
     }
@@ -170,10 +171,10 @@ class Labels {
     }
 
     async getLabelForAddress(address) {
-        const retrievedObject = await this.get(address);
+        const retrievedObject = await this.get(address.toLowerCase());
 
         if (retrievedObject) {
-            return retrievedObject[address];
+            return retrievedObject[address.toLowerCase()];
         }
     }
 
