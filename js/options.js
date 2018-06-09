@@ -141,6 +141,14 @@ objBrowser.runtime.onMessage.addListener(
                 objDomainLists.whitelist = getWhitelistedDomains();
                 strResponse = JSON.stringify(objDomainLists);
                 break;
+            case 'signature_inject' :
+                //This option is enabled by default
+                if(localStorage.getItem("ext-etheraddresslookup-signature_inject") === null) {
+                    strResponse = 1;
+                } else {
+                    strResponse = localStorage.getItem("ext-etheraddresslookup-signature_inject");
+                }
+                break;
             default:
                 strResponse = "unsupported";
                 break;
