@@ -141,6 +141,31 @@ objBrowser.runtime.onMessage.addListener(
                 objDomainLists.whitelist = getWhitelistedDomains();
                 strResponse = JSON.stringify(objDomainLists);
                 break;
+            case 'twitter_validation' :
+                //This option is enabled by default
+                if(localStorage.getItem("ext-etheraddresslookup-twitter_validation") === null) {
+                    strResponse = 1;
+                } else {
+                    strResponse = localStorage.getItem("ext-etheraddresslookup-twitter_validation");
+                }
+                break;
+            case 'twitter_lists' :
+                let twitter_lists = {
+                    "whitelist": [
+                        "237387363", //sniko_
+                        "4831010888" //MyCrypto
+                    ],
+                    "blacklist": []
+                };
+
+                if(localStorage.getItem("ext-etheraddresslookup-twitter_lists")) {
+                    var cached_list = JSON.parse(localStorage.getItem("ext-etheraddresslookup-twitter_lists"));
+                    twitter_lists.whitelist = cached_list.whitelist;
+                    twitter_lists.blacklist = cached_list.blacklist;
+                }
+
+                strResponse = JSON.stringify(twitter_lists);
+                break;
             case 'signature_inject' :
                 //This option is enabled by default
                 if(localStorage.getItem("ext-etheraddresslookup-signature_inject") === null) {
