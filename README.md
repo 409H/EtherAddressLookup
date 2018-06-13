@@ -69,18 +69,20 @@ details on why the changes are needed.
 
 ## Whitelisted Domains
 
-The whitelist can only be updated by myself (@409H) and MyEtherWallet (@tayvano). The whitelist will prevent any false-positives
+The whitelist can only be updated by myself (@409H) and MyCrypto (@tayvano). The whitelist will prevent any false-positives
 from happening with the Levenshtein algo (special thanks to @sogoiii). If you find a domain that is wrongly blacklisted, then please
 [open an issue](https://github.com/409H/EtherAddressLookup/issues/new) or open
 a [pull request](https://github.com/409H/EtherAddressLookup/compare) with the changes.
 
 ## Special Thanks
 
-* Thanks to the team at MyEtherWallet for helping keep the domain blacklist up-to-date!
+* Thanks to the team at MyCrypto for helping keep the domain blacklist up-to-date!
 * Thanks to the team at [Cryptominded](https://cryptominded.com/) for the store graphics!
 * Thanks to MrLuit for providing [https://etherscamdb.info](https://etherscamdb.info) and the report domain functionality (v1.5)
 * Thanks to [Samyoul](https://github.com/Samyoul) for continued support and development!
 * To everyone who reports bad domains to us through the various channels!
+* Thanks to [danielkmakcom](https://twitter.com/danielkmakcom) from [ChronoLogicETH](https://twitter.com/ChronoLogicETH) for doing the label functionality (v1.17)!
+* Thanks to [CryptoInfl](https://cryptoinfluencers.io/) for providing a whitelist of Twitter handles (v1.18)!
 
 ----
 
