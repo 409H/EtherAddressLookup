@@ -37,9 +37,16 @@
     width: 300px;
 
     #content {
-        padding: 15px;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+        background: url(/images/powered-by-mycrypto.png);
+        background-size: 85%;
+        background-position: bottom;
+        background-repeat: no-repeat;
 
         #footer {
+            padding-top: 4em;
             font-size: 70%;
         }
     }
@@ -100,6 +107,11 @@
     box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
     display: inline-block;
     margin-bottom: -0.2em;
+}
+
+#ext-etheraddresslookup-choose_blockchain {
+    margin-top:0;
+    margin-bottom:0;
 }
 
 /*Labels*/
