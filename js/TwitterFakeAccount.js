@@ -61,6 +61,9 @@ class TwitterFakeAccount
             }
 
             var objAccountDetails = objNode.getElementsByClassName("account-group")[0];
+            if(typeof objAccountDetails === 'undefined') {
+                return;
+            }
             objNode.setAttribute("ext-etheraddresslookup-twitterflagged", 1);
 
             var objWhitelistedIcon = document.createElement("img");
