@@ -150,13 +150,40 @@ objBrowser.runtime.onMessage.addListener(
                 }
                 break;
             case 'twitter_lists' :
+                //See when they were last fetched
                 let twitter_lists = {
-                    "whitelist": [
-                        "237387363", //sniko_
-                        "4831010888" //MyCrypto
-                    ],
+                    "last_fetched": 0,
+                    "whitelist": [],
                     "blacklist": []
                 };
+
+                if(localStorage.getItem("ext-etheraddresslookup-twitter_lists")) {
+                    let saved_settings = JSON.parse(localStorage.getItem("ext-etheraddresslookup-twitter_lists"));
+                    twitter_lists.last_fetched = saved_settings.last_fetched;
+                }
+
+                if((Math.floor(Date.now() - twitter_lists.last_fetched)) > 600*1000) {
+                    fetch("https://raw.githubusercontent.com/MrLuit/EtherScamDB/master/_data/twitter.json")
+                    .then(res => res.json())
+                    .then((lists) => {
+                        twitter_lists.last_fetched = Date.now();
+                        
+                        //We only need the Twitter IDs
+                        Object.entries(lists.whitelist).forEach(
+                            ([twitter_userid, screename]) => {
+                                twitter_lists.whitelist.push(twitter_userid);
+                            }
+                        );
+
+                        Object.entries(lists.blacklist).forEach(
+                            ([twitter_userid, screename]) => {
+                                twitter_lists.blacklist.push(twitter_userid);
+                            }
+                        );
+
+                        localStorage.setItem("ext-etheraddresslookup-twitter_lists", JSON.stringify(twitter_lists));
+                    });
+                }
 
                 if(localStorage.getItem("ext-etheraddresslookup-twitter_lists")) {
                     var cached_list = JSON.parse(localStorage.getItem("ext-etheraddresslookup-twitter_lists"));
