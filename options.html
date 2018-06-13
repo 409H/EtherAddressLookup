@@ -43,13 +43,18 @@
                 </label>
 
                 <label class="fancy-checkbox">
-                    <input type="checkbox" name="ext-etheraddresslookup-show_style" id="ext-etheraddresslookup-perform_address_lookups">
-                    <span>Perform address lookups</span>
+                    <input type="checkbox" name="ext-etheraddresslookup-perform_address_lookups" id="ext-etheraddresslookup-perform_address_lookups">
+                    <span>Perform address lookups</span> <sup>[<a href="https://github.com/409H/EtherAddressLookup/wiki/Address-Lookups" target="_blank">?</a>]</sup>
+                </label>
+
+                <label class="fancy-checkbox">
+                    <input type="checkbox" name="ext-etheraddresslookup-twitter_validation" id="ext-etheraddresslookup-twitter_validation">
+                    <span>Twitter Badges</span> <sup>[<a href="https://github.com/409H/EtherAddressLookup/wiki/Twitter-Badges" target="_blank">?</a>]</sup>
                 </label>
 
                 <label class="fancy-checkbox">
                     <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains" id="ext-etheraddresslookup-blacklist_domains">
-                    <span>Warn of blacklisted domains</span>
+                    <span>Warn of blacklisted domains</span> <sup>[<a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains" target="_blank">?</a>]</sup>
                 </label>
                 <div id="ext-etheraddresslookup-blacklist_domains_stats">
                     <input type="checkbox" name="ext-etheraddresslookup-3rd_party_blacklist_domains" id="ext-etheraddresslookup-3rd_party_blacklist_domains"> Use 3rd party blacklists <br />
@@ -146,22 +151,16 @@
             <a href="/settings.html" target="_blank">More Settings</a> &mdash;
             <a href="http://eal-phishing-stats.herokuapp.com/" target="_blank">Scam domains</a> &mdash;
             <a href="https://github.com/409H/EtherAddressLookup" target="_blank">GitHub</a>
+            <a href="https://harrydenley.com/ethaddresslookup-chrome-extension-release/" target="_blank">Read Author Blog</a> &mdash;
+            <a href="https://twitter.com/EthAddrLookup" target="_blank">@EthAddrLookup</a>
         </div>
 
-        <br />
-
-        <a href="https://harrydenley.com/ethaddresslookup-chrome-extension-release/" target="_blank">Read Author Blog</a> &mdash;
-        <a href="https://twitter.com/EthAddrLookup" target="_blank">@EthAddrLookup</a>
-        <br/>
-        <span id="ext-etheraddresslookup-tip_box">
-            <strong>Tip:</strong> Install our other extension: <a href="https://harrydenley.com/ethsecuritylookup-chrome-extension-release/" target="_blank">EtherSecurityLookup</a>.
-        </span>
-        <br />
-        <strong>Version:</strong> <span id="ext-manifest_version"></span> &mdash; BETA
+        <small><strong>Version:</strong> <span id="ext-manifest_version"></span> &mdash; BETA</small>
     </div>
 </div>
 
 <script src="js/app/toggleMatchHighlight.js"></script>
+<script src="js/app/toggleTwitterValidation.js"></script>
 <script src="js/app/chooseBlockchain.js"></script>
 <script src="js/app/toggleBlacklistDomains.js"></script>
 <script src="js/app/toggleBookmarks.js"></script>

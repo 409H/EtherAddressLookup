@@ -1,69 +1,100 @@
 .ext-etheraddresslookup-link {
-  white-space: nowrap; }
-  .ext-etheraddresslookup-link-highlight {
-    padding: 2px;
-    background: #F2EAAC;
-    color: #000;
-    border: 1px solid #C7BC67; }
-  .ext-etheraddresslookup-link-no_highlight {
-    padding: 0px;
-    background: transparent;
-    border: 1px solid transparent;
-    color: inherit; }
+  white-space: nowrap;
+}
+
+.ext-etheraddresslookup-link-highlight {
+  padding: 2px;
+  background: #F2EAAC;
+  color: #000;
+  border: 1px solid #C7BC67;
+}
+
+.ext-etheraddresslookup-link-no_highlight {
+  padding: 0px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: inherit;
+}
+
 .ext-etheraddresslookup-warning {
   color: red;
-  border-bottom: 1px dashed red; }
+  border-bottom: 1px dashed red;
+}
+
 .ext-etheraddresslookup-note {
   font-size: 10pt;
   color: #c2c6c7;
-  line-height: 10pt; }
+  line-height: 10pt;
+}
 
 #ext-etheraddresslookup-popup {
   margin: 0;
   padding: 0px;
   font-family: "Arial";
   font-size: 12pt;
-  width: 300px; }
-  #ext-etheraddresslookup-popup #content {
-    padding: 15px; }
-    #ext-etheraddresslookup-popup #content #footer {
-      font-size: 70%; }
+  width: 300px;
+}
+
+#ext-etheraddresslookup-popup #content {
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: url(/images/powered-by-mycrypto.png);
+  background-size: 85%;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+#ext-etheraddresslookup-popup #content #footer {
+  padding-top: 4em;
+  font-size: 70%;
+}
 
 #ext-etheraddresslookup-blacklist_domains_stats {
   font-size: 10pt;
   color: #c2c6c7;
   line-height: 10pt;
   padding-left: 3.5em;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+}
 
 #ext-etheraddresslookup-report {
   margin-bottom: 20px;
   padding: 8px 20px 8px 17px;
   width: 100%;
-  font-size: 10pt; }
+  font-size: 10pt;
+}
 
 .ext-etheraddresslookup-center {
-  text-align: center; }
+  text-align: center;
+}
 
 #ext-etheraddresslookup-bookmarks {
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+}
 
 .ext-etheraddresslookup-bookmark_icon {
   width: 16px;
   height: 16px;
-  display: inline-block; }
-  .ext-etheraddresslookup-bookmark_icon:hover {
-    opacity: 0.5; }
-  .ext-etheraddresslookup-bookmark_icon:nth-child(2n) {
-    margin-left: 15px;
-    margin-right: 15px; }
+  display: inline-block;
+}
+
+.ext-etheraddresslookup-bookmark_icon:hover {
+  opacity: 0.5;
+}
+
+.ext-etheraddresslookup-bookmark_icon:nth-child(2n) {
+  margin-left: 15px;
+  margin-right: 15px;
+}
 
 #ext-etheraddresslookup-bookmark_modify_window {
   display: none;
   color: #252428;
   margin-top: 5%;
   padding: 15px 5%;
-  background: #e4e4e4; }
+  background: #e4e4e4;
+}
 
 .ext-etheraddresslookup-blockie {
   width: 1em;
@@ -73,12 +104,21 @@
   border-radius: 50%;
   box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
   display: inline-block;
-  margin-bottom: -0.2em; }
+  margin-bottom: -0.2em;
+}
+
+#ext-etheraddresslookup-choose_blockchain {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
 /*Labels*/
 @media print {
   .ext-etheraddresslookup-label {
-    border: 1px solid #000; } }
+    border: 1px solid #000;
+  }
+}
+
 .ext-etheraddresslookup-label {
   display: inline-block;
   padding: 0.25em 0.4em;
@@ -88,46 +128,58 @@
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 0.25rem; }
-  .ext-etheraddresslookup-label[data-fill-label-input] {
-    cursor: pointer; }
+  border-radius: 0.25rem;
+}
+
+.ext-etheraddresslookup-label[data-fill-label-input] {
+  cursor: pointer;
+}
 
 .ext-etheraddresslookup-label:empty {
-  display: none; }
+  display: none;
+}
 
 .ext-etheraddresslookup-label-pill {
   padding-right: 0.6em;
   padding-left: 0.6em;
-  border-radius: 10rem; }
+  border-radius: 10rem;
+}
 
 /*Popovers*/
 .ext-etheraddresslookup-popover *,
 .ext-etheraddresslookup-popover *::before,
 .ext-etheraddresslookup-popover *::after {
-  box-sizing: inherit; }
+  box-sizing: inherit;
+}
 
 .ext-etheraddresslookup-popover.fade {
   opacity: 0;
-  transition: opacity 0.15s linear; }
+  transition: opacity 0.15s linear;
+}
 
 .ext-etheraddresslookup-popover.fade.show {
-  opacity: 1; }
+  opacity: 1;
+}
 
 .ext-etheraddresslookup-popover h3 {
   orphans: 3;
-  widows: 3; }
+  widows: 3;
+}
 
 .ext-etheraddresslookup-popover h3 {
-  page-break-after: avoid; }
+  page-break-after: avoid;
+}
 
 .ext-etheraddresslookup-popover h3 {
   margin-top: 0;
-  margin-bottom: .5rem; }
+  margin-bottom: .5rem;
+}
 
 .ext-etheraddresslookup-popover h3, .h3 {
   font-family: inherit;
   font-weight: 500;
-  line-height: 1.1; }
+  line-height: 1.1;
+}
 
 .ext-etheraddresslookup-popover .close {
   float: right;
@@ -136,18 +188,21 @@
   line-height: 1rem;
   color: #000;
   text-shadow: 0 1px 0 #fff;
-  opacity: .5; }
+  opacity: .5;
+}
 
 .ext-etheraddresslookup-popover .close:focus, .close:hover {
   color: #000;
   text-decoration: none;
-  opacity: .75; }
+  opacity: .75;
+}
 
 .ext-etheraddresslookup-popover button.close {
   padding: 0;
   background: transparent;
   border: 0;
-  -webkit-appearance: none; }
+  -webkit-appearance: none;
+}
 
 .ext-etheraddresslookup-popover {
   position: absolute;
@@ -176,104 +231,124 @@
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.3rem; }
+  border-radius: 0.3rem;
+}
 
 .ext-etheraddresslookup-popover .arrow {
   position: absolute;
   display: block;
   width: 10px;
-  height: 5px; }
+  height: 5px;
+}
 
 .ext-etheraddresslookup-popover .arrow::before,
 .ext-etheraddresslookup-popover .arrow::after {
   position: absolute;
   display: block;
   border-color: transparent;
-  border-style: solid; }
+  border-style: solid;
+}
 
 .ext-etheraddresslookup-popover .arrow::before {
   content: "";
-  border-width: 11px; }
+  border-width: 11px;
+}
 
 .ext-etheraddresslookup-popover .arrow::after {
   content: "";
-  border-width: 11px; }
+  border-width: 11px;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-top,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="top"] {
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-top .arrow,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="top"] .arrow {
-  bottom: 0; }
+  bottom: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-top .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="top"] .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-top .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="top"] .arrow::after {
-  border-bottom-width: 0; }
+  border-bottom-width: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-top .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="top"] .arrow::before {
   bottom: -11px;
   margin-left: -6px;
-  border-top-color: rgba(0, 0, 0, 0.25); }
+  border-top-color: rgba(0, 0, 0, 0.25);
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-top .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="top"] .arrow::after {
   bottom: -10px;
   margin-left: -6px;
-  border-top-color: #fff; }
+  border-top-color: #fff;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-right,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="right"] {
-  margin-left: 10px; }
+  margin-left: 10px;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-right .arrow,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="right"] .arrow {
-  left: 0; }
+  left: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-right .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="right"] .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-right .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="right"] .arrow::after {
   margin-top: -8px;
-  border-left-width: 0; }
+  border-left-width: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-right .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="right"] .arrow::before {
   left: -11px;
-  border-right-color: rgba(0, 0, 0, 0.25); }
+  border-right-color: rgba(0, 0, 0, 0.25);
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-right .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="right"] .arrow::after {
   left: -10px;
-  border-right-color: #fff; }
+  border-right-color: #fff;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-bottom,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="bottom"] {
-  margin-top: 10px; }
+  margin-top: 10px;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-bottom .arrow,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="bottom"] .arrow {
-  top: 0; }
+  top: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-bottom .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="bottom"] .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-bottom .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="bottom"] .arrow::after {
   margin-left: -7px;
-  border-top-width: 0; }
+  border-top-width: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-bottom .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="bottom"] .arrow::before {
   top: -11px;
-  border-bottom-color: rgba(0, 0, 0, 0.25); }
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-bottom .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="bottom"] .arrow::after {
   top: -10px;
-  border-bottom-color: #fff; }
+  border-bottom-color: #fff;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-bottom .ext-etheraddresslookup-popover-header::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="bottom"] .ext-etheraddresslookup-popover-header::before {
@@ -284,32 +359,38 @@
   width: 20px;
   margin-left: -10px;
   content: "";
-  border-bottom: 1px solid #f7f7f7; }
+  border-bottom: 1px solid #f7f7f7;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-left,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="left"] {
-  margin-right: 10px; }
+  margin-right: 10px;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-left .arrow,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="left"] .arrow {
-  right: 0; }
+  right: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-left .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="left"] .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-left .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="left"] .arrow::after {
   margin-top: -8px;
-  border-right-width: 0; }
+  border-right-width: 0;
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-left .arrow::before,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="left"] .arrow::before {
   right: -11px;
-  border-left-color: rgba(0, 0, 0, 0.25); }
+  border-left-color: rgba(0, 0, 0, 0.25);
+}
 
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-left .arrow::after,
 .ext-etheraddresslookup-popover.bs-ext-etheraddresslookup-popover-auto[x-placement^="left"] .arrow::after {
   right: -10px;
-  border-left-color: #fff; }
+  border-left-color: #fff;
+}
 
 .ext-etheraddresslookup-popover-header {
   padding: 8px 14px;
@@ -319,14 +400,17 @@
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-top-left-radius: calc(0.3rem - 1px);
-  border-top-right-radius: calc(0.3rem - 1px); }
+  border-top-right-radius: calc(0.3rem - 1px);
+}
 
 .ext-etheraddresslookup-popover-header:empty {
-  display: none; }
+  display: none;
+}
 
 .ext-etheraddresslookup-popover-body {
   padding: 9px 14px;
-  color: #212529; }
+  color: #212529;
+}
 
 /*Tabs*/
 .ext-etheraddresslookup-nav {
@@ -336,153 +420,187 @@
   flex-wrap: wrap;
   padding-left: 0;
   margin-bottom: 0;
-  list-style: none !important; }
+  list-style: none !important;
+}
 
 .ext-etheraddresslookup-nav li {
-  list-style: none !important; }
+  list-style: none !important;
+}
 
 .ext-etheraddresslookup-nav-link {
   display: block;
-  padding: 0.5rem 1rem; }
+  padding: 0.5rem 1rem;
+}
 
 .ext-etheraddresslookup-nav-link:focus,
 .ext-etheraddresslookup-nav-link:hover {
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 .ext-etheraddresslookup-nav-link.disabled {
-  color: #868e96; }
+  color: #868e96;
+}
 
 .ext-etheraddresslookup-nav-tabs {
-  border-bottom: 1px solid #dee2e6; }
+  border-bottom: 1px solid #dee2e6;
+}
 
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-item {
   margin-bottom: -1px;
-  font-size: 10pt; }
+  font-size: 10pt;
+}
 
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link {
   border: 1px solid transparent;
   border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem; }
+  border-top-right-radius: 0.25rem;
+}
 
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link:focus,
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link:hover {
-  border-color: #e9ecef #e9ecef #dee2e6; }
+  border-color: #e9ecef #e9ecef #dee2e6;
+}
 
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link.disabled {
   color: #868e96;
   background-color: transparent;
-  border-color: transparent; }
+  border-color: transparent;
+}
 
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-link.active,
 .ext-etheraddresslookup-nav-tabs .ext-etheraddresslookup-nav-item.show .ext-etheraddresslookup-nav-link {
   color: #495057;
   background-color: #fff;
-  border-color: #dee2e6 #dee2e6 #fff; }
+  border-color: #dee2e6 #dee2e6 #fff;
+}
 
 .ext-etheraddresslookup-nav-tabs .dropdown-menu {
   margin-top: -1px;
   border-top-left-radius: 0;
-  border-top-right-radius: 0; }
+  border-top-right-radius: 0;
+}
 
 .ext-etheraddresslookup-tab-content > .ext-etheraddresslookup-tab-pane {
   display: none;
-  font-size: 10pt; }
+  font-size: 10pt;
+}
 
 .ext-etheraddresslookup-tab-content > .active {
-  display: block; }
+  display: block;
+}
 
 .ext-etheraddresslookup-tab-content .fade {
   opacity: 0;
-  transition: opacity 0.15s linear; }
+  transition: opacity 0.15s linear;
+}
 
 .ext-etheraddresslookup-tab-content .fade.show {
-  opacity: 1; }
+  opacity: 1;
+}
 
 .ext-etheraddresslookup-tab-content.collapsing {
   position: relative;
   height: 0;
   overflow: hidden;
-  transition: height 0.35s ease; }
+  transition: height 0.35s ease;
+}
 
 #ext-etheraddresslookup-new-labels option {
-  color: #ffffff; }
+  color: #ffffff;
+}
 
 #ext-etheraddresslookup-new-labels button {
-  width: 100%; }
+  width: 100%;
+}
 
 .ext-etheraddresslookup-address_stats_hover {
   z-index: 10;
   position: absolute;
-  user-select: none; }
-  .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
-    all: initial;
-    display: none;
-    position: absolute;
-    bottom: 5%;
-    left: 5%;
-    right: 5%;
-    top: 10%;
-    background-color: #fff;
-    color: #000;
-    padding: .5em;
-    z-index: 99999;
-    width: 275px;
-    height: 120px;
-    border: 2px solid #e4e4e4;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    user-select: none; }
-    .ext-etheraddresslookup-0xaddress.display-popup > .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
-      display: inline-block; }
-    .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > span {
-      all: initial;
-      font-size: 10pt;
-      text-decoration: none;
-      font-style: normal;
-      font-family: 'Verdana';
-      display: block;
-      line-height: 2em;
-      user-select: none; }
-    .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > a > img {
-      display: inline;
-      width: 100px;
-      height: 22px;
-      bottom: 0%;
-      right: 5%;
-      position: absolute;
-      margin: 0; }
-  .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_node_error {
-    all: initial;
-    user-select: none;
-    background: #d02626;
-    border-radius: 5em;
-    height: 10px;
-    width: auto;
-    position: absolute;
-    right: 5%;
-    display: none;
-    z-index: 2;
-    color: #fff;
-    padding: 3px;
-    font-size: 8pt; }
-  .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_node_ok {
-    all: initial;
-    user-select: none;
-    background: #32a735;
-    border-radius: 50%;
-    height: 10px;
-    width: 10px;
-    position: absolute;
-    right: 5%;
-    display: none;
-    z-index: 1; }
+  user-select: none;
+}
+
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+  all: initial;
+  display: none;
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  right: 5%;
+  top: 10%;
+  background-color: #fff;
+  color: #000;
+  padding: .5em;
+  z-index: 99999;
+  width: 275px;
+  height: 120px;
+  border: 2px solid #e4e4e4;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  user-select: none;
+}
+
+.ext-etheraddresslookup-0xaddress.display-popup > .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+  display: inline-block;
+}
+
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > span {
+  all: initial;
+  font-size: 10pt;
+  text-decoration: none;
+  font-style: normal;
+  font-family: 'Verdana';
+  display: block;
+  line-height: 2em;
+  user-select: none;
+}
+
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > a > img {
+  display: inline;
+  width: 100px;
+  height: 22px;
+  bottom: 0%;
+  right: 5%;
+  position: absolute;
+  margin: 0;
+}
+
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_node_error {
+  all: initial;
+  user-select: none;
+  background: #d02626;
+  border-radius: 5em;
+  height: 10px;
+  width: auto;
+  position: absolute;
+  right: 5%;
+  display: none;
+  z-index: 2;
+  color: #fff;
+  padding: 3px;
+  font-size: 8pt;
+}
+
+.ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_node_ok {
+  all: initial;
+  user-select: none;
+  background: #32a735;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  right: 5%;
+  display: none;
+  z-index: 1;
+}
 
 #ext-etheraddresslookup-tip_box {
   background: #00c2c1;
   padding: 1px;
-  color: #fff; }
-  #ext-etheraddresslookup-tip_box a {
-    color: #fff;
-    text-decoration: underline; }
+  color: #fff;
+}
 
+#ext-etheraddresslookup-tip_box a {
+  color: #fff;
+  text-decoration: underline;
+}
 /*# sourceMappingURL=app.css.map */
