@@ -205,7 +205,9 @@ chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
     if(objResponse.resp == 1) {
 
         // If they click on the Home button which draws them to the top of the page
-        document.getElementById("global-nav-home").addEventListener("click", doTwitterBadges.bind(objCachedBadges));
+        if(document.getElementById("global-nav-home")) {
+            document.getElementById("global-nav-home").addEventListener("click", doTwitterBadges.bind(objCachedBadges));
+        }
         // If anything on the DOM changes
         observeDOM( document.getElementsByTagName('body')[0], doTwitterBadges.bind(objCachedBadges));
 
