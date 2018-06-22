@@ -203,7 +203,13 @@ var intTweetCounter = 0;
 
 chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
     if(objResponse.resp == 1) {
-        observeDOM( document.getElementsByTagName('body')[0] ,function(){
+
+        // If they click on the Home button which draws them to the top of the page
+        document.getElementById("global-nav-home").addEventListener("click", doTwitterBadges.bind(objCachedBadges));
+        // If anything on the DOM changes
+        observeDOM( document.getElementsByTagName('body')[0], doTwitterBadges.bind(objCachedBadges));
+
+        function doTwitterBadges(){
             if(document.activeElement.classList.contains("tweet-box") === false) {
                 if (document.getElementsByClassName("tweet")) {
                     var arrTweets = objTwitterFakeAccount.getTweets();
@@ -269,7 +275,7 @@ chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
                     }
                 }
             }
-        }.bind(objCachedBadges));
+        };
     }
 });
 
