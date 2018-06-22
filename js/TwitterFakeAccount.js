@@ -98,6 +98,7 @@ class TwitterFakeAccount
         var objNodes = document.getElementsByClassName("ext-etheraddresslookup-tweet-" + objData.tweet_id);
         for (var intCounter = 0; intCounter < objNodes.length; intCounter++) {
             var objNode = objNodes[intCounter];
+
             if (objNode.getAttribute("ext-etheraddresslookup-twitterflagged")) {
                 return;
             }
@@ -188,65 +189,100 @@ var observeDOM = (function(){
 // Observe a specific DOM element:
 var objTwitterFakeAccount = new TwitterFakeAccount();
 var objWorker = new Worker(chrome.runtime.getURL('/js/workers/TwitterFakeAccount.js'));
-var arrCheckedUsers = [];
+
+let objCachedBadges = {
+    "whitelist": [],
+    "blacklist": [],
+    "neutral": []
+};
+
+let arrWhitelistedAccountIds = [];
+let arrBlacklistedAccountIds = [];
+let arrNeutralAccountIds = [];
 var intTweetCounter = 0;
 
 chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
     if(objResponse.resp == 1) {
-        observeDOM( document.getElementsByTagName('body')[0] ,function(){
-            if (document.getElementsByClassName("tweet")) {
-                var arrTweets = objTwitterFakeAccount.getTweets();
 
-                intTweetCounter = arrTweets.length;
+        // If they click on the Home button which draws them to the top of the page
+        if(document.getElementById("global-nav-home")) {
+            document.getElementById("global-nav-home").addEventListener("click", doTwitterBadges.bind(objCachedBadges));
+        }
+        // If anything on the DOM changes
+        observeDOM( document.getElementsByTagName('body')[0], doTwitterBadges.bind(objCachedBadges));
 
-                var arrTweetData = [];
-                for(var intCounter=0; intCounter<arrTweets.length; intCounter++) {
+        function doTwitterBadges(){
+            if(document.activeElement.classList.contains("tweet-box") === false) {
+                if (document.getElementsByClassName("tweet")) {
+                    var arrTweets = objTwitterFakeAccount.getTweets();
 
-                    var arrTmpTweetData = {
-                        "userId": arrTweets[intCounter].getAttribute("data-user-id"),
-                        "name": arrTweets[intCounter].getAttribute("data-screen-name"),
-                        "tweet_id": arrTweets[intCounter].getAttribute("data-tweet-id"),
-                        "twitter_verified":  objTwitterFakeAccount.isTwitterVerified(arrTweets[intCounter])
-                    };
+                    intTweetCounter = arrTweets.length;
 
-                    //See if we've already checked the userid
-                    if(arrCheckedUsers.indexOf(arrTmpTweetData.userId) !== -1) {
-                        if(arrCheckedUsers[arrTmpTweetData.userId].is_imposter === false) {
-                            continue;
-                        } else {
-                            objTweetData.similar_to = arrCheckedUsers[arrTmpTweetData.userId].similar_to;
-                            objTwitterFakeAccount.doWarningAlert(objTweetData);
-                            continue;
+                    var arrTweetData = [];
+                    for(var intCounter=0; intCounter<arrTweets.length; intCounter++) {
+
+                        if(arrTweets[intCounter].classList.contains("ext-etheraddresslookup-tweet-"+arrTweets[intCounter].getAttribute("data-tweet-id")) === false) {
+
+                            arrTweets[intCounter].classList.add("ext-etheraddresslookup-tweet-" + arrTweets[intCounter].getAttribute("data-tweet-id"));
+
+                            let blContactBackground = true;
+
+                            let arrTmpTweetData = {
+                                "userId": arrTweets[intCounter].getAttribute("data-user-id"),
+                                "name": arrTweets[intCounter].getAttribute("data-screen-name"),
+                                "tweet_id": arrTweets[intCounter].getAttribute("data-tweet-id"),
+                                "twitter_verified":  objTwitterFakeAccount.isTwitterVerified(arrTweets[intCounter])
+                            };
+
+                            //See if we've already checked the userid (whitelist)
+                            if(this.whitelist.indexOf(arrTmpTweetData.userId) > -1) {
+                                blContactBackground = false;
+                                objTwitterFakeAccount.doWhitelistAlert(arrTmpTweetData);
+                            }
+
+                            //See if we've already checked the userid (blacklist)
+                            if(this.blacklist.indexOf(arrTmpTweetData.userId) > -1) {
+                                blContactBackground = false;
+                                objTwitterFakeAccount.doBlacklistAlert(arrTmpTweetData);
+                            }
+
+                            //See if we've already checked the userid (neutral)
+                            if(this.neutral.indexOf(arrTmpTweetData.userId) > -1) {
+                                blContactBackground = false;
+                                objTwitterFakeAccount.doNeutralAlert(arrTmpTweetData);
+                            }
+
+                            if(blContactBackground) {
+                                arrTweetData.push(arrTmpTweetData);
+                            }
                         }
                     }
 
-                    if("ext-etheraddresslookup-tweet-"+arrTweets[intCounter].getAttribute("data-tweet-id") in arrTweets[intCounter] === false) {
-                        arrTweets[intCounter].className += " ext-etheraddresslookup-tweet-" + arrTweets[intCounter].getAttribute("data-tweet-id");
+                    var objDataToInspect = {
+                        "whitelist": {},
+                        "blacklist": {},
+                        "tweet_data": arrTweetData
+                    };
+
+                    if(arrTweetData.length) {
+                        chrome.runtime.sendMessage({func: "twitter_lists"}, function(objResponse) {
+
+                            let twitterlists = JSON.parse(objResponse.resp);
+
+                            this.whitelist = twitterlists.whitelist;
+                            this.blacklist =twitterlists.blacklist;
+
+                            objWorker.postMessage(JSON.stringify(this));
+                        }.bind(objDataToInspect));
                     }
-                    arrTweetData.push(arrTmpTweetData);
                 }
-
-                var objDataToInspect = {
-                    "whitelist": {},
-                    "blacklist": {},
-                    "tweet_data": arrTweetData
-                };
-                chrome.runtime.sendMessage({func: "twitter_lists"}, function(objResponse) {
-
-                    let twitterlists = JSON.parse(objResponse.resp);
-
-                    this.whitelist = twitterlists.whitelist;
-                    this.blacklist =twitterlists.blacklist;
-
-                    objWorker.postMessage(JSON.stringify(this));
-                }.bind(objDataToInspect));
             }
-        });
+        };
     }
 });
 
-objWorker.onmessage = function (event) {
-    arrCheckedUsers[event.data.userId] = event.data;
+objWorker.onmessage = function (event) 
+{
     var arrData = JSON.parse(event.data);
 
     for(var intCounter=0; intCounter<arrData.length; intCounter++) {
@@ -258,15 +294,18 @@ objWorker.onmessage = function (event) {
         }
 
         if(arrData[intCounter].is_whitelisted) {
+            objCachedBadges["whitelist"].push(arrData[intCounter].userId);
             objTwitterFakeAccount.doWhitelistAlert(arrData[intCounter]);
             continue;
         }
 
         if(arrData[intCounter].is_blacklisted) {
+            objCachedBadges["blacklist"].push(arrData[intCounter].userId);
             objTwitterFakeAccount.doBlacklistAlert(arrData[intCounter]);
             continue;
         }
 
+        objCachedBadges["neutral"].push(arrData[intCounter].userId);
         objTwitterFakeAccount.doNeutralAlert(arrData[intCounter]);
     }
 };
