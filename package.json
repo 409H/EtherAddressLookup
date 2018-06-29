@@ -29,5 +29,8 @@
     "eslint": "^4.19.1",
     "gulp": "^3.9.1",
     "gulp-sass": "^4.0.1"
+  },
+  "dependencies": {
+    "etherscamdb-js-address-validation": "^1.2.1"
   }
 }
