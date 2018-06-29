@@ -36,7 +36,7 @@
                 </tbody>
             </table>
 
-            <!---- Modify Bookmark Window --->
+            <!--- Modify Bookmark Window -->
             <div id="ext-etheraddresslookup-bookmark_modify_window">
                 <h3>Modify Bookmark</h3>
                 <form method="post" action="" class="pure-form pure-form-aligned" id="ext-etheraddresslookup-bookmark_modify_form">
@@ -133,9 +133,171 @@
     </div>
 
     <div class="pure-g">
+        <div class="pure-u-1-1">
+            <h3>Address Badges</h3>
+            <p>EtherAddressLookup will implement badges on different platforms to give you an idiciation to trust the address. For example, if you have the address added
+                as a label in EAL, an EAL icon will appear and if you hover over the icon it will tell you the label name. You can also enable/disable communications to 
+                EtherScamDb to see if addresses are verified as a scam/phish or not.
+            </p>
+            <p>
+                EtherAddressLookup takes your privacy very seriously and you may want to use EtherScamDB directories for addresses, but you don't want to contact a foreign host 
+                with addresses that <i>could</i> expose your identity (IPs, timestamps, address lookups), so we've written an article on how to run EtherScamDB locally but also grab 
+                the scam list periodically - <a href="https://github.com/MrLuit/EtherScamDB/blob/master/run-locally.md#etherscamdb" target="_blank">https://github.com/MrLuit/EtherScamDB/blob/master/run-locally.md#etherscamdb</a> 
+                &mdash; EtherScamDB does run on a NodeJS server without the typical <code>access_log</code> you'd find with Nginx or Apache, but we wanted to offer the option to run it yourself.
+            </p>
+            <p>
+                Currently, the address badges will be injected into the following domains;
+                <ul>
+                    <li>MyCrypto &mdash; https://mycrypto.com/accounts/send</li>
+                    <li>MyEtherWallet &mdash; https://www.myetherwallet.com/#send-transaction</li>
+                    <li>Etherscan &mdash; https://etherscan.io/address/&laquo;address&raquo;</li>
+                </ul>
+            </p>
+            <label class="fancy-checkbox">
+                    <input type="checkbox" name="ext-etheraddresslookup-address_badges" id="ext-etheraddresslookup-address_badges">
+                    <span id="ext-etheraddresslookup-address_badges_text">Enabled</span>
+            </label>
+            <table class="pure-table">
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="25.555px" height="30px" viewBox="0 0 609.555 1000" enable-background="new 0 0 609.555 1000" xml:space="preserve">
+                            <title>We are checking the address...</title>
+                            <g>
+                                <g>
+                                    <path fill="#DEDEDE" d="M9.337,557.712c5.979,20.553,13.911,40.265,23.809,58.8l-0.04,0.023l0.341,0.572
+                                                    c4.45,8.303,9.294,16.359,14.473,24.185L304.794,1000V733.475L9.337,557.712z"/>
+                                    <path fill="#D9D9D9" d="M304.794,733.475V1000l256.875-358.708c5.176-7.825,10.022-15.882,14.473-24.185l0.34-0.572l-0.039-0.023
+                                                    c9.895-18.535,17.832-38.247,23.806-58.8L304.794,733.475z"/>
+                                </g>
+                                <polygon fill="#D9D9D9" points="304.776,0 304.776,387.292 476.391,285.198 	"/>
+                                <path fill="#D9D9D9" d="M502.419,328.454l-4.897-8.177L396.74,380.242l-91.946,143.716l-0.015,163.935L609.555,506.57
+                                                L502.419,328.454z M381.535,559.258l86.699-134.769l34.045,60.231L381.535,559.258z"/>
+                                <polygon fill="#DEDEDE" points="304.779,687.893 0,506.57 107.139,328.454 112.036,320.277 212.794,380.225 304.741,523.944 	"/>
+                                <polygon fill="#DEDEDE" points="304.776,387.292 304.776,0 133.213,285.237 	"/>
+                            </g>
+                            </svg>
+                        </td>
+                        <td>
+                            This icon will display to indicate that we are waiting on a response from EtherScamDB API.
+                        </td>
+                    </tr>
+                        <td>
+                            <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="25.555px" height="30px" viewBox="0 0 609.555 1000" enable-background="new 0 0 609.555 1000" xml:space="preserve">
+                                <title>This address has not been verified EtherScamDB</title>
+                                <g>
+                                    <g>
+                                        <path fill="#505461" d="M9.337,557.712c5.979,20.553,13.911,40.265,23.809,58.8l-0.04,0.023l0.341,0.572
+                                            c4.45,8.303,9.294,16.359,14.473,24.185L304.794,1000V733.475L9.337,557.712z"/>
+                                        <path fill="#282138" d="M304.794,733.475V1000l256.875-358.708c5.176-7.825,10.022-15.882,14.473-24.185l0.34-0.572l-0.039-0.023
+                                            c9.895-18.535,17.832-38.247,23.806-58.8L304.794,733.475z"/>
+                                    </g>
+                                    <polygon fill="#282138" points="304.776,0 304.776,387.292 476.391,285.198 	"/>
+                                    <path fill="#282138" d="M502.419,328.454l-4.897-8.177L396.74,380.242l-91.946,143.716l-0.015,163.935L609.555,506.57
+                                        L502.419,328.454z M381.535,559.258l86.699-134.769l34.045,60.231L381.535,559.258z"/>
+                                    <polygon fill="#505461" points="304.779,687.893 0,506.57 107.139,328.454 112.036,320.277 212.794,380.225 304.741,523.944 	"/>
+                                    <polygon fill="#505461" points="304.776,387.292 304.776,0 133.213,285.237 	"/>
+                                </g>
+                            </svg>
+                        </td>
+                        <td>
+                            This icon will display to indicate that the address is not in the EtherScamDB directory.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            width="25.555px" height="30px" viewBox="0 0 609.555 1000" enable-background="new 0 0 609.555 1000" xml:space="preserve">
+                                <title>This address has been blacklisted by EtherScamDB</title>
+                                <g>
+                                    <g>
+                                        <path fill="#BD1327" d="M9.337,557.712c5.979,20.553,13.911,40.265,23.809,58.8l-0.04,0.023l0.341,0.572
+                                            c4.45,8.303,9.294,16.359,14.473,24.185L304.794,1000V733.475L9.337,557.712z"/>
+                                        <path fill="#801F35" d="M304.794,733.475V1000l256.875-358.708c5.176-7.825,10.022-15.882,14.473-24.185l0.34-0.572l-0.039-0.023
+                                            c9.895-18.535,17.832-38.247,23.806-58.8L304.794,733.475z"/>
+                                    </g>
+                                    <polygon fill="#801F35" points="304.776,0 304.776,387.292 476.391,285.198 	"/>
+                                    <path fill="#801F35" d="M502.419,328.454l-4.897-8.177L396.74,380.242l-91.946,143.716l-0.015,163.935L609.555,506.57
+                                        L502.419,328.454z M381.535,559.258l86.699-134.769l34.045,60.231L381.535,559.258z"/>
+                                    <polygon fill="#BD1327" points="304.779,687.893 0,506.57 107.139,328.454 112.036,320.277 212.794,380.225 304.741,523.944 	"/>
+                                    <polygon fill="#BD1327" points="304.776,387.292 304.776,0 133.213,285.237 	"/>
+                                </g>
+                            </svg>
+                        </td>
+                        <td>
+                            This icon will display to indicate that the address is a bad address relating to a scam or phishing campaign.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            width="25.555px" height="30px" viewBox="0 0 609.555 1000" enable-background="new 0 0 609.555 1000" xml:space="preserve">
+                                <title>This address has been verified by EtherScamDB</title>
+                                <g>
+                                    <g>
+                                        <path fill="#1F8027" d="M9.337,557.712c5.979,20.553,13.911,40.265,23.809,58.8l-0.04,0.023l0.341,0.572
+                                            c4.45,8.303,9.294,16.359,14.473,24.185L304.794,1000V733.475L9.337,557.712z"/>
+                                        <path fill="#1F8021" d="M304.794,733.475V1000l256.875-358.708c5.176-7.825,10.022-15.882,14.473-24.185l0.34-0.572l-0.039-0.023
+                                            c9.895-18.535,17.832-38.247,23.806-58.8L304.794,733.475z"/>
+                                    </g>
+                                    <polygon fill="#1F8021" points="304.776,0 304.776,387.292 476.391,285.198 	"/>
+                                    <path fill="#1F8021" d="M502.419,328.454l-4.897-8.177L396.74,380.242l-91.946,143.716l-0.015,163.935L609.555,506.57
+                                        L502.419,328.454z M381.535,559.258l86.699-134.769l34.045,60.231L381.535,559.258z"/>
+                                    <polygon fill="#1F8027" points="304.779,687.893 0,506.57 107.139,328.454 112.036,320.277 212.794,380.225 304.741,523.944 	"/>
+                                    <polygon fill="#1F8027" points="304.776,387.292 304.776,0 133.213,285.237 	"/>
+                                </g>
+                            </svg>
+                        </td>
+                        <td>
+                            This icon will display to indicate that the address is a verified address relating to product or service.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="/images/ether-128x128.png" width="30px" height="30px" title="The address has a label in EAL" />
+                        </td>
+                        <td>
+                            This icon will display to indicate that the address has a label in EtheraddressLookup.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </p>
+
+            <div class="success margin-15 hide-me" id="ext-etheraddresslookup-address_badges_success">
+                    Setting has been saved.
+                </div>
+    
+                <form method="post" action="" class="pure-form pure-form-aligned" id="ext-etheraddresslookup-address_badges_modify_form">
+                    <div class="pure-control-group">
+                        <label for="ext-etheraddresslookup-address_badges_toggle_checkbox">EtherScamDB Integration:</label>
+                        <input type="checkbox" name="signature" id="ext-etheraddresslookup-address_badges_toggle_checkbox">
+                    </div>
+    
+                    <div class="pure-control-group">
+                        <label for="ext-etheraddresslookup-address_badges_esdb_url">EtherScamDB API:</label>
+                        <input type="text" name="esdb_url" placeholder="https://etherscamdb.info" id="ext-etheraddresslookup-address_badges_esdb_url">
+                        <small>localhost:8080 if running locally with default settings.</small>
+                    </div>
+
+                    <button type="submit" class="pure-button pure-button-primary">Save</button>
+                </form>
+        </div>
+    </div>
+
+    <div class="pure-g">
         <div class="pure-u-2-3">
             <h3>Special Thanks</h3>
-            <p>I'd like to dedicate this block to thank the 3rd party teams for maintaining their blacklists.</p>
+            <p>I'd like to dedicate this block to thank the 3rd party teams for maintaining their lists.</p>
+            <h5>Domain Blacklists</h5>
             <ul>
                 <li>
                     <a target="_blank" href="https://www.iosiro.com/?ref=EtherAddressLookup">iosiro</a> &mdash;
@@ -147,6 +309,13 @@
                 </li>
             </ul>
             <p>If you maintain your own blacklist (specifically for the Ethereum ecosystem) and wish to integrate them into EAL, please read <a href="https://harrydenley.com/eal-using-third-party-blacklists/" target="_blank">EAL using third-party blacklists</a> article.</p>
+
+            <h5>Twitter Whitelists</h5>
+            <ul>
+                <li>
+                    <a href="_blank" href="https://cryptoinfluencers.io/?ref=EtherAddressLookup">CryptoInfluencers</a>
+                </li>
+            </ul>
         </div>
 
         <div class="pure-u-1-3">
