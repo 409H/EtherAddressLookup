@@ -26,7 +26,7 @@ function refreshBlockchainExplorer() {
         objBrowser.tabs.sendMessage(tabs[0].id, {
             "func":strMethod
         }, function(objResponse) {
-            if(objResponse.status) {
+            if(objResponse && objResponse.status) {
                 console.log("Response from tab: " + objResponse.status);
             } else {
                 console.log("Cannot "+ strMethod +" on tab.");

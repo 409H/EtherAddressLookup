@@ -69,9 +69,9 @@ function doHistoryInspection() {
         if(intTotalWarnings > 0) {
             objDiv.innerHTML += "<div class='warning'>You have been on a domain that has now been blacklisted - if you " +
                 "entered your private key anywhere on the reported domains below, please consider your address " +
-                "compromised and start moving your coins to an alternative address that you trust and control!</div><br /><br />"
+                "compromised and start moving your coins to an alternative address that you trust and control!</div><br /><br />";
         } else {
-            objDiv.innerHTML += "<div class='success'>It looks like you're all good! Remember to never share your private keys.</div><br /><br />"
+            objDiv.innerHTML += "<div class='success'>It looks like you're all good! Remember to never share your private keys.</div><br /><br />";
         }
         objDiv.innerHTML += strReportText;
         objDiv.style.display = "inline";
@@ -94,7 +94,7 @@ function removePermission()
         permissions: ['history']
     }, function(removed) {
         if (removed) {
-            console.log("Removed history permission.")
+            console.log("Removed history permission.");
         } else {
             console.log("Cannot remove history permission!");
         }

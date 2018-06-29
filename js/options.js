@@ -1,7 +1,7 @@
 let objBrowser = chrome ? chrome : browser;
 (function() {
     //Toggle the highlight option and set it in LocalStorage
-    var objOptionAddHighlight = document.getElementById('ext-etheraddresslookup-show_style');
+    var objOptionAddHighlight = document.querySelector('[name="ext-etheraddresslookup-show_style"]');
     if(objOptionAddHighlight) {
         objOptionAddHighlight.addEventListener('click', toggleMatchHighlight);
     }
@@ -19,14 +19,14 @@ let objBrowser = chrome ? chrome : browser;
     }
 
     //Toggle the blacklist domains option and set it in LocalStorage
-    var objBlacklistDomains = document.getElementById('ext-etheraddresslookup-blacklist_domains');
-    if(objBlacklistDomains) {
+    let objBlacklistDomains = document.getElementById('ext-etheraddresslookup-blacklist_domains');
+    if (objBlacklistDomains) {
         objBlacklistDomains.addEventListener('click', toggleBlacklistDomains);
     }
 
     //Toggle the use 3rd party blacklist domains option and set it in LocalStorage
-    var objBlacklistDomains = document.getElementById('ext-etheraddresslookup-3rd_party_blacklist_domains');
-    if(objBlacklistDomains) {
+    objBlacklistDomains = document.getElementById('ext-etheraddresslookup-3rd_party_blacklist_domains');
+    if (objBlacklistDomains) {
         objBlacklistDomains.addEventListener('click', toggle3rdPartyBlacklistDomains);
     }
 
@@ -141,6 +141,58 @@ objBrowser.runtime.onMessage.addListener(
                 objDomainLists.whitelist = getWhitelistedDomains();
                 strResponse = JSON.stringify(objDomainLists);
                 break;
+            case 'twitter_validation' :
+                //This option is enabled by default
+                if(localStorage.getItem("ext-etheraddresslookup-twitter_validation") === null) {
+                    strResponse = 1;
+                } else {
+                    strResponse = localStorage.getItem("ext-etheraddresslookup-twitter_validation");
+                }
+                break;
+            case 'twitter_lists' :
+                //See when they were last fetched
+                let twitter_lists = {
+                    "last_fetched": 0,
+                    "whitelist": [],
+                    "blacklist": []
+                };
+
+                if(localStorage.getItem("ext-etheraddresslookup-twitter_lists")) {
+                    let saved_settings = JSON.parse(localStorage.getItem("ext-etheraddresslookup-twitter_lists"));
+                    twitter_lists.last_fetched = saved_settings.last_fetched;
+                }
+
+                if((Math.floor(Date.now() - twitter_lists.last_fetched)) > 600*1000) {
+                    fetch("https://raw.githubusercontent.com/MrLuit/EtherScamDB/master/_data/twitter.json")
+                    .then(res => res.json())
+                    .then((lists) => {
+                        twitter_lists.last_fetched = Date.now();
+                        
+                        //We only need the Twitter IDs
+                        Object.entries(lists.whitelist).forEach(
+                            ([twitter_userid, screename]) => {
+                                twitter_lists.whitelist.push(twitter_userid);
+                            }
+                        );
+
+                        Object.entries(lists.blacklist).forEach(
+                            ([twitter_userid, screename]) => {
+                                twitter_lists.blacklist.push(twitter_userid);
+                            }
+                        );
+
+                        localStorage.setItem("ext-etheraddresslookup-twitter_lists", JSON.stringify(twitter_lists));
+                    });
+                }
+
+                if(localStorage.getItem("ext-etheraddresslookup-twitter_lists")) {
+                    var cached_list = JSON.parse(localStorage.getItem("ext-etheraddresslookup-twitter_lists"));
+                    twitter_lists.whitelist = cached_list.whitelist;
+                    twitter_lists.blacklist = cached_list.blacklist;
+                }
+
+                strResponse = JSON.stringify(twitter_lists);
+                break;
             case 'signature_inject' :
                 //This option is enabled by default
                 if(localStorage.getItem("ext-etheraddresslookup-signature_inject") === null) {
@@ -186,7 +238,7 @@ function getBlacklistedDomains(strType)
         }
     };
     //See if we need to get the blacklisted domains - ie: do we have them cached?
-    if(localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list") === null) {
+    if (localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list") === null) {
         updateAllBlacklists(objEalBlacklistedDomains);
     } else {
         var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
@@ -199,13 +251,8 @@ function getBlacklistedDomains(strType)
     }
 
     strType = strType || "eal";
-    if(strType == "eal") {
-        var objEalDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
-        return objEalDomains;
-    } else {
-        var objEalDomains = localStorage.getItem("ext-etheraddresslookup-3p_blacklist_domains_list");
-        return objEalDomains;
-    }
+
+    return localStorage.getItem(`ext-etheraddresslookup-${strType === 'eal' ? '' : '3p_'}blacklist_domains_list`);
 }
 
 function updateAllBlacklists(objEalBlacklistedDomains)
@@ -238,9 +285,9 @@ function updateAllBlacklists(objEalBlacklistedDomains)
 
 function getWhitelistedDomains()
 {
-    var objWhitelistedDomains = {"timestamp":0,"domains":[]};
+    let objWhitelistedDomains = {"timestamp":0,"domains":[]};
     //See if we need to get the blacklisted domains - ie: do we have them cached?
-    if(localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list") === null) {
+    if (localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list") === null) {
         getWhitelistedDomainsFromSource().then(function (arrDomains) {
             objWhitelistedDomains.timestamp = Math.floor(Date.now() / 1000);
             objWhitelistedDomains.domains = arrDomains;
@@ -249,7 +296,7 @@ function getWhitelistedDomains()
             return objWhitelistedDomains.domains;
         });
     } else {
-        var objWhitelistedDomains = localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list");
+        objWhitelistedDomains = localStorage.getItem("ext-etheraddresslookup-whitelist_domains_list");
         //Check to see if the cache is older than 5 minutes, if so re-cache it.
         objWhitelistedDomains = JSON.parse(objWhitelistedDomains);
         console.log("Whitelisted domains last fetched: " + (Math.floor(Date.now() / 1000) - objWhitelistedDomains.timestamp) + " seconds ago");
