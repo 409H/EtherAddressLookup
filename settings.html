@@ -154,8 +154,8 @@
                 </ul>
             </p>
             <label class="fancy-checkbox">
-                    <input type="checkbox" name="ext-etheraddresslookup-address_badges" id="ext-etheraddresslookup-address_badges">
-                    <span id="ext-etheraddresslookup-address_badges_text">Enabled</span>
+                <input type="checkbox" name="ext-etheraddresslookup-address_badges" id="ext-etheraddresslookup-address_badges">
+                <span id="ext-etheraddresslookup-address_badges_text">Enabled</span>
             </label>
             <table class="pure-table">
                 <thead>
@@ -262,7 +262,31 @@
                     </tr>
                     <tr>
                         <td>
-                            <img src="/images/ether-128x128.png" width="30px" height="30px" title="The address has a label in EAL" />
+                            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                            <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+                            <svg width="25.555px" height="30px" viewBox="0 0 610 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+                                <g transform="matrix(7.55254,0,0,7.55254,-596.311,18.3404)">
+                                    <g id="Ether">
+                                        <g>
+                                            <g>
+                                                <g transform="matrix(1,0,0,1,0,0.990842)">
+                                                    <path d="M119.276,81.519L152.508,66.287L119.276,117.519L86.044,66.287L119.276,81.519Z" style="fill:url(#_Linear1);"/>
+                                                </g>
+                                                <g transform="matrix(1.05421,0,0,1.05421,-6.46769,-2.92141)">
+                                                    <path d="M153.942,61.709L140.996,42.233L155.567,60.996L155.523,61.017L153.726,63.806L119.306,79.227L84.885,63.806L83.088,61.017L83.044,60.996L97.615,42.233L84.669,61.709L119.306,77.227L153.942,61.709Z" style="fill:rgb(20,100,185);"/>
+                                                </g>
+                                                <g transform="matrix(1,0,0,1,-80.8128,-0.064499)">
+                                                    <path d="M234.011,61.456L200.279,76.568L166.547,61.456L200.279,9.104L234.011,61.456Z" style="fill:url(#_Linear2);"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                                <defs>
+                                    <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.21657e-15,36.1993,-36.1993,2.21657e-15,119.291,81.6952)"><stop offset="0" style="stop-color:rgb(23,67,112);stop-opacity:1"/><stop offset="1" style="stop-color:black;stop-opacity:1"/></linearGradient>
+                                    <linearGradient id="_Linear2" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(4.04697e-15,-66.092,66.092,4.04697e-15,200.343,75.9982)"><stop offset="0" style="stop-color:rgb(20,100,185);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(81,156,236);stop-opacity:1"/></linearGradient>
+                                </defs>
+                            </svg>
                         </td>
                         <td>
                             This icon will display to indicate that the address has a label in EtheraddressLookup.
@@ -330,5 +354,6 @@
 <script src="js/app/historyInspector.js"></script>
 <script src="js/app/rpcNodeSelector.js"></script>
 <script src="js/app/signatureSelector.js"></script>
+<script src="js/app/addressBadges.js"></script>
 </body>
 </html>
