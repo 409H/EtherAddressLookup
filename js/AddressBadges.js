@@ -30,8 +30,8 @@
 
         function MyCryptoAddressBadges()
         {
-            objEsdbBadge.style = "padding-top:1em;text-align:center;height:50px;width:25px;margin-top:1em;float:left;margin-right:1em;";
-            objEalBadge.style = "padding-top:1em;text-align:center;height:50px;width:30px;margin-top:1em;float:right;margin-left:1em;";
+            objEsdbBadge.style = "padding-top:1em;text-align:center;height:25px;width:25px;margin-top:-5em;float:right;margin-left:1.5em;";
+            objEalBadge.style = "padding-top:1em;text-align:center;height:25px;width:30px;margin-top:-2em;float:right;margin-left:1.5em;";
 
             let objEsdbInterval = setInterval(() => {
                 let objIdenticon;
@@ -66,8 +66,8 @@
         
         function EtherscanAddressBadges()
         {
-            objEsdbBadge.style = "position: relative;float:left;margin-right:1em;";
-            objEalBadge.style = "position: relative;float:left;margin-right:1em;";
+            objEsdbBadge.style = "height:25px;width:25px;position:relative;float:left;margin-right:1em;";
+            objEalBadge.style = "height:29px;width:29px;position:relative;float:left;margin-right:1em;";
 
             let objHeader;
             let objAddressTo;
@@ -113,9 +113,7 @@
                 return false;
             }
 
-            if(false) { //@todo - check the labels on local storage
-                return addressIsEalLabelled();
-            }
+            return addressIsEalLabelled();
         }
 
         function addressIsEalLabelled()
@@ -123,7 +121,8 @@
             document.getElementById("eal-address-verify").innerHTML = `
                 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-                <svg width="30.555px" height="50px" viewBox="0 0 610 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+                <svg viewBox="0 0 610 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+                    <title>Labelled on EAL as Foo</title>
                     <g transform="matrix(7.55254,0,0,7.55254,-596.311,18.3404)">
                         <g id="Ether">
                             <g>
@@ -135,7 +134,7 @@
                                         <path d="M153.942,61.709L140.996,42.233L155.567,60.996L155.523,61.017L153.726,63.806L119.306,79.227L84.885,63.806L83.088,61.017L83.044,60.996L97.615,42.233L84.669,61.709L119.306,77.227L153.942,61.709Z" style="fill:rgb(20,100,185);"/>
                                     </g>
                                     <g transform="matrix(1,0,0,1,-80.8128,-0.064499)">
-                                        <path d="M234.011,61.456L200.279,76.568L166.547,61.456L200.279,9.104L234.011,61.456Z" style="fill:url(#_Linear2);"/>
+                                        <path d="M234.011,61.456L200.279,76.568L166.547,61.456L200.279,0.104L234.011,61.456Z" style="fill:url(#_Linear2);"/>
                                     </g>
                                 </g>
                             </g>
