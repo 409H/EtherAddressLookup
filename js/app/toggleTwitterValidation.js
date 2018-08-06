@@ -43,7 +43,7 @@ function getTwitterLists()
         twitter_lists.last_fetched = saved_settings.last_fetched;
     }
 
-    if(twitter_lists.last_fetched <= Date.now()-600) {
+    if((Math.floor(Date.now() - twitter_lists.last_fetched)) > 600*1000) {
         fetch("https://raw.githubusercontent.com/MrLuit/EtherScamDB/master/_data/twitter.json")
         .then(res => res.json())
         .then((lists) => {
