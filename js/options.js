@@ -201,6 +201,26 @@ objBrowser.runtime.onMessage.addListener(
                     strResponse = localStorage.getItem("ext-etheraddresslookup-signature_inject");
                 }
                 break;
+            case 'address_badges' :
+                var objDefault = {
+                    "enabled": 1,
+                    "etherscamdb": {
+                        "enabled": 0,
+                        "endpoint": "https://etherscamdb.info"
+                    },
+                    "inject": {
+                        "mycrypto": 1,
+                        "mew": 1,
+                        "etherscan": 1
+                    }
+                };
+
+                if(localStorage.getItem("ext-etheraddresslookup-address_badges")) {
+                    objDefault = JSON.parse(localStorage.getItem("ext-etheraddresslookup-address_badges"))
+                }
+
+                strResponse = JSON.stringify(objDefault);
+                break;
             default:
                 strResponse = "unsupported";
                 break;
