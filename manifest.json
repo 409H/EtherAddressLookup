@@ -66,6 +66,7 @@
     "/js/workers/TwitterFakeAccount.js",
     "images/twitter/whitelisted.png",
     "images/twitter/blacklisted.png",
-    "images/twitter/neutral.png"
+    "images/twitter/neutral.png",
+    "static/phishing/phishing.html"
   ]
 }
