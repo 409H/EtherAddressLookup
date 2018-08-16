@@ -95,7 +95,17 @@
 
                                 if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
                                     console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
-                                    window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing-"+ str3rdPartyIdentifier +".html#"+ (window.location.href);
+                                    switch(str3rdPartyIdentifier) {
+                                        case 'iosiro':
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-iosiro.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                        break;
+                                        case 'segasec':
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-segasec.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                        break;
+                                        default:
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                        break;
+                                    }
                                     return false;
                                 }
                             }
