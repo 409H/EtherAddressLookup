@@ -36,7 +36,7 @@
                     var arrDomainParts = strCurrentTab.split(".");
                     arrDomainParts.forEach(strDomainPart => {
                         if (strDomainPart.startsWith("xn--")) {
-                            window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#" + (window.location.href) + "#punycode";
+                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) + "#punycode";
                             return false;
                         }
                     });
@@ -71,9 +71,9 @@
             }
 
             //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
-            if ( arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted === true || blHolisticStatus === true)) {
+            if (arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted === true || blHolisticStatus === true)) {
                 console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
-                window.location.href = "https://harrydenley.com/EtherAddressLookup/phishing.html#"+ (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
                 return false;
             }
         }
