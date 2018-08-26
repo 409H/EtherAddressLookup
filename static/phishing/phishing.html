@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>EAL Warning</title>
+      <link rel="icon" href="https://github.com/409H/EtherAddressLookup/raw/master/images/ether-16x16.png?raw=true"/>
+      <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+      <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    <style>
+        body {
+          background: #00c2c1;
+          font-family: 'Montserrat', sans-serif;
+          color: #000;
+          padding: 0;
+          margin: 5% 0%;
+        }
+
+        .content {
+            margin: auto auto;
+            background: #fff;
+            width: 80%;
+            height: 80%;
+            border-radius: 1em;
+        }
+
+        .content > div, .content > h1 {
+            padding: 1% 2%;
+        }
+
+        .content > h1 {
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        #note {
+            text-align: center;
+            font-weight: 800;
+            color: #9c9c9c;
+        }
+        
+        #warn {
+            font-size: 30pt;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #more-info {
+            border-radius: 0 0 0% 0%;
+            background: #ffcc4d;
+            padding-bottom: 1em;
+        }
+
+        ul > li {
+            padding: 5px;
+        }
+
+        .hide-me {
+            display: none;
+        }
+
+        .notice {
+            padding-left: 10px;
+            margin: 30px 0;
+        }
+
+        #punycode {
+            border-left: 4px solid #D4C490;
+        }
+
+        #levenshtein {
+            border-left: 4px solid #2150a7;
+        }
+
+        #blacklisted {
+            border-left: 4px solid #D49990;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+        <h1>
+            <i class="em em-warning" id="warn"></i> ATTENTION
+        </h1>
+        <div>
+            <p id="note">We have detected the domain to have malicious intent and have prevented you from interacting with it.</p>
+            <br />
+            <div id="punycode" class="notice hide-me">
+                <p>This domain is blocked because you have <strong>blocked all punycode domains</strong> (this is default behaviour). <br />
+                   If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#punycode-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+            </div>
+            <div id="levenshtein" class="notice hide-me">
+                <p>This domain is blocked because it is too similar to a domain in our fuzzy list.<br />
+                   If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#levenshtien-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+            </div>
+            <div id="blacklisted" class="notice hide-me">
+                <p>This domain is blocked because it is on our blacklist.<br />
+                   If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#blacklisted-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+            </div>            
+            <p>This is because you have enabled <span>Warn of blacklisted domains</span> setting on <img src="../../images/ether-16x16.png"  alt="EtherAddressLookup Icon" />EtherAddressLookup Browser Extension.</p>
+            <p>You can turn this setting off, but it's advised not to as we blacklisted the domain for a reason.</p>
+            <br />
+            <p>If you feel this domain is wrongly blacklisted, please <a href="https://github.com/409H/EtherAddressLookup/issues/new">open a new issue on GitHub</a></p>
+            <p><strong>To read more about this, visit <a id="link-etherscamdb" href="">https://etherscamdb.info/domain/</a></strong></p>
+        </div>
+        <div id="more-info">
+            <h3>Helpful Tips:</h3>
+            <p>
+                <ul>
+                    <li><strong>Links sent to you inprovoked are often malicious.</strong> 
+                        If you arrived here form a link sent to you via Slack, DM, Twitter, Email, it is likely someone 
+                        trying to trick you so they can steal your crypto.</li>
+                    <li><strong>Try seeking out a trustworthy, secure link on your own.</strong> Top Google results (not 
+                        Google Ads!), Verified Twitter accounts, or asking someone you know & trust. Once you find the 
+                        correct URL, bookmark it!</li>
+                </ul>
+            </p>
+        </div>
+        <div id="donation">
+            <h3>Donations</h3>
+            <p>If you want to support development, send ETH/ERC20 tokens to: <strong><a href="https://etherscan.io/address/ethaddresslookup.harrydenley.eth" target="_blank">ethaddresslookup.harrydenley.eth</a></strong> &mdash; Thank you!</p>
+            <br />
+            <img alt="QR code for donations" src="data:image/gif;base64,R0lGODlhhACEAJEAAAAAAP///wAAAAAAACH5BAEAAAIALAAAAACEAIQAAAL/jI+py+0Po5y02ouz3rz7D4biSJbmiabqyrbuC8chQNf2jeeMvef89FP4hkQApYi89WjL4bHWTBafUmQzqgNCF9UktevkboVTLVMMDkuCFTbC9x4n3Bf6Wg6xR/TwAx9fB3h3NmgUSDiXZfCHiKGXJ9jw+MCo5Bc5WegYeXVJFIeYGcBGimkaWrbIiWao+unZOrrqGlvaCNtJ20f7Baomi3pLFlx7Guvruwt8TClnhQvtYFssvJy7rCyKDJvtrGjNXXU93V09ngqu603cdc7+rR2NDb9uyRsu5U79G3+vjrPt375k4lgFnAdQHqR3Cf2lQ8jMgrKDzxwu3FduIL6I/22+UUTX72FFkfVCYqlGjp45gxunfWyYYaK8kSFNzjT2kmOvQzpZSqyn7+CmldJmJSIqCahPkkgvDu05DGpSYkEV8nz6JQ1MlzepdsWotWZYlRodcjVbcmzTllpzuv2aU+1agWHfovV6F6xaGXmFLpXJd8TZh/psBv6Jl/Bfj4dFDBaVcm6KyF7MlIVYiWC+DZRHOv0KmCkYDp3Rfc4buvQrDap/nRadOu1mx7Ivi0Wasd1SrBvt7jGau2BU0rV9vz6pt/JwzsXhWr7YOrbka8il2xN9vBlM4riFH70+mLr269yl6o76GLhRzVJ3Fp39PX13yaGzKkV/HzbZ84oFPv8N35tzdNVGkzGGQeSXfwJiRiBIBq7HCoAK9sUWQ8r1h6Bl8oGH04L1LbYdTxtKiB1oEKJ24lQcWphgiSjS1xxrZLHX4oY0PhegB61V92Bi7GWUnSYVcuRZjhjyB1mKcTE2IEozRujgfO2B6NqQyNXoXZIwskhlkBjyRiFiyVX1HpFKjmccjhN+1yKW06G5oHsZLmfRblbJmNiB4oXZAZAi5lcemX0+KSaJYLJ5Z0yEdrTVmWUKWp6h40n66J+rMXhpZnY2OWWdhRSYhptmOnmpl9BFOVqimuIXYqWFoopkh3TGx6SKlYzoqH5ceoropz3aVutrwfm4qa2/Lvnmi2P/JtomlKSuuKyYN66pZae6JucntTF+GedVRsa667XN8nnosPxsS9m4LioaLrjRistst9LG6yqtyR4pa6+MXibntPvuie+9lKp4pbezilpurrcqnC/CBhvbaMSpaitXsHCWae6PsDa418M8ttvWtxVbXO/H79Yl8sjk8fWhkKyaV6ueH7T827PVrhoDzV7SbF1gOl9sL8ytcvsyyr5KbDKy/Gool31IOwutvweqvOW5Ni+a7b4VOx011LgS6/K/RpoKdMFrkl3vz7yiPWfbbBeW4tTqSXybtUr3qybE7wqL6t2Txhwyp3KCCuzQGl8NX5Fp922ilNa5q/a1No7t9a+Epke+Y+Ndz8vr19ZmruzAkHpIsr6EH7502Dinm/fpVtJLsKr5Yc5x4StjvKjUDbfO+Nl/P/2yw5xjanvdWev+bMKZbnsq8EELL/bwkc5tte2H4o3n7UFPvnbZeU/vONaAfk9+9jeLD3bNIyNvPexZy8wp5LPPH36euaIuv/36C7050epvnbL2dY9iqWuMAQ+IwAQqcIEMbKADHwjBCEpwghSsoAUhUAAAOw==" />
+        </div>
+    </div>
+    <script src="phishing-notices.js"></script>
+  </body>
+</html>
