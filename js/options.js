@@ -154,14 +154,20 @@ objBrowser.runtime.onMessage.addListener(
                 let twitter_lists = {
                     "last_fetched": 0,
                     "whitelist": [],
-                    "blacklist": []
+                    "blacklist": [],
+                    "influence_score": {
+                        "last_fetched": 0,
+                        "list": []
+                    }
                 };
 
                 if(localStorage.getItem("ext-etheraddresslookup-twitter_lists")) {
                     let saved_settings = JSON.parse(localStorage.getItem("ext-etheraddresslookup-twitter_lists"));
                     twitter_lists.last_fetched = saved_settings.last_fetched;
+                    twitter_lists.influence_score.last_fetched = saved_settings.influence_score.last_fetched;
                 }
 
+                // Grab the twitter data every 10 minutes
                 if((Math.floor(Date.now() - twitter_lists.last_fetched)) > 600*1000) {
                     fetch("https://raw.githubusercontent.com/MrLuit/EtherScamDB/master/_data/twitter.json")
                     .then(res => res.json())
@@ -185,10 +191,24 @@ objBrowser.runtime.onMessage.addListener(
                     });
                 }
 
+                // Grab the influence score data every week
+                if((Math.floor(Date.now() - twitter_lists.influence_score.last_fetched)) > 604800*1000) {
+                    fetch("https://pastebin.com/raw/YEaNWcQe")
+                    .then(res => res.json())
+                    .then((lists) => {
+                        twitter_lists.influence_score.last_fetched = Date.now();
+                        
+                        twitter_lists.influence_score.list = lists;
+
+                        localStorage.setItem("ext-etheraddresslookup-twitter_lists", JSON.stringify(twitter_lists));
+                    });
+                }
+
                 if(localStorage.getItem("ext-etheraddresslookup-twitter_lists")) {
                     var cached_list = JSON.parse(localStorage.getItem("ext-etheraddresslookup-twitter_lists"));
                     twitter_lists.whitelist = cached_list.whitelist;
                     twitter_lists.blacklist = cached_list.blacklist;
+                    twitter_lists.influence_score = cached_list.influence_score;
                 }
 
                 strResponse = JSON.stringify(twitter_lists);
