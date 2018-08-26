@@ -96,8 +96,8 @@
                                 if(obj3rdPartyLists[str3rdPartyIdentifier].domains.indexOf(strCurrentTab) >= 0) {
                                     console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
                                     switch(str3rdPartyIdentifier) {
-                                        case 'iosiro':
-                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-iosiro.html#') + (window.location.hostname) +"#blacklisted";
+                                        case 'phishfort':
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-phishfort.html#') + (window.location.hostname) +"#blacklisted";
                                         break;
                                         case 'segasec':
                                             window.location.href = chrome.runtime.getURL('/static/phishing/phishing-segasec.html#') + (window.location.hostname) +"#blacklisted";

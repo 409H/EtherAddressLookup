@@ -221,12 +221,12 @@ function getBlacklistedDomains(strType)
             "identifer": "eal"
         },
         "third_party": {
-            "iosiro": {
+            "phishfort": {
                 "timestamp": 0,
                 "domains": [],
                 "format": "plain",
-                "repo": "https://raw.githubusercontent.com/iosiro/counter_phishing_blacklist/master/blacklists/domains.json",
-                "identifer": "iosiro"
+                "repo": "https://raw.githubusercontent.com/phishfort/counter_phishing_blacklist/master/blacklists/domains.json",
+                "identifer": "phishfort"
             },
             "segasec": {
                 "timestamp": 0,
@@ -265,9 +265,9 @@ function updateAllBlacklists(objEalBlacklistedDomains)
     });
 
     if( [null, 1].indexOf(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist")) >= 0) {
-        getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.iosiro).then(function (arrDomains) {
-            objEalBlacklistedDomains.third_party.iosiro.timestamp = Math.floor(Date.now() / 1000);
-            objEalBlacklistedDomains.third_party.iosiro.domains = arrDomains;
+        getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.phishfort).then(function (arrDomains) {
+            objEalBlacklistedDomains.third_party.phishfort.timestamp = Math.floor(Date.now() / 1000);
+            objEalBlacklistedDomains.third_party.phishfort.domains = arrDomains;
 
             localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
             return objEalBlacklistedDomains.eal.domains;
