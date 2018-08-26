@@ -97,13 +97,13 @@
                                     console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
                                     switch(str3rdPartyIdentifier) {
                                         case 'iosiro':
-                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-iosiro.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-iosiro.html#') + (window.location.hostname) +"#blacklisted";
                                         break;
                                         case 'segasec':
-                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-segasec.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-segasec.html#') + (window.location.hostname) +"#blacklisted";
                                         break;
                                         default:
-                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) +"#blacklisted";
                                         break;
                                     }
                                     return false;
