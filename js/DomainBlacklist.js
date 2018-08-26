@@ -73,7 +73,7 @@
             //If it's not in the whitelist and it is blacklisted or levenshtien wants to blacklist it.
             if (arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted === true || blHolisticStatus === true)) {
                 console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
-                window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
                 return false;
             }
         }
@@ -97,13 +97,13 @@
                                     console.warn(window.location.href + " is blacklisted by "+ str3rdPartyIdentifier);
                                     switch(str3rdPartyIdentifier) {
                                         case 'iosiro':
-                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-iosiro.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-iosiro.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
                                         break;
                                         case 'segasec':
-                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-segasec.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing-segasec.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
                                         break;
                                         default:
-                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.href) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+                                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
                                         break;
                                     }
                                     return false;
