@@ -9,6 +9,7 @@ class TwitterFakeAccount
         this.objBlacklistedHandles = [];
         this.arrViewBlacklistedUserIds = [];
         this.arrViewWhitelistedUserIds = [];
+        this.objInfluenceScores = [];
         this.intTweetCount = 0;
     }
 
@@ -20,6 +21,11 @@ class TwitterFakeAccount
     setBlacklist(arrBlacklist)
     {
         this.objBlacklistedHandles = arrBlacklist;
+    }
+
+    setInfluenceScores(objInfluenceScores)
+    {
+        this.objInfluenceScores = objInfluenceScores;
     }
 
     /**
@@ -43,10 +49,23 @@ class TwitterFakeAccount
         if(Object.keys(this.objWhitelistedHandles).length) {
             for(var intKey in this.objWhitelistedHandles) {
                 if (intUserId === this.objWhitelistedHandles[intKey]) {
-                    return {
+                    var objReturn = {
                         "result": false,
-                        "whitelisted": true
+                        "whitelisted": true,
+                        "influence_score": ""
                     };
+
+                    // See if we are to do the influence scores
+                    // @todo - check to see if we have this option enabled
+                    if(true) {
+                        if(Object.keys(this.objInfluenceScores).length) {
+                            if(Object.keys(this.objInfluenceScores).indexOf(intUserId) > -1) {
+                                objReturn.influence_score = Math.floor(this.objInfluenceScores[intUserId]);       
+                            }
+                        }
+                    }
+
+                    return objReturn;
                 }
             }
         }
@@ -57,7 +76,7 @@ class TwitterFakeAccount
                 if (intUserId === this.objBlacklistedHandles[intKey]) {
                     return {
                         "result": false,
-                        "blacklisted": false
+                        "blacklisted": true
                     };
                 }
             }
@@ -75,6 +94,7 @@ self.onmessage = function(objData) {
     var arrTweetData = objRequest.tweet_data;
     objTwitterFakeAccount.setWhitelist(objRequest.whitelist);
     objTwitterFakeAccount.setBlacklist(objRequest.blacklist);
+    objTwitterFakeAccount.setInfluenceScores(objRequest.influence_score);
 
     for(var intCounter=0; intCounter<arrTweetData.length; intCounter++) {
         var objTweetData = arrTweetData[intCounter];
@@ -96,6 +116,12 @@ self.onmessage = function(objData) {
             objTweetData.is_blacklisted = true;
         } else {
             objTweetData.is_blacklisted = false;
+        }
+
+        if(objImposter.hasOwnProperty("influence_score")) {
+            objTweetData.influence_score = objImposter.influence_score
+        } else {
+            objTweetData.influence_score = -1;
         }
         
         arrTweetData[intCounter] = objTweetData;
