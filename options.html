@@ -17,8 +17,6 @@
     <a target="_blank" href="https://etherscamdb.info/report/domain/" class="btn btn-sm btn-error"
        id="ext-etheraddresslookup-report"><img width="16" height="16" src="images/flag.png"> Report a domain</a>
 
-    <br/>
-
     <div>
         <ul class="ext-etheraddresslookup-nav ext-etheraddresslookup-nav-tabs" id="ext-etheraddresslookup-tab" role="tablist" style="margin-bottom: 1rem">
             <li class="ext-etheraddresslookup-nav-item">
@@ -54,8 +52,10 @@
                     <a href="https://cryptoinfluencers.io/" target="_blank">
                         <img title="CryptoInfluencers has provided a lot of the Twitter accounts that are 'verified'" src="/images/cryptoinfluencers.png" style="height:15px;width:110px;vertical-align:middle;"/>
                     </a>
-
                 </label>
+                <div id="ext-etheraddresslookup-blacklist_domains_stats">
+                    <input type="checkbox"> Show Influencer Score
+                </div>
 
                 <label class="fancy-checkbox">
                     <input type="checkbox" name="ext-etheraddresslookup-blacklist_domains" id="ext-etheraddresslookup-blacklist_domains">
@@ -63,7 +63,7 @@
                 </label>
                 <div id="ext-etheraddresslookup-blacklist_domains_stats">
                     <input type="checkbox" name="ext-etheraddresslookup-3rd_party_blacklist_domains" id="ext-etheraddresslookup-3rd_party_blacklist_domains"> Use 3rd party blacklists <br />
-                    <input type="checkbox" name="ext-etheraddresslookup-block_punycode_blacklist_domains" id="ext-etheraddresslookup-block_punycode_blacklist_domains"> Block all punycode domains <br /> <br />
+                    <input type="checkbox" name="ext-etheraddresslookup-block_punycode_blacklist_domains" id="ext-etheraddresslookup-block_punycode_blacklist_domains"> Block all punycode domains <br />
                     <small>Last updated: <span id="ext-etheraddresslookup-blacklist_domains_last_updated">N/A</span></small>
                     <br/>
                     <small>Domains Blacklisted: <span id="ext-etheraddresslookup-blacklist_domains_total_count">0</span>
@@ -90,9 +90,6 @@
                         <option value="https://kovan.etherscan.io/address">Etherscan.io *</option>
                     </optgroup>
                 </select>
-                <div class="ext-etheraddresslookup-note">
-                    <small>* ENS address compatible.</small>
-                </div>
             </div>
 
             <!-- LABELS PANEL -->

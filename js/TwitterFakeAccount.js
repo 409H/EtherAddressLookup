@@ -51,6 +51,65 @@ class TwitterFakeAccount
         return this.arrAllTwitterUsernames;
     }
 
+    // @todo - fix the ui on this. it's shit atm
+    doInfluenceScore(objData)
+    {
+        console.log(objData);
+        var objNodes = document.getElementsByClassName("ext-etheraddresslookup-tweet-" + objData.tweet_id);
+        for (var intCounter = 0; intCounter < objNodes.length; intCounter++) {
+            var objNode = objNodes[intCounter];
+            if (objNode.getAttribute("ext-etheraddresslookup-twitterflagged-influencescore")) {
+                return;
+            }
+
+            var objAccountDetails = objNode.getElementsByClassName("account-group")[0];
+            if(typeof objAccountDetails === 'undefined') {
+                return;
+            }
+            objNode.setAttribute("ext-etheraddresslookup-twitterflagged-influencescore", 1);
+
+            var objInfluenceScore = document.createElement("div");
+            objInfluenceScore.style.display = "inline";
+            objInfluenceScore.style.height = "25px;";
+            objInfluenceScore.style.width = "55px";
+            objInfluenceScore.style.padding = "0 10px";
+            objInfluenceScore.style.textAlign = "center";
+            objInfluenceScore.style.cursor = "help";
+            objInfluenceScore.style.background = "rgb(231, 231, 231)";
+            objInfluenceScore.style.borderRadius = "1em";
+            // Switch up the text colour because vanity
+            switch(true) {
+                // Top tier influential
+                case Math.floor(objData.influence_score) > 700:
+                    objInfluenceScore.style.color = "#9AD490";
+                break;
+                // Second tier influential
+                case Math.floor(objData.influence_score) > 600:
+                    objInfluenceScore.style.color = "#90D4C1";
+                break;
+                // Third tier influential
+                case Math.floor(objData.influence_score) > 500:
+                    objInfluenceScore.style.color = "#90B5D4";
+                break;     
+                // Fourth tier influential
+                case Math.floor(objData.influence_score) > 400:
+                    objInfluenceScore.style.color = "#A690D4";
+                break;    
+                // Fifth tier influential
+                case Math.floor(objData.influence_score) > 300:
+                    objInfluenceScore.style.color = "#D490D3";
+                break;                                          
+                default:
+                    objInfluenceScore.style.color = "#111";
+                break;
+
+            }
+            objInfluenceScore.innerHTML = "<strong>"+ objData.influence_score +"</strong>";
+            objInfluenceScore.title = "This influence score is calculated by CryptoInfluencers.io"
+            objAccountDetails.append(objInfluenceScore);
+        }
+    }
+
     doNeutralAlert(objData)
     {
         var objNodes = document.getElementsByClassName("ext-etheraddresslookup-tweet-" + objData.tweet_id);
@@ -193,12 +252,14 @@ var objWorker = new Worker(chrome.runtime.getURL('/js/workers/TwitterFakeAccount
 let objCachedBadges = {
     "whitelist": [],
     "blacklist": [],
-    "neutral": []
+    "neutral": [],
+    "influence_score": []
 };
 
 let arrWhitelistedAccountIds = [];
 let arrBlacklistedAccountIds = [];
 let arrNeutralAccountIds = [];
+let arrInfluenceScore = [];
 var intTweetCounter = 0;
 
 chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
@@ -231,13 +292,23 @@ chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
                                 "userId": arrTweets[intCounter].getAttribute("data-user-id"),
                                 "name": arrTweets[intCounter].getAttribute("data-screen-name"),
                                 "tweet_id": arrTweets[intCounter].getAttribute("data-tweet-id"),
-                                "twitter_verified":  objTwitterFakeAccount.isTwitterVerified(arrTweets[intCounter])
+                                "twitter_verified":  objTwitterFakeAccount.isTwitterVerified(arrTweets[intCounter]),
+                                "influence_score": -1
                             };
 
                             //See if we've already checked the userid (whitelist)
                             if(this.whitelist.indexOf(arrTmpTweetData.userId) > -1) {
                                 blContactBackground = false;
                                 objTwitterFakeAccount.doWhitelistAlert(arrTmpTweetData);
+
+                                //See if we've already got the influence score
+                                console.log("@@");
+                                console.log(Object.keys(this.influence_score));
+                                console.log(this.influence_score);
+                                if(Object.keys(this.influence_score).indexOf(arrTmpTweetData.userId) > -1) {
+                                    arrTmpTweetData.influence_score = this.influence_score[arrTmpTweetData.userId];
+                                    objTwitterFakeAccount.doInfluenceScore(arrTmpTweetData); 
+                                }
                             }
 
                             //See if we've already checked the userid (blacklist)
@@ -266,11 +337,14 @@ chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
 
                     if(arrTweetData.length) {
                         chrome.runtime.sendMessage({func: "twitter_lists"}, function(objResponse) {
-
                             let twitterlists = JSON.parse(objResponse.resp);
 
                             this.whitelist = twitterlists.whitelist;
-                            this.blacklist =twitterlists.blacklist;
+                            this.blacklist = twitterlists.blacklist;
+                            this.influence_score = twitterlists.influence_score.list;
+                            
+                            console.log("___LIST____");
+                            console.log(twitterlists.influence_score.list);
 
                             objWorker.postMessage(JSON.stringify(this));
                         }.bind(objDataToInspect));
@@ -296,6 +370,14 @@ objWorker.onmessage = function (event)
         if(arrData[intCounter].is_whitelisted) {
             objCachedBadges["whitelist"].push(arrData[intCounter].userId);
             objTwitterFakeAccount.doWhitelistAlert(arrData[intCounter]);
+
+            if(arrData[intCounter].influence_score) {
+                var objIs = new Object;
+                objIs.arrData[intCounter].userId = arrData[intCounter].influence_score;
+                objCachedBadges["influence_score"].push(objIs);
+                objTwitterFakeAccount.doInfluenceScore(arrData[intCounter]);
+            }
+
             continue;
         }
 
