@@ -43,7 +43,7 @@
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],
     "js": [
-      "js/app/lib/web3-light.min.js",
+      "js/app/lib/web3.js",
       "js/DomManipulator.js",
       "js/labels.js",
       "js/main.js",
