@@ -26,7 +26,7 @@
     "matches": ["http://*/*", "https://*/*"],
     "js": [
       "js/app/lib/punycode.min.js",
-      "js/app/lib/blockies.min.js",
+      "js/app/lib/blockies.js",
       "js/app/lib/sha256.min.js",
       "js/DomainBlacklist.js",
       "js/SignatureInject.js"
