@@ -28,11 +28,18 @@
       "js/app/lib/punycode.min.js",
       "js/app/lib/blockies.min.js",
       "js/app/lib/sha256.min.js",
-      "js/app/lib/patch-worker.js",
       "js/DomainBlacklist.js",
       "js/SignatureInject.js"
     ]
-  },{
+  },
+  {
+    "run_at": "document_start",
+    "matches": ["http://twitter.com/*", "https://twitter.com/*"],
+    "js": [
+      "js/app/lib/patch-worker.js"
+    ]
+  },
+  {
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],
     "js": [
@@ -43,7 +50,8 @@
       "js/app/lib/nat-twbs-modal-popover.js"
     ],
     "css": ["css/app.css"]
-  },{
+  },
+  {
     "run_at": "document_end",
     "matches": ["https://twitter.com/*"],
     "js": [
