@@ -27,7 +27,7 @@
     "js": [
       "js/app/lib/punycode.js",
       "js/app/lib/blockies.js",
-      "js/app/lib/sha256.min.js",
+      "js/app/lib/sha256.js",
       "js/DomainBlacklist.js",
       "js/SignatureInject.js"
     ]
