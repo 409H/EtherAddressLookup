@@ -25,7 +25,7 @@
     "run_at": "document_start",
     "matches": ["http://*/*", "https://*/*"],
     "js": [
-      "js/app/lib/punycode.min.js",
+      "js/app/lib/punycode.js",
       "js/app/lib/blockies.js",
       "js/app/lib/sha256.min.js",
       "js/DomainBlacklist.js",
