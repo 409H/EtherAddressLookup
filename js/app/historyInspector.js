@@ -43,7 +43,7 @@ function doHistoryInspection() {
             var objUri = URI(objHistoryItems[intIterator].url);
 
             //See if we redirected to the phishing site...
-            if (objUri.domain() === "harrydenley.com" && ["/EtherAddressLookup/phishing.html", "/EtherAddressLookup/phishing-segasec.html", "/EtherAddressLookup/phishing-iosiro.html"].indexOf(objUri.path()) >= 0) {
+            if (objUri.domain() === "harrydenley.com" && ["/EtherAddressLookup/phishing.html", "/EtherAddressLookup/phishing-segasec.html", "/EtherAddressLookup/phishing-phishfort.html"].indexOf(objUri.path()) >= 0) {
                 blRedirected = true;
                 continue;
             }

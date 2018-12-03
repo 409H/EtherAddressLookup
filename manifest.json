@@ -4,7 +4,7 @@
   "name": "EtherAddressLookup",
   "short_name": "EtherAddressLookup",
   "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
-  "version": "1.18.2",
+  "version": "1.19",
 
   "browser_action": {
     "default_icon": "images/icon.png",
@@ -25,25 +25,33 @@
     "run_at": "document_start",
     "matches": ["http://*/*", "https://*/*"],
     "js": [
-      "js/app/lib/punycode.min.js",
-      "js/app/lib/blockies.min.js",
-      "js/app/lib/sha256.min.js",
-      "js/app/lib/patch-worker.js",
+      "js/app/lib/punycode.js",
+      "js/app/lib/blockies.js",
+      "js/app/lib/sha256.js",
       "js/DomainBlacklist.js",
       "js/SignatureInject.js"
     ]
-  },{
+  },
+  {
+    "run_at": "document_start",
+    "matches": ["http://twitter.com/*", "https://twitter.com/*"],
+    "js": [
+      "js/app/lib/patch-worker.js"
+    ]
+  },
+  {
     "run_at": "document_end",
     "matches": ["http://*/*", "https://*/*"],
     "js": [
-      "js/app/lib/web3-light.min.js",
+      "js/app/lib/web3.js",
       "js/DomManipulator.js",
       "js/labels.js",
       "js/main.js",
       "js/app/lib/nat-twbs-modal-popover.js"
     ],
     "css": ["css/app.css"]
-  },{
+  },
+  {
     "run_at": "document_end",
     "matches": ["https://twitter.com/*"],
     "js": [
@@ -66,6 +74,9 @@
     "/js/workers/TwitterFakeAccount.js",
     "images/twitter/whitelisted.png",
     "images/twitter/blacklisted.png",
-    "images/twitter/neutral.png"
+    "images/twitter/neutral.png",
+    "static/phishing/phishing.html",
+    "static/phishing/phishing-phishfort.html",
+    "static/phishing/phishing-segasec.html"
   ]
 }
