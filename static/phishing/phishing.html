@@ -80,28 +80,36 @@
         <h1>
             <i class="em em-warning" id="warn"></i> ATTENTION
         </h1>
-        <div>
+        <div style="width:100%;margin:auto;">
             <p id="note">We have detected the domain to have malicious intent and have prevented you from interacting with it.</p>
             <br />
-            <div id="punycode" class="notice hide-me">
-                <p>This domain is blocked because you have <strong>blocked all punycode domains</strong> (this is default behaviour). <br />
-                   If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#punycode-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+            <div id="notice-container">
+                <div id="punycode" class="notice hide-me">
+                    <p>This domain is blocked because you have <strong>blocked all punycode domains</strong> (this is default behaviour). <br />
+                    If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#punycode-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+                </div>
+                <div id="levenshtein" class="notice hide-me">
+                    <p>This domain is blocked because it is too similar to a domain in our fuzzy list.<br />
+                    If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#levenshtien-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+                </div>
+                <div id="blacklisted" class="notice hide-me">
+                    <p>This domain is blocked because it is on our blacklist.<br />
+                    If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#blacklisted-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+                </div>            
+                <p>This is because you have enabled <span>Warn of blacklisted domains</span> setting on <img src="../../images/ether-16x16.png"  alt="EtherAddressLookup Icon" />EtherAddressLookup Browser Extension.</p>
+                <p>You can turn this setting off, but it's advised not to as we blacklisted the domain for a reason.</p>
+                <br />
+                <p>If you feel this domain is wrongly blacklisted, please <a href="https://github.com/409H/EtherAddressLookup/issues/new">open a new issue on GitHub</a></p>
+                <p><strong>To read more about this, visit <a id="link-etherscamdb" href="">https://etherscamdb.info/domain/</a></strong></p>
             </div>
-            <div id="levenshtein" class="notice hide-me">
-                <p>This domain is blocked because it is too similar to a domain in our fuzzy list.<br />
-                   If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#levenshtien-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
-            </div>
-            <div id="blacklisted" class="notice hide-me">
-                <p>This domain is blocked because it is on our blacklist.<br />
-                   If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#blacklisted-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
-            </div>            
-            <p>This is because you have enabled <span>Warn of blacklisted domains</span> setting on <img src="../../images/ether-16x16.png"  alt="EtherAddressLookup Icon" />EtherAddressLookup Browser Extension.</p>
-            <p>You can turn this setting off, but it's advised not to as we blacklisted the domain for a reason.</p>
-            <br />
-            <p>If you feel this domain is wrongly blacklisted, please <a href="https://github.com/409H/EtherAddressLookup/issues/new">open a new issue on GitHub</a></p>
-            <p><strong>To read more about this, visit <a id="link-etherscamdb" href="">https://etherscamdb.info/domain/</a></strong></p>
+            <div id="gif-container" class="hide-me">
+                <div id="punycode_turnoff" class="hide-me">
+                    <p style="width:70%"><strong>You can turn off autoblocking of punycode domains as shown below.</strong></p>
+                    <img src="/images/turn_off_punycode_blocker.gif" height="500px" alt="How to turn off the punycode blocker" />
+                </div>
+            </div> 
         </div>
-        <div id="more-info">
+        <div style="margin-top:5%;clear:both;" id="more-info">
             <h3>Helpful Tips:</h3>
             <p>
                 <ul>
