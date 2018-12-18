@@ -105,9 +105,9 @@ objBrowser.runtime.onMessage.addListener(
                 }
                 break;
             case 'block_punycode_domains' :
-                //This option is enabled by default
+                //This option is disabled by default
                 if(localStorage.getItem("ext-etheraddresslookup-block_punycode_blacklist_domains") === null) {
-                    strResponse = 1;
+                    strResponse = 0;
                 } else {
                     strResponse = localStorage.getItem("ext-etheraddresslookup-block_punycode_blacklist_domains");
                 }
