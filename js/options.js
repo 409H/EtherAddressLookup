@@ -225,7 +225,7 @@ function getBlacklistedDomains(strType)
                 "timestamp": 0,
                 "domains": [],
                 "format": "plain",
-                "repo": "https://raw.githubusercontent.com/phishfort/counter_phishing_blacklist/master/blacklists/domains.json",
+                "repo": "https://raw.githubusercontent.com/phishfort/phishfort-lists/master/blacklists/domains.json",
                 "identifer": "phishfort"
             },
             "segasec": {
