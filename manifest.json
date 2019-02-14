@@ -57,6 +57,17 @@
     "js": [
       "js/TwitterFakeAccount.js"
     ]
+  },{
+    "run_at": "document_end",
+    "matches": [
+      "https://*.mycrypto.com/account\/send",
+      "https://*.myetherwallet.com/",
+      "https://*.etherscan.io/address/*"
+    ],
+    "js": [
+      "js/app/lib/esd.js",
+      "js/AddressBadges.js"
+    ]
   }],
 
   "background": {
