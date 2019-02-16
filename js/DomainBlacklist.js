@@ -27,6 +27,28 @@
 
     function doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains)
     {
+
+        // Check the user bookmarks to see if they trust the domain
+        objBrowser.runtime.sendMessage({func: "user_domain_bookmarks"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                var strCurrentTab = window.location.hostname.replace(/www\./g,'');
+                var objBookmarks = JSON.parse(objResponse.resp);
+
+                for(var intKey in objBookmarks) {
+                    if(objBookmarks.hasOwnProperty(intKey)) {
+                        var strBookmarkUrl = objBookmarks[intKey]["url"].replace(/https?\:\/\//, '').toLowerCase();
+                        strBookmarkUrl = strBookmarkUrl.split("/")[0];
+                        if(strBookmarkUrl === strCurrentTab.toLowerCase()) {
+                            objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "whitelisted", "type": "bookmarked"}, function(objResponse) {
+                                // Icon should be a different colour now.
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+        });
+
         //See if we are blocking all punycode domains.
         objBrowser.runtime.sendMessage({func: "block_punycode_domains"}, function(objResponse) {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
@@ -37,6 +59,11 @@
                     arrDomainParts.forEach(strDomainPart => {
                         if (strDomainPart.startsWith("xn--")) {
                             window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) + "#punycode";
+
+                            objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": "punycode"}, function(objResponse) {
+                                // Icon should be a different colour now.
+                            });
+
                             return false;
                         }
                     });
@@ -48,6 +75,9 @@
         let strCurrentTab =  window.location.hostname.replace(/www\./g,'');
         if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
             console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
+            objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "whitelisted", "type": "whitelisted"}, function(objResponse) {
+                // Icon should be a different colour now.
+            });
             return false;
         }
 
@@ -74,6 +104,11 @@
             if (arrWhitelistedDomains.indexOf(strCurrentTab) < 0 && (isBlacklisted === true || blHolisticStatus === true)) {
                 console.warn(window.location.href + " is blacklisted by EAL - "+ (isBlacklisted ? "Blacklisted" : "Levenshtein Logic"));
                 window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
+
+                objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": (isBlacklisted ? "blacklisted": "levenshtein")}, function(objResponse) {
+                    // Icon should be a different colour now.
+                });
+
                 return false;
             }
         }
@@ -106,6 +141,11 @@
                                             window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) +"#blacklisted";
                                         break;
                                     }
+
+                                    objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": "thirdparty"}, function(objResponse) {
+                                        // Icon should be a different colour now.
+                                    });
+
                                     return false;
                                 }
                             }
