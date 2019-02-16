@@ -201,6 +201,101 @@ objBrowser.runtime.onMessage.addListener(
                     strResponse = localStorage.getItem("ext-etheraddresslookup-signature_inject");
                 }
                 break;
+            case 'user_domain_bookmarks' :
+                // Fetches the user domain bookmarks - these are domains they trust
+                var strBookmarks = localStorage.getItem("ext-etheraddresslookup-bookmarks");
+                //No bookmarks have been set, set the default ones.
+                if(strBookmarks === null) {
+                    var arrBookmarks = new Array();
+                    arrBookmarks.push({
+                        "icon": "https://www.google.com/s2/favicons?domain=https://mycrypto.com",
+                        "url": "https://mycrypto.com"
+                    });
+                    arrBookmarks.push({
+                        "icon": "images/bookmarks/etherscan.png",
+                        "url": "https://etherscan.io"
+                    });
+                    arrBookmarks.push({
+                        "icon": "images/bookmarks/etherchain.jpg",
+                        "url": "https://etherchain.org"
+                    });
+                    arrBookmarks.push({
+                        "icon": "images/bookmarks/ethplorer.jpg",
+                        "url": "https://ethplorer.io"
+                    });
+                    arrBookmarks.push({
+                        "icon": "images/bookmarks/rethereum.png",
+                        "url": "https://reddit.com/r/ethereum"
+                    });
+                    arrBookmarks.push({
+                        "icon": "images/bookmarks/rethtrader.png",
+                        "url": "https://reddit.com/r/ethtrader"
+                    });
+                } else {
+                    arrBookmarks = JSON.parse(strBookmarks);
+                }
+            
+                strResponse = JSON.stringify(arrBookmarks);
+                break;
+            case 'change_ext_icon' :
+                // Changes the extension icon
+                let strReason = "";
+                if(request.type) {
+                    switch(request.type) {
+                        case 'thirdparty':
+                            strReason = request.icon + " by a thirdparty list";
+                            break;
+                        case 'punycode':
+                            strReason = request.icon + " due to punycode domain";
+                            break; 
+                        case 'blacklisted' :
+                            strReason = "Blacklisted by the EAL extension";
+                            break;
+                        case 'levenshtein' :
+                            strReason = "Blacklisted as too similar to a trusted domain";
+                            break;  
+                        case 'whitelisted' :
+                            strReason = "Trusted by the EAL extension";
+                            break;                         
+                        case 'bookmarked':
+                            strReason = "Trusted by your bookmarks in EAL";
+                            break;
+                        default:
+                            strReason = "";
+                            break;
+                    }
+                }
+
+                switch(request.icon) {
+                    case 'whitelisted' :
+                        chrome.browserAction.setIcon({
+                            path: "images/ether-128x128-green_badge.png",
+                            tabId: sender.tab.id
+                        });
+
+                        chrome.browserAction.setTitle({
+                            title: ["This domain is recognised as legitimatye by EtherAddressLookup", strReason].filter(i => i).join(" - ")
+                        });
+                    break;
+                    case 'blacklisted' :
+                        chrome.browserAction.setIcon({
+                            path: "images/ether-128x128-red_badge.png",
+                            tabId: sender.tab.id
+                        });
+
+                        chrome.browserAction.setTitle({
+                            title: ["This domain is recognised as bad by EtherAddressLookup", strReason].filter(i => i).join(" - ")
+                        });
+                    break;                    
+                    case 'neutral' :
+                    default :
+                    chrome.browserAction.setIcon({
+                        path: "images/ether-128x128-black_badge.png",
+                        tabId: sender.tab.id
+                    });
+                    break;                    
+                }
+                break;
             default:
                 strResponse = "unsupported";
                 break;
