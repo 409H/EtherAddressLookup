@@ -14,7 +14,6 @@ class SignatureSelector
         document.getElementById("ext-etheraddresslookup-signature_success").classList.add("hide-me");
 
         objBrowser.runtime.sendMessage({func: "signature_inject"}, function(objResponse) {
-            console.log(objResponse);
             document.getElementById("ext-etheraddresslookup-signature_modify_checkbox").checked = !!parseInt(objResponse.resp);
         });
     }
