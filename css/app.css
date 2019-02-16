@@ -102,7 +102,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
-  box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
+  -webkit-box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
+          box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
   display: inline-block;
   margin-bottom: -0.2em;
 }
@@ -149,11 +150,13 @@
 .ext-etheraddresslookup-popover *,
 .ext-etheraddresslookup-popover *::before,
 .ext-etheraddresslookup-popover *::after {
-  box-sizing: inherit;
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
 }
 
 .ext-etheraddresslookup-popover.fade {
   opacity: 0;
+  -webkit-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
 
@@ -415,6 +418,7 @@
 /*Tabs*/
 .ext-etheraddresslookup-nav {
   display: -ms-flexbox;
+  display: -webkit-box;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
@@ -491,6 +495,7 @@
 
 .ext-etheraddresslookup-tab-content .fade {
   opacity: 0;
+  -webkit-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
 
@@ -502,6 +507,7 @@
   position: relative;
   height: 0;
   overflow: hidden;
+  -webkit-transition: height 0.35s ease;
   transition: height 0.35s ease;
 }
 
@@ -516,7 +522,10 @@
 .ext-etheraddresslookup-address_stats_hover {
   z-index: 10;
   position: absolute;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
@@ -536,7 +545,10 @@
   border: 2px solid #e4e4e4;
   overflow-x: hidden;
   overflow-y: hidden;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .ext-etheraddresslookup-0xaddress.display-popup > .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
@@ -551,7 +563,10 @@
   font-family: 'Verdana';
   display: block;
   line-height: 2em;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content > a > img {
@@ -566,7 +581,10 @@
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_node_error {
   all: initial;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   background: #d02626;
   border-radius: 5em;
   height: 10px;
@@ -582,7 +600,10 @@
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_node_ok {
   all: initial;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   background: #32a735;
   border-radius: 50%;
   height: 10px;
