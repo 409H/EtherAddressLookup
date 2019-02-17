@@ -2,7 +2,7 @@ let objBrowser = chrome ? chrome : browser;
 
 const EXT_PREFIX = 'ext-etheraddresslookup';
 const HOVER_POPUP_CLASS_NAME = `${EXT_PREFIX}-address_stats_hover`;
-const ADDRESS_DISPLAY_POPUP_CLASS_NAME = 'display-popup';
+const ADDRESS_DISPLAY_POPUP_CLASS_NAME = `${EXT_PREFIX}-display-popup`;
 const ATTRIBUTE_ADDRESS_UNIQUE_ID = `data-${EXT_PREFIX}-address-unique-id`;
 const LABEL_LOADED_ATTRIBUTE = `data-${EXT_PREFIX}-label-loaded`;
 
@@ -389,6 +389,11 @@ class EtherAddressLookup {
         }
 
         if (!addressElement.classList.contains(ADDRESS_DISPLAY_POPUP_CLASS_NAME)) {
+
+           if(document.querySelector(`.${ADDRESS_DISPLAY_POPUP_CLASS_NAME}`)) {
+               document.querySelector(`.${ADDRESS_DISPLAY_POPUP_CLASS_NAME}`).classList.remove(ADDRESS_DISPLAY_POPUP_CLASS_NAME)
+           }
+
             addressElement.classList.add(ADDRESS_DISPLAY_POPUP_CLASS_NAME);
         }
 
@@ -407,6 +412,7 @@ class EtherAddressLookup {
                 </p>
                 <div id='${EXT_PREFIX}-address_stats_hover_node_error_${uniqueAddressId}' class='${EXT_PREFIX}-address_stats_hover_node_error'></div>
                 <div id='${EXT_PREFIX}-address_stats_hover_node_ok_${uniqueAddressId}' class='${EXT_PREFIX}-address_stats_hover_node_ok'></div>
+                <br />
                 <span id='${EXT_PREFIX}-address_balance_${uniqueAddressId}'></span>
                 <span id='${EXT_PREFIX}-transactions_out_${uniqueAddressId}'></span>
                 <span id='${EXT_PREFIX}-contract_address_${uniqueAddressId}'></span>
@@ -435,6 +441,7 @@ class EtherAddressLookup {
                         objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).innerText = "There were RPC errors";
                     } else {
                         objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).style.display = "inline";
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).innerText = "RPC calls successful";
                         intTransactionCount = parseInt(result).toLocaleString();
                     }
 
@@ -455,6 +462,7 @@ class EtherAddressLookup {
                         objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).innerText = "There were RPC errors";
                     } else {
                         objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).style.display = "inline";
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).innerText = "RPC calls successful";
                         flEthBalance = web3.fromWei(result.toString(10), "ether").toLocaleString("en-US", {maximumSignificantDigits: 9});
                     }
 
@@ -476,6 +484,7 @@ class EtherAddressLookup {
                         objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_error_"+uniqueAddressId).innerText = "There were RPC errors";
                     } else {
                         objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).style.display = "inline";
+                        objHoverNodeContent.querySelector("#ext-etheraddresslookup-address_stats_hover_node_ok_"+uniqueAddressId).innerText = "RPC calls successful";
                         var blIsContractAddress = result == "0x" ? false : true;
                         if (blIsContractAddress) {
                             objContractAddress.innerHTML += "<small>This is a contract address</small>";

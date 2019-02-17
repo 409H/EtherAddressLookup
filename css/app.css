@@ -551,7 +551,7 @@
           user-select: none;
 }
 
-.ext-etheraddresslookup-0xaddress.display-popup > .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
+.ext-etheraddresslookup-0xaddress.ext-etheraddresslookup-display-popup > .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_content {
   display: inline-block;
 }
 
