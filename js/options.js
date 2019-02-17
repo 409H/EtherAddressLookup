@@ -354,15 +354,30 @@ function updateAllBlacklists(objEalBlacklistedDomains)
 {
     getBlacklistedDomainsFromSource(objEalBlacklistedDomains.eal).then(function (arrDomains) {
         objEalBlacklistedDomains.eal.timestamp = Math.floor(Date.now() / 1000);
-        objEalBlacklistedDomains.eal.domains = arrDomains;
+        objEalBlacklistedDomains.eal.domains = arrDomains.filter((v,i,a)=>a.indexOf(v)==i);
 
         localStorage.setItem("ext-etheraddresslookup-blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.eal));
     });
 
     if( [null, 1].indexOf(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist")) >= 0) {
         getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.phishfort).then(function (arrDomains) {
+
+            let arrPhishFortBlacklist = [];
+            // De-dupe from the main EAL source - save on space.
+            let objEalBlacklist = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
+            if(objEalBlacklist !== null) {
+                objEalBlacklist = JSON.parse(objEalBlacklist);
+                let arrEalBlacklist = objEalBlacklist.domains;
+                var intBlacklistLength = arrDomains.length;
+                while(intBlacklistLength--) {
+                    if(arrEalBlacklist.indexOf(arrDomains[intBlacklistLength]) < 0) {
+                        arrPhishFortBlacklist.push(arrDomains[intBlacklistLength])
+                    }
+                }
+            }
+
             objEalBlacklistedDomains.third_party.phishfort.timestamp = Math.floor(Date.now() / 1000);
-            objEalBlacklistedDomains.third_party.phishfort.domains = arrDomains;
+            objEalBlacklistedDomains.third_party.phishfort.domains = arrPhishFortBlacklist;
 
             localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
             return objEalBlacklistedDomains.eal.domains;
@@ -370,7 +385,7 @@ function updateAllBlacklists(objEalBlacklistedDomains)
 
         getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.segasec).then(function (arrDomains) {
             objEalBlacklistedDomains.third_party.segasec.timestamp = Math.floor(Date.now() / 1000);
-            objEalBlacklistedDomains.third_party.segasec.domains = arrDomains;
+            objEalBlacklistedDomains.third_party.segasec.domains = arrDomains.filter((v,i,a)=>a.indexOf(v)==i);
 
             localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
             return objEalBlacklistedDomains.eal.domains;
