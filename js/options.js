@@ -361,8 +361,26 @@ function updateAllBlacklists(objEalBlacklistedDomains)
 
     if( [null, 1].indexOf(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist")) >= 0) {
         getBlacklistedDomainsFromSource(objEalBlacklistedDomains.third_party.phishfort).then(function (arrDomains) {
+
+            let arrPhishFortBlacklist = [];
+            // De-dupe from the main EAL source - save on space.
+            let objEalBlacklist = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
+            if(objEalBlacklist !== null) {
+                objEalBlacklist = JSON.parse(objEalBlacklist);
+                let arrEalBlacklist = objEalBlacklist.domains;
+                console.log(objEalBlacklist);
+                var intBlacklistLength = arrDomains.length;
+                while(intBlacklistLength--) {
+                    if(arrEalBlacklist.indexOf(arrDomains[intBlacklistLength]) < 0) {
+                        arrPhishFortBlacklist.push(arrDomains[intBlacklistLength])
+                    }
+                }
+            }
+
+            console.log(arrPhishFortBlacklist);
+
             objEalBlacklistedDomains.third_party.phishfort.timestamp = Math.floor(Date.now() / 1000);
-            objEalBlacklistedDomains.third_party.phishfort.domains = arrDomains;
+            objEalBlacklistedDomains.third_party.phishfort.domains = arrPhishFortBlacklist;
 
             localStorage.setItem("ext-etheraddresslookup-3p_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.third_party));
             return objEalBlacklistedDomains.eal.domains;
