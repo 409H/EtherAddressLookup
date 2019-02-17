@@ -354,7 +354,7 @@ function updateAllBlacklists(objEalBlacklistedDomains)
 {
     getBlacklistedDomainsFromSource(objEalBlacklistedDomains.eal).then(function (arrDomains) {
         objEalBlacklistedDomains.eal.timestamp = Math.floor(Date.now() / 1000);
-        objEalBlacklistedDomains.eal.domains = arrDomains;
+        objEalBlacklistedDomains.eal.domains = arrDomains.filter((v,i,a)=>a.indexOf(v)==i);
 
         localStorage.setItem("ext-etheraddresslookup-blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.eal));
     });
