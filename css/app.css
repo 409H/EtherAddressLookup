@@ -596,6 +596,7 @@
   color: #fff;
   padding: 3px;
   font-size: 8pt;
+  clear: both;
 }
 
 .ext-etheraddresslookup-address_stats_hover .ext-etheraddresslookup-address_stats_hover_node_ok {
@@ -605,13 +606,17 @@
       -ms-user-select: none;
           user-select: none;
   background: #32a735;
-  border-radius: 50%;
+  border-radius: 5em;
   height: 10px;
-  width: 10px;
+  width: auto;
   position: absolute;
   right: 5%;
   display: none;
-  z-index: 1;
+  z-index: 2;
+  color: #fff;
+  padding: 3px;
+  font-size: 8pt;
+  clear: both;
 }
 
 #ext-etheraddresslookup-tip_box {
