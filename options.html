@@ -31,6 +31,11 @@
                     Labels
                 </a>
             </li>
+            <li class="ext-etheraddresslookup-nav-item">
+                <a class="ext-etheraddresslookup-nav-link" id="ext-etheraddresslookup-ens-tab" data-toggle="ext-etheraddresslookup-tab" data-duration="350" data-height="true" href="#ext-etheraddresslookup-ens" role="tab" aria-controls="ext-etheraddresslookup-ens" aria-expanded="false">
+                    ENS
+                </a>
+            </li>            
         </ul>
 
         <div class="ext-etheraddresslookup-tab-content" id="ext-etheraddresslookup-tab-content">
@@ -147,6 +152,26 @@
                 </div>
             </div>
 
+            <!-- ENS PANEL -->
+            <div class="ext-etheraddresslookup-tab-pane fade " id="ext-etheraddresslookup-ens" role="tabpanel" aria-labelledby="ext-etheraddresslookup-ens-tab" aria-expanded="false">
+                <!-- New Label -->
+                <div id="ext-etheraddresslookup-ens-container">
+                    <h3>ENS</h3>
+                    <p class="ext-etheraddresslookup-note">Enter an ENS name and EAL will perform a lookup.</p>
+                    <ul>
+                        <li><a target="_blank" href="https://ens.domains/">What is ENS?</a></li>
+                    </ul>
+                    <form id="ext-etheraddresslookup-ens_lookup_form">
+                        <input class="form-control" type="text" name="ext-etheraddresslookup-ens_name" id="ext-etheraddresslookup-ens_name" placeholder="ENS Name (ethereum.eth)" autocomplete="off" />
+                        <button class="btn btn-success btn-small" type="submit">Lookup</button>
+                    </form>
+
+                    <div id="ext-etheraddresslookup-ens_output">
+
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -163,6 +188,8 @@
     </div>
 </div>
 
+<script src="js/app/lib/web3.js"></script>
+<script src="js/app/lib/blockies.js"></script>
 <script src="js/app/toggleMatchHighlight.js"></script>
 <script src="js/app/toggleTwitterValidation.js"></script>
 <script src="js/app/chooseBlockchain.js"></script>
@@ -172,6 +199,8 @@
 <script src="js/app/lib/nat-twbs-modal-popover.js"></script>
 <script src="js/labels.js"></script>
 <script src="js/options/labels.js"></script>
+<script src="js/ens.js"></script>
+<script src="js/options/ens.js"></script>
 <script src="js/options.js"></script>
 </body>
 </html>
