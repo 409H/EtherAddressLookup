@@ -27,6 +27,14 @@
   line-height: 10pt;
 }
 
+.ext-etheraddresslookup-note_network_diff {
+  display: none;
+  margin-top: 0.3em;
+  padding-top: 1em;
+  color: red;
+  font-size: 10pt;
+}
+
 #ext-etheraddresslookup-popup {
   margin: 0;
   padding: 0px;

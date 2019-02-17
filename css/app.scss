@@ -26,6 +26,14 @@
         font-size: 10pt;
         color: #c2c6c7;
         line-height: 10pt;
+
+        &_network_diff {
+            display: none;
+            margin-top: 0.3em;
+            padding-top: 1em;
+            color: red;
+            font-size: 10pt;
+        }
     }
 }
 

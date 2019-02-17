@@ -75,22 +75,27 @@
                 <select class="form-control" name="ext-etheraddresslookup-choose_blockchain"
                         id="ext-etheraddresslookup-choose_blockchain">
                     <optgroup label="Mainnet">
-                        <option value="https://etherscan.io/address">Etherscan.io *</option>
-                        <option value="https://etherchain.org/account">Etherchain.org *</option>
-                        <option value="https://ethplorer.io/address">Ethplorer.io</option>
+                        <option data-network="1" value="https://etherscan.io/address">Etherscan.io *</option>
+                        <option data-network="1" value="https://etherchain.org/account">Etherchain.org *</option>
+                        <option data-network="1" value="https://ethplorer.io/address">Ethplorer.io</option>
                     </optgroup>
                     <optgroup label="Rinkeby">
-                        <option value="https://rinkeby.etherscan.io/address">Etherscan.io *</option>
+                        <option data-network="4" value="https://rinkeby.etherscan.io/address">Etherscan.io *</option>
                     </optgroup>
                     <optgroup label="Ropsten">
-                        <option value="https://ropsten.etherscan.io/address">Etherscan.io *</option>
+                        <option data-network="3" value="https://ropsten.etherscan.io/address">Etherscan.io *</option>
                     </optgroup>
                     <optgroup label="Kovan">
-                        <option value="https://kovan.etherscan.io/address">Etherscan.io *</option>
+                        <option data-network="42" value="https://kovan.etherscan.io/address">Etherscan.io *</option>
                     </optgroup>
+                    <optgroup label="Goerli">
+                        <option data-network="5" value="https://goerli.etherscan.io/address">Etherscan.io *</option>
+                        <option data-network="5" value="https://blockscout.com/eth/goerli">Blockscout</option>
+                    </optgroup>                    
                 </select>
                 <div class="ext-etheraddresslookup-note">
                     <small>* ENS address compatible.</small>
+                    <div class="ext-etheraddresslookup-note_network_diff"></div>
                 </div>
             </div>
 
@@ -163,6 +168,7 @@
     </div>
 </div>
 
+<script src="js/app/lib/web3.js"></script>
 <script src="js/app/toggleMatchHighlight.js"></script>
 <script src="js/app/toggleTwitterValidation.js"></script>
 <script src="js/app/chooseBlockchain.js"></script>
