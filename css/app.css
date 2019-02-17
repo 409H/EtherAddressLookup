@@ -519,6 +519,31 @@
   width: 100%;
 }
 
+#ext-etheraddresslookup-ens_container button {
+  width: 100%;
+}
+
+#ext-etheraddresslookup-ens_output {
+  width: 100%;
+  font-size: 80%;
+  word-break: break-word;
+}
+
+#ext-etheraddresslookup-ens_output .error {
+  color: #ED2E2E;
+}
+
+#ext-etheraddresslookup-ens_output .blockie {
+  height: 1.5em;
+  width: 1.5em;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+#ext-etheraddresslookup-ens_output #ens_additional_details {
+  padding-top: 1em;
+}
+
 .ext-etheraddresslookup-address_stats_hover {
   z-index: 10;
   position: absolute;
