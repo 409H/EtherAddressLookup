@@ -75,9 +75,6 @@
         let strCurrentTab =  window.location.hostname.replace(/www\./g,'');
         if(arrWhitelistedDomains.indexOf(strCurrentTab) >= 0) {
             console.log("Domain "+ strCurrentTab +" is whitelisted on EAL!");
-            objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "whitelisted", "type": "whitelisted"}, function(objResponse) {
-                // Icon should be a different colour now.
-            });
             return false;
         }
 
