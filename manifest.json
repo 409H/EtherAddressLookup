@@ -3,11 +3,11 @@
 
   "name": "EtherAddressLookup",
   "short_name": "EtherAddressLookup",
-  "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer.",
-  "version": "1.19.1",
+  "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer + antiphishing measures.",
+  "version": "1.21",
 
   "browser_action": {
-    "default_icon": "images/icon.png",
+    "default_icon": "images/ether-128x128.png",
     "default_popup": "options.html",
     "default_title": "EtherAddressLookup"
   },
