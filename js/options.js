@@ -274,7 +274,7 @@ objBrowser.runtime.onMessage.addListener(
                         });
 
                         chrome.browserAction.setTitle({
-                            title: ["This domain is recognised as legitimatye by EtherAddressLookup", strReason].filter(i => i).join(" - ")
+                            title: ["This domain is recognised as legitimate by EtherAddressLookup", strReason].filter(i => i).join(" - ")
                         });
                     break;
                     case 'blacklisted' :
