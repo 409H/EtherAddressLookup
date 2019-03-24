@@ -28,6 +28,10 @@
     function doBlacklistCheck(arrWhitelistedDomains, arrBlacklistedDomains)
     {
 
+        objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "neutral", "type": ""}, function(objResponse) {
+            // Icon should be a different colour now.
+        });
+
         // Check the user bookmarks to see if they trust the domain
         objBrowser.runtime.sendMessage({func: "user_domain_bookmarks"}, function(objResponse) {
             if(objResponse && objResponse.hasOwnProperty("resp")) {
