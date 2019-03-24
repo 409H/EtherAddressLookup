@@ -43,6 +43,23 @@ let objBrowser = chrome ? chrome : browser;
         objManifestVersion.innerHTML = objManifest.version;
     }
 
+    // //Get the rpc network details
+    var objNetworkDetails = document.querySelector("#ext-etheraddresslookup-rpc_node_details > span");
+    if(objNetworkDetails) {
+        let objNetworkDetails;
+        if(localStorage.getItem("ext-etheraddresslookup-rpc_node_details") === null) {
+            objNetworkDetails = {
+                "network_id": 1,
+                "chain_id": 1,
+                "name": "MAINNET",
+                "type": "ETH"
+            };
+        } else {
+            objNetworkDetails = JSON.parse(localStorage.getItem("ext-etheraddresslookup-rpc_node_details"));
+        }
+        document.querySelector("#ext-etheraddresslookup-rpc_node_details > span").innerText = [objNetworkDetails.name, objNetworkDetails.type].join(" - ");
+    }
+
     //init getting blacklisted domains
     getBlacklistedDomains();
     setInterval(function() {
@@ -115,6 +132,18 @@ objBrowser.runtime.onMessage.addListener(
             case 'whitelist_domain_list' :
                 console.log("Getting whitelisted domain list");
                 strResponse = getWhitelistedDomains();
+                break;
+            case 'rpc_details' :
+                    if(localStorage.getItem("ext-etheraddresslookup-rpc_node_details") === null) {
+                        strResponse = JSON.stringify({
+                                "network_id": 1,
+                                "chain_id": 1,
+                                "name": "MAINNET",
+                                "type": "ETH"
+                            })
+                    } else {
+                        strResponse = localStorage.getItem("ext-etheraddresslookup-rpc_node_details");
+                    }
                 break;
             case 'rpc_provider' :
                     if(localStorage.getItem("ext-etheraddresslookup-rpc_node") === null) {

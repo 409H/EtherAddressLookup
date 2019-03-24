@@ -12,6 +12,8 @@ class EtherAddressLookup {
         this.objWeb3 = objWeb3;
         this._labels = labels;
 
+        this.strRpcDetails = "";
+
         this.setDefaultExtensionSettings();
         this.init();
 
@@ -54,6 +56,12 @@ class EtherAddressLookup {
         objBrowser.runtime.sendMessage({func: "perform_address_lookups"}, function(objResponse) {
             this.blPerformAddressLookups = objResponse.resp;
             ++this.intSettingsCount;
+        }.bind(this));
+
+        //Get the RPC network details
+        objBrowser.runtime.sendMessage({ func: "rpc_details" }, function(objResponse) {
+            let objDetails = JSON.parse(objResponse.resp);
+            this.strRpcDetails = `${objDetails.name} (${objDetails.type})`;
         }.bind(this));
 
         //Update the DOM once all settings have been received...
@@ -425,8 +433,9 @@ class EtherAddressLookup {
             //Get the RPC provider for the user
             objBrowser.runtime.sendMessage({ func: "rpc_provider" }, (objResponse) => {
                 var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
+                
                 var str0xAddress = addressElement.getAttribute("data-address");
-                let objHoverNodeContent = addressElement.children[1].children[0];
+                const objHoverNodeContent = addressElement.children[1].children[0];
 
                 //Get transaction count
                 web3.eth.getTransactionCount(str0xAddress, function(error, result) {
@@ -493,9 +502,16 @@ class EtherAddressLookup {
                 });
 
                 if (objResponse.resp.includes("quiknode.io")) {
-                    objHoverNodeContent.innerHTML += "<a href='https://quiknode.io/?ref=EtherAddressLookup' target='_blank' title='RPC node managed by Quiknode.io'><img src='" + objBrowser.runtime.getURL("/images/powered-by-quiknode.png") + "' /></a>";
+                    objHoverNodeContent.innerHTML += `<div style="position:absolute;right:1em;bottom:0.5em;">
+                        <a href='https://www.quiknode.io?tap_a=22610-7a7484&tap_s=150933-0c5904' target='_blank' title='RPC node managed by Quiknode.io'>
+                            <img height="15px"src='${objBrowser.runtime.getURL("/images/powered-by-quiknode.png")}' />
+                        </a>
+                    </div>`;
                 }
 
+                objHoverNodeContent.innerHTML += `<div style="position:absolute;bottom:0.5em;">
+                    <span style="font-size: 7pt"><strong>NETWORK:</strong> ${this.strRpcDetails}</span>
+                </div>`;
             });
         }
 
