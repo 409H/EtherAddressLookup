@@ -274,7 +274,7 @@ objBrowser.runtime.onMessage.addListener(
                         });
 
                         chrome.browserAction.setTitle({
-                            title: ["This domain is recognised as legitimatye by EtherAddressLookup", strReason].filter(i => i).join(" - ")
+                            title: ["This domain is recognised as legitimate by EtherAddressLookup", strReason].filter(i => i).join(" - ")
                         });
                     break;
                     case 'blacklisted' :
@@ -289,10 +289,15 @@ objBrowser.runtime.onMessage.addListener(
                     break;                    
                     case 'neutral' :
                     default :
-                    chrome.browserAction.setIcon({
-                        path: "images/ether-128x128-black_badge.png",
-                        tabId: sender.tab.id
-                    });
+                        chrome.browserAction.setIcon({
+                            path: "images/ether-128x128.png",
+                            tabId: sender.tab.id
+                        });
+
+                        chrome.browserAction.setTitle({
+                            title: "EtherAddressLookup (Powered by MyCrypto)",
+                        });
+
                     break;                    
                 }
                 break;
