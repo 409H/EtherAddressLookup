@@ -225,7 +225,7 @@ class ChainLookup
                     <ul>
                         <li><strong>Gas Limit:</strong> ${objTxDetails.gas.limit} (${Math.ceil(objTxDetails.gas.used_percent)}% consumed)</li>
                         <li><strong>Transaction Fee:</strong> Ξ${objTxDetails.gas.used * objTxDetails.gas.price}</li>
-                        <li><strong>Block:</strong> ${objTxDetails.block.number} (${objTxDetails.block.ago <= 1000000 ? objTxDetails.block.ago + " blocks ago" : "millions of blocks ago"})
+                        <li><strong>Block:</strong> ${objTxDetails.block.number} (${objTxDetails.block.ago.replace(",", "") <= 1000000 ? objTxDetails.block.ago + " blocks ago" : "millions of blocks ago"})
                     </ul>
             `;
     }
