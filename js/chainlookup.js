@@ -18,15 +18,16 @@ class ChainLookup
         if(document.querySelector(FORM_CHAIN_LOOKUP_SELECTOR)) {
 
             this.getRpcDetails();
-            // setInterval(async function() {
-            //     await this.getRpcDetails();
-            // }.bind(this), 10000);
 
             document.querySelector(FORM_CHAIN_LOOKUP_SELECTOR).addEventListener('submit', async (event) => {
                 event.preventDefault();
 
-                const strInput = document.querySelector(FORM_CHAIN_LOOKUP_INPUT_SELECTOR).value;
-                await this.resolve(strInput);
+                chrome.runtime.sendMessage({ func: "blockchain_explorer" }, async function(objResponse) {
+                    this.strBlockExplorer = objResponse.resp;
+
+                    const strInput = document.querySelector(FORM_CHAIN_LOOKUP_INPUT_SELECTOR).value;
+                    await this.resolve(strInput);
+                }.bind(this));
             });
         }
     }
@@ -118,7 +119,7 @@ class ChainLookup
                 <strong>Address:</strong> <br />
                     <span>
                         <img class="blockie" src="${strAddressBlockie}" />
-                        <a target="_blank" href="https://etherscan.io/address/${strInput}">${strInput}</a>
+                        <a target="_blank" href="${this.strBlockExplorer +"/"+ strInput}">${strInput}</a>
                     </span> <br />
                     <ul>
                         <li><strong>ETH:</strong> ${objAddressDetails.eth}</li>
@@ -223,14 +224,14 @@ class ChainLookup
 
                         <span>
                             <img class="blockie" src="${strAddressFromBlockie}" />
-                            <a target="_blank" href="https://etherscan.io/address/${objTransaction.from}">${objLabelledAddresses.from}</a>
+                            <a target="_blank" href="${this.strBlockExplorer +"/"+ objTransaction.from}">${objLabelledAddresses.from}</a>
                         </span> 
                         ${blUseLables ? `<br />&darr;<br />` : `&#8594;`}
                         <a style="border-bottom:1px dotted #000;" title="Ξ${objTxDetails.eth_full}">${objTxDetails.eth} ETH</a>
                         ${blUseLables ? `<br />&darr;<br />` : `&#8594;`}
                         <span>
                             <img class="blockie" src="${strAddressToBlockie}" />
-                            <a target="_blank" href="https://etherscan.io/address/${strToAddress}">${objLabelledAddresses.to}</a>
+                            <a target="_blank" href="${this.strBlockExplorer +"/"+ strToAddress}">${objLabelledAddresses.to}</a>
                         </span>
                     </div>
 
