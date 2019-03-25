@@ -172,60 +172,80 @@ class ChainLookup
                 "limit": objTransaction.gas.toLocaleString("en-US"),                
                 "price": this.web3.fromWei(objTransaction.gasPrice.toString()).toLocaleString("en-US"),
                 "used": objTransactionReceipt.gasUsed,
-                "used_percent": (objTransactionReceipt.gasUsed / objTransaction.gas)*100
+                "used_percent": (objTransactionReceipt.gasUsed / objTransaction.gas)*100,
+                "fee": (objTransactionReceipt.gasUsed * this.web3.fromWei(objTransaction.gasPrice.toString()).toLocaleString("en-US"))
             },
             "block": {
                 "number": objTransaction.blockNumber.toLocaleString("en-US"),
                 "ago": (this.intBlockNumber - objTransaction.blockNumber).toLocaleString("en-US"),
             },
             "nonce": objTransaction.nonce.toLocaleString("en-US"),
-            "input": objTransaction.v
+            "input": objTransaction.v,
+            "contract": {
+                "is": false
+            }
         }
+
+        objTxDetails.contract.is = this.web3.eth.getCode(strToAddress) === "0x" ? false : true;
 
         let objLabels = new Labels();
         let objLabelledAddress;
         let strLabel;
+        let blUseLables = false;
         let objLabelledAddresses = {
-            "to": ChainLookup.getShortAddress(objTransaction.from),
-            "from": ChainLookup.getShortAddress(strToAddress)
+            "from": ChainLookup.getShortAddress(objTransaction.from),
+            "to": ChainLookup.getShortAddress(strToAddress)
         }
 
         objLabelledAddress = await objLabels.getLabelForAddress(objTransaction.from);
         if(typeof objLabelledAddress !== "undefined") {
-            strLabel = `${objLabelledAddress.label} (${ChainLookup.getShortAddress(strToAddress)})`;
+            strLabel = `${objLabelledAddress.label} (${ChainLookup.getShortAddress(strFromAddress)})`;
             objLabelledAddresses.from = objLabels.getTemplate(strLabel, objLabelledAddress.color);
+            blUseLables = true;
         }
 
         objLabelledAddress = await objLabels.getLabelForAddress(strToAddress);
         if(typeof objLabelledAddress !== "undefined") {
             strLabel = `${objLabelledAddress.label} (${ChainLookup.getShortAddress(strToAddress)})`;
             objLabelledAddresses.to = objLabels.getTemplate(strLabel, objLabelledAddress.color);
+            blUseLables = true;
         }
 
         document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML = `
                 <strong>Transaction:</strong> <br />
                     <div style="text-align:center">
                         ${objTransactionReceipt.contractAddress !== null 
-                            ? `<strong>This transaction created a contract</strong><br />`
-                            : ``
+                            ? `<strong>🐣 This transaction created a contract</strong><br />`
+                            : objTxDetails.contract.is
+                                ? `<strong>📞 This transaction called a contract</strong><br />`
+                                : ``
                         }
+
                         <span>
                             <img class="blockie" src="${strAddressFromBlockie}" />
                             <a target="_blank" href="https://etherscan.io/address/${objTransaction.from}">${objLabelledAddresses.from}</a>
                         </span> 
-                        &#8594;
+                        ${blUseLables ? `<br />&darr;<br />` : `&#8594;`}
                         <a style="border-bottom:1px dotted #000;" title="Ξ${objTxDetails.eth_full}">${objTxDetails.eth} ETH</a>
-                        &#8594;
+                        ${blUseLables ? `<br />&darr;<br />` : `&#8594;`}
                         <span>
                             <img class="blockie" src="${strAddressToBlockie}" />
                             <a target="_blank" href="https://etherscan.io/address/${strToAddress}">${objLabelledAddresses.to}</a>
                         </span>
                     </div>
 
+                    <br />
+
                     <ul>
                         <li><strong>Gas Limit:</strong> ${objTxDetails.gas.limit} (${Math.ceil(objTxDetails.gas.used_percent)}% consumed)</li>
-                        <li><strong>Transaction Fee:</strong> Ξ${objTxDetails.gas.used * objTxDetails.gas.price}</li>
-                        <li><strong>Block:</strong> ${objTxDetails.block.number} (${objTxDetails.block.ago.replace(",", "") <= 1000000 ? objTxDetails.block.ago + " blocks ago" : "millions of blocks ago"})
+                        <li><strong>Transaction Fee:</strong> Ξ${objTxDetails.gas.fee} 
+                            ${objTransactionReceipt.contractAddress === null 
+                                && objTxDetails.gas.fee >= objTxDetails.eth 
+                                && objTxDetails.eth > 0
+                                ? `<a title="Yikes! It cost more to send">😱</a>` 
+                                : ``}
+                        </li>
+                        <li><strong>Block:</strong> ${objTxDetails.block.number} (${objTxDetails.block.ago.replace(",", "") <= 3000000 ? objTxDetails.block.ago + " blocks ago" : "millions of blocks ago"})
                     </ul>
             `;
     }
