@@ -69,9 +69,15 @@ class ChainLookup
                 this.doTxLookup(strInput);
                 break;
             case 'UNKNOWN':
-                document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML = `
+                if(strInput.endsWith(".eth")) {
+                    document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML += `
+                    <span class="error">ENS Integration coming soon. Search by 0x address or transaction hash.</span>
+                `;
+                } else {
+                    document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML = `
                     <span class="error">Invalid input. Either an Ethereum address or transaction hash.</span>
                 `;
+                }
             break;
         }
     }
@@ -232,7 +238,7 @@ class ChainLookup
                         </span>
 
                         <br />
-                        
+
                         ${
                             objTransactionReceipt.status === "0x0"
                                 ?
