@@ -155,6 +155,14 @@ class ChainLookup
 
         let objTransactionReceipt = await this.web3.eth.getTransactionReceipt(strInput);
     
+        if(objTransactionReceipt === null) {
+            objTransactionReceipt = {
+                contractAddress: null,
+                gasUsed: null,
+                is_pending: true
+            }
+        }
+
         let strAddressFromBlockie = blockies.create({
             seed: objTransaction.from.toLowerCase(),
             size: 8,
@@ -179,7 +187,7 @@ class ChainLookup
                 "fee": (objTransactionReceipt.gasUsed * this.web3.fromWei(objTransaction.gasPrice.toString()).toLocaleString("en-US"))
             },
             "block": {
-                "number": objTransaction.blockNumber.toLocaleString("en-US"),
+                "number": objTransaction.blockNumber ? objTransaction.blockNumber.toLocaleString("en-US") : null,
                 "ago": (this.intBlockNumber - objTransaction.blockNumber).toLocaleString("en-US"),
             },
             "nonce": objTransaction.nonce.toLocaleString("en-US"),
@@ -239,11 +247,15 @@ class ChainLookup
                         <br />
 
                         ${
-                            objTransactionReceipt.status === "0x0"
+                            objTransactionReceipt.is_pending
                                 ?
-                                    `<span style="color:#C03737;font-weight:600;">Transaction Failed</span>`
+                                    `<span style="color:#C0BC37;font-weight:600;">Transaction is pending</span>`
                                 :
-                                `<span style="color:#4FC037;font-weight:600;">Transaction Successful</span>`
+                                    objTransactionReceipt.status === "0x0"
+                                        ?
+                                            `<span style="color:#C03737;font-weight:600;">Transaction Failed</span>`
+                                        :
+                                        `<span style="color:#4FC037;font-weight:600;">Transaction Successful</span>`
                         }
 
                     </div>
@@ -251,7 +263,14 @@ class ChainLookup
                     <br />
 
                     <ul>
-                        <li><strong>Gas Limit:</strong> ${objTxDetails.gas.limit} (${Math.ceil(objTxDetails.gas.used_percent)}% consumed)</li>
+                        <li><strong>Gas Limit:</strong> ${objTxDetails.gas.limit} 
+                        ${
+                            objTransactionReceipt.is_pending
+                                ?
+                                    ``
+                                :
+                                    `(${Math.ceil(objTxDetails.gas.used_percent)}% consumed)`
+                        }</li>
                         <li><strong>Transaction Fee:</strong> Ξ${objTxDetails.gas.fee} 
                             ${objTransactionReceipt.contractAddress === null 
                                 && objTxDetails.gas.fee >= objTxDetails.eth 
@@ -259,7 +278,14 @@ class ChainLookup
                                 ? `<a title="Yikes! It cost more to send">😱</a>` 
                                 : ``}
                         </li>
-                        <li><strong>Block:</strong> ${objTxDetails.block.number} (${objTxDetails.block.ago.replace(",", "") <= 3000000 ? objTxDetails.block.ago + " blocks ago" : "millions of blocks ago"})
+                        <li><strong>Block:</strong> 
+                        ${
+                            objTransactionReceipt.is_pending
+                                ?
+                                    `<i>Pending</i>`
+                                :
+                                    `${objTxDetails.block.number} (${objTxDetails.block.ago.replace(",", "") <= 3000000 ? objTxDetails.block.ago + " blocks ago" : "millions of blocks ago"})`
+                        }</li>
                     </ul>
             `;
     }
