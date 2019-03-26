@@ -420,7 +420,6 @@ class EtherAddressLookup {
                 </p>
                 <div id='${EXT_PREFIX}-address_stats_hover_node_error_${uniqueAddressId}' class='${EXT_PREFIX}-address_stats_hover_node_error'></div>
                 <div id='${EXT_PREFIX}-address_stats_hover_node_ok_${uniqueAddressId}' class='${EXT_PREFIX}-address_stats_hover_node_ok'></div>
-                <br />
                 <span id='${EXT_PREFIX}-address_balance_${uniqueAddressId}'></span>
                 <span id='${EXT_PREFIX}-transactions_out_${uniqueAddressId}'></span>
                 <span id='${EXT_PREFIX}-contract_address_${uniqueAddressId}'></span>

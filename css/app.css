@@ -519,6 +519,31 @@
   transition: height 0.35s ease;
 }
 
+#ext-etheraddresslookup-chain_lookup_container button {
+  width: 100%;
+}
+
+#ext-etheraddresslookup-chain_lookup_output {
+  width: 100%;
+  font-size: 80%;
+  word-break: break-word;
+}
+
+#ext-etheraddresslookup-chain_lookup_output .error {
+  color: #ED2E2E;
+}
+
+#ext-etheraddresslookup-chain_lookup_output .blockie {
+  height: 1.5em;
+  width: 1.5em;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+#ext-etheraddresslookup-chain_lookup_output #additional_details {
+  padding-top: 1em;
+}
+
 #ext-etheraddresslookup-new-labels option {
   color: #ffffff;
 }

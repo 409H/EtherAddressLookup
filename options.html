@@ -31,6 +31,11 @@
                     Labels
                 </a>
             </li>
+            <li class="ext-etheraddresslookup-nav-item">
+                <a class="ext-etheraddresslookup-nav-link" id="ext-etheraddresslookup-chain_lookup-tab" data-toggle="ext-etheraddresslookup-tab" data-duration="350" data-height="true" href="#ext-etheraddresslookup-chain_lookup" role="tab" aria-controls="ext-etheraddresslookup-chain_lookup" aria-expanded="false">
+                    Lookup
+                </a>
+            </li>            
         </ul>
 
         <div class="ext-etheraddresslookup-tab-content" id="ext-etheraddresslookup-tab-content">
@@ -151,6 +156,25 @@
                     </div>
                 </div>
             </div>
+
+            <div class="ext-etheraddresslookup-tab-pane fade " id="ext-etheraddresslookup-chain_lookup" role="tabpanel" aria-labelledby="ext-etheraddresslookup-chain_lookup-tab" aria-expanded="false">
+                <div id="ext-etheraddresslookup-chain_lookup_container">
+                    <h3>Lookups</h3>
+                    <p>Input a transaction hash or an Ethereum address to find out more details about it.</p>
+                    <div id="ext-etheraddresslookup-chain_lookup_details"></div>
+
+                    <br />
+                    
+                    <form id="ext-etheraddresslookup-chain_lookup_form">
+                        <input class="form-control" type="text" name="ext-etheraddresslookup-addr_or_tx" id="ext-etheraddresslookup-addr_or_tx" placeholder="0x address or tx hash" autocomplete="off" />
+                        <button class="btn btn-success btn-small" type="submit">Lookup</button>
+                    </form>
+
+                    <div id="ext-etheraddresslookup-chain_lookup_output">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -169,6 +193,7 @@
 </div>
 
 <script src="js/app/lib/web3.js"></script>
+<script src="js/app/lib/blockies.js"></script>
 <script src="js/app/toggleMatchHighlight.js"></script>
 <script src="js/app/toggleTwitterValidation.js"></script>
 <script src="js/app/chooseBlockchain.js"></script>
@@ -178,6 +203,8 @@
 <script src="js/app/lib/nat-twbs-modal-popover.js"></script>
 <script src="js/labels.js"></script>
 <script src="js/options/labels.js"></script>
+<script src="js/chainlookup.js"></script>
+<script src="js/options/chainlookup.js"></script>
 <script src="js/options.js"></script>
 </body>
 </html>
