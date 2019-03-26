@@ -115,11 +115,19 @@ class ChainLookup
         objAddressDetails.tx = parseInt(this.web3.eth.getTransactionCount(strInput)).toLocaleString();
         objAddressDetails.contract = this.web3.eth.getCode(strInput) === "0x" ? "Normal (EOA)": "Contract";
 
+        let strAddressLookedup = strInput;
+        let objLabels = new Labels();
+        let objLabelledAddress = await objLabels.getLabelForAddress(strAddressLookedup);
+        if(typeof objLabelledAddress !== "undefined") {
+            let strLabel = `${objLabelledAddress.label} (${ChainLookup.getShortAddress(strAddressLookedup)})`;
+            strAddressLookedup = objLabels.getTemplate(strLabel, objLabelledAddress.color);
+        }
+
         document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML = `
                 <strong>Address:</strong> <br />
                     <span>
                         <img class="blockie" src="${strAddressBlockie}" />
-                        <a target="_blank" href="${this.strBlockExplorer +"/"+ strInput}">${strInput}</a>
+                        <a target="_blank" href="${this.strBlockExplorer +"/"+ strInput}">${strAddressLookedup}</a>
                     </span> <br />
                     <ul>
                         <li><strong>ETH:</strong> ${objAddressDetails.eth}</li>
@@ -127,17 +135,6 @@ class ChainLookup
                         <li><strong>Type:</strong> ${objAddressDetails.contract}</li>
                     </ul>
             `;
-
-        let objLabels = new Labels();
-        let objLabelledAddress = await objLabels.getLabelForAddress(strInput);
-        if(typeof objLabelledAddress !== "undefined") {
-            const { color, label } = objLabelledAddress;
-            if(label.length) {
-                document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML += `
-                    ${objLabels.getTemplate(label, color)}
-                `;
-            }
-        }
     }
 
     async doTxLookup(strInput)
@@ -200,7 +197,7 @@ class ChainLookup
 
         objLabelledAddress = await objLabels.getLabelForAddress(objTransaction.from);
         if(typeof objLabelledAddress !== "undefined") {
-            strLabel = `${objLabelledAddress.label} (${ChainLookup.getShortAddress(strFromAddress)})`;
+            strLabel = `${objLabelledAddress.label} (${ChainLookup.getShortAddress(objTransaction.from)})`;
             objLabelledAddresses.from = objLabels.getTemplate(strLabel, objLabelledAddress.color);
             blUseLables = true;
         }
@@ -233,6 +230,17 @@ class ChainLookup
                             <img class="blockie" src="${strAddressToBlockie}" />
                             <a target="_blank" href="${this.strBlockExplorer +"/"+ strToAddress}">${objLabelledAddresses.to}</a>
                         </span>
+
+                        <br />
+                        
+                        ${
+                            objTransactionReceipt.status === "0x0"
+                                ?
+                                    `<span style="color:#C03737;font-weight:600;">Transaction Failed</span>`
+                                :
+                                `<span style="color:#4FC037;font-weight:600;">Transaction Successful</span>`
+                        }
+
                     </div>
 
                     <br />
