@@ -148,7 +148,7 @@ class ChainLookup
 
         if(objTransaction === null) {
             document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML = `
-                <span class="error">Unknown transaction (it might still be pending, waiting to be mined by the network)</span>
+                <span class="error">Unknown transaction (it might still be pending, waiting to be mined by the network or you may be on the wrong network)</span>
             `;
             return;
         }
