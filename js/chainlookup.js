@@ -57,6 +57,8 @@ class ChainLookup
     async resolve(strInput)
     {
         strInput = strInput.trim();
+        strInput = strInput.startsWith("0x") ? strInput : `0x${strInput}`
+        
         document.querySelector(FORM_CHAIN_LOOKUP_OUTPUT_SELECTOR).innerHTML = ``;
         let strInputType = this.getInputType(strInput);
 
@@ -87,9 +89,6 @@ class ChainLookup
         /**
          * Determines if we are inptting an address or transaction hash
          */
-
-        strInput = strInput.startsWith("0x") ? strInput : `0x${strInput}`
-
         switch(strInput.length) {
             case 42 : //Address
                 return "ADDRESS";
