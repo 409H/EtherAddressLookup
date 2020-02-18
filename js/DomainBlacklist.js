@@ -121,10 +121,6 @@
                     let windowLoc = window.location.href.replace(/^https?\:\/\/|www\./g,''); 
                     uris.domains.forEach(f => {
                         let r = new RegExp(`^(${f.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&')})`, 'g');
-                        console.log(r)
-                        console.log(r.exec(windowLoc))
-                        console.log(f === windowLoc || (r.exec(windowLoc) !== null))
-                        console.log(windowLoc)
 
                         if(f === windowLoc || (r.exec(windowLoc) !== null)) {
                             console.warn(`${windowLoc} webpage is blacklisted by EAL - Blacklisted`);
