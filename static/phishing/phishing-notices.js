@@ -33,7 +33,9 @@ switch(b[b.length-1].toLowerCase()) {
 
 //Populate the link to EtherScamDB
 if(b[b.length-1].toLowerCase() !== "uri") {
-    document.getElementById("esdb-link").style.display = "block";
+    if(document.getElementById("esdb-link")) {
+        document.getElementById("esdb-link").style.display = "block";
+    }
     let cleandomain = encodeURI(b[1].replace(/https?\:?\/?\/?w{0,3}\.?/,"").replace(/\/$/,""));
     document.getElementById("link-etherscamdb").href = "https://etherscamdb.info/domain/"+cleandomain;
     document.getElementById("link-etherscamdb").textContent = "https://etherscamdb.info/domain/"+cleandomain;
