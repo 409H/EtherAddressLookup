@@ -1,14 +1,27 @@
 (function() {
     let objBrowser = chrome ? chrome : browser;
 
-    //Get the blacklist domains option for the user
-    objBrowser.runtime.sendMessage({func: "blacklist_domains"}, function(objResponse) {
-        if(objResponse && objResponse.hasOwnProperty("resp")) {
-            if(objResponse.resp == 1) {
-                blacklistedDomainCheck();
+    let strInitHref = window.location.href;
+
+    function init(){
+        //Get the blacklist domains option for the user
+        objBrowser.runtime.sendMessage({func: "blacklist_domains"}, function(objResponse) {
+            if(objResponse && objResponse.hasOwnProperty("resp")) {
+                if(objResponse.resp == 1) {
+                    blacklistedDomainCheck();
+                }
             }
+        });
+    }
+
+    init();
+    
+    window.onclick = function(e) {
+        if(strInitHref !== window.location.href) {
+            strInitHref = window.location.href;
+            init();
         }
-    });
+    }
 
     //Detects if the current tab is in the blacklisted domains file
     function blacklistedDomainCheck() {
@@ -117,7 +130,6 @@
             objBrowser.runtime.sendMessage({func: "blacklist_uri_list"}, function (objResponse) {
                 if (objResponse && objResponse.hasOwnProperty("resp")) {
                     let uris = JSON.parse(objResponse.resp)
-                    uris.domains.push("youtube.com/watch?v=QTnx2mAkbQc")
                     let windowLoc = window.location.href.replace(/^https?\:\/\/|www\./g,''); 
                     uris.domains.forEach(f => {
                         let r = new RegExp(`^(${f.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&')})`, 'g');
