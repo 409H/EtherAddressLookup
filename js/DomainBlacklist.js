@@ -112,6 +112,33 @@
 
                 return false;
             }
+
+            // Now check the full path (ie: YouTube because of fake livestreams and telegra.ph)
+            objBrowser.runtime.sendMessage({func: "blacklist_uri_list"}, function (objResponse) {
+                if (objResponse && objResponse.hasOwnProperty("resp")) {
+                    let uris = JSON.parse(objResponse.resp)
+                    uris.domains.push("youtube.com/watch?v=QTnx2mAkbQc")
+                    let windowLoc = window.location.href.replace(/^https?\:\/\/|www\./g,''); 
+                    uris.domains.forEach(f => {
+                        let r = new RegExp(`^(${f.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&')})`, 'g');
+                        console.log(r)
+                        console.log(r.exec(windowLoc))
+                        console.log(f === windowLoc || (r.exec(windowLoc) !== null))
+                        console.log(windowLoc)
+
+                        if(f === windowLoc || (r.exec(windowLoc) !== null)) {
+                            console.warn(`${windowLoc} webpage is blacklisted by EAL - Blacklisted`);
+                            window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#'+ btoa(window.location.href) +'#uri');
+        
+                            objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": "blacklisted"}, function(objResponse) {
+                                // Icon should be a different colour now.
+                            });
+        
+                            return false;
+                        }
+                    })
+                }
+            });
         }
 
         //Now do the 3rd party domain list check if they have that option enabled.

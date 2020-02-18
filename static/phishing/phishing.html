@@ -73,6 +73,10 @@
         #blacklisted {
             border-left: 4px solid #D49990;
         }
+
+        #uri {
+            border-left: 4px solid #f0ef0e;
+        }
     </style>
   </head>
   <body>
@@ -92,15 +96,19 @@
                     <p>This domain is blocked because it is too similar to a domain in our fuzzy list.<br />
                     If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#levenshtien-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
                 </div>
+                <div id="uri" class="notice hide-me">
+                    <p>This webpage is blocked because it is on our blacklist.<br />
+                    If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#blacklisted-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
+                </div>                
                 <div id="blacklisted" class="notice hide-me">
                     <p>This domain is blocked because it is on our blacklist.<br />
                     If you  want to access this domain and you're sure it's safe, please <a href="https://github.com/409H/EtherAddressLookup/wiki/Blacklisted-Domains#blacklisted-domains" target="_blank">disable the behaviour</a> in the EtherAddressLookup settings.</p>
-                </div>            
+                </div>
                 <p>This is because you have enabled <span>Warn of blacklisted domains</span> setting on <img src="../../images/ether-16x16.png"  alt="EtherAddressLookup Icon" />EtherAddressLookup Browser Extension.</p>
                 <p>You can turn this setting off, but it's advised not to as we blacklisted the domain for a reason.</p>
                 <br />
                 <p>If you feel this domain is wrongly blacklisted, please <a href="https://github.com/409H/EtherAddressLookup/issues/new">open a new issue on GitHub</a></p>
-                <p><strong>To read more about this, visit <a id="link-etherscamdb" href="">https://etherscamdb.info/domain/</a></strong></p>
+                <p id="esdb-link" class="hide-me"><strong>To read more about this, visit <a id="link-etherscamdb" href="">https://etherscamdb.info/domain/</a></strong></p>
             </div>
             <div id="gif-container" class="hide-me">
                 <div id="punycode_turnoff" class="hide-me">
@@ -119,6 +127,16 @@
                     <li><strong>Try seeking out a trustworthy, secure link on your own.</strong> Top Google results (not 
                         Google Ads!), Verified Twitter accounts, or asking someone you know & trust. Once you find the 
                         correct URL, bookmark it!</li>
+                    <li><strong>Nobody is giving away free money.</strong> Scammers are trying to impersonate official looking channels
+                        to convince you to perform a trust trading scam (by sending them money in return for more money sent back). This
+                        is a common scam that we have written about it numerous times:
+                        <ul>
+                            <li><a href="https://medium.com/mycrypto/crypto-trust-trading-scams-are-running-rampant-on-youtube-9f575210879b" target="_blank">Crypto Trust-Trading Scams Are Running Rampant On YouTube</a></li>
+                            <li><a href="https://medium.com/mycrypto/country-click-through-rates-for-bitly-scams-dbafdfd48b04" target="_blank">Nigeria, Indonesia, the US, and Vietnam are among the highest victim rates for crypto scams</a></li>
+                            <li><a href="https://medium.com/mycrypto/research-into-trust-trading-scams-on-twitter-ba6309d87a18" target="_blank">Research into Trust-Trading Scams on Twitter</a></li>
+                            <li><a href="https://medium.com/mycrypto/the-trust-trading-scam-kit-98aaf18270a7" target="_blank">The Trust-Trading Scam Kit</a></li>
+                        </ul>
+                    </li>                         
                 </ul>
             </p>
         </div>

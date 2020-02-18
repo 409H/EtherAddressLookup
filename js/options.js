@@ -113,6 +113,10 @@ objBrowser.runtime.onMessage.addListener(
                 console.log("Getting 3p blacklisted domain list");
                 strResponse = getBlacklistedDomains("3p");
                 break;
+            case 'blacklist_uri_list' :
+                console.log("Getting the blacklist uri list");
+                strResponse = getBlacklistedDomains("uri");
+                break;
             case 'use_3rd_party_blacklists' :
                 //This option is enabled by default
                 if(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist") === null) {
@@ -147,13 +151,13 @@ objBrowser.runtime.onMessage.addListener(
                 break;
             case 'rpc_provider' :
                     if(localStorage.getItem("ext-etheraddresslookup-rpc_node") === null) {
-                        strResponse = "https://freely-central-lark.quiknode.io/9fe4c4a0-2ea2-4ac1-ab64-f92990cd2914/118-xxADc8hKSSB9joCb-g==/";
+                        strResponse = "https://mainnet.infura.io/v3/02b145caa61b49998168f2b97d4ef323";
                     } else {
                         strResponse = localStorage.getItem("ext-etheraddresslookup-rpc_node");
                     }
                 break;
             case 'rpc_default_provider' :
-                strResponse = "https://freely-central-lark.quiknode.io/9fe4c4a0-2ea2-4ac1-ab64-f92990cd2914/118-xxADc8hKSSB9joCb-g==/";
+                strResponse = "https://mainnet.infura.io/v3/02b145caa61b49998168f2b97d4ef323";
                 break;
             case 'perform_address_lookups' :
                 //This option is enabled by default
@@ -349,6 +353,13 @@ function getBlacklistedDomains(strType)
             "repo": "http://api.infura.io/v1/blacklist",
             "identifer": "eal"
         },
+        "uri": {
+            "timestamp": 0,
+            "domains": [],
+            "format": "plain",
+            "repo": "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/uri.json",
+            "identifer": "uri"
+        },
         "third_party": {
             "phishfort": {
                 "timestamp": 0,
@@ -380,8 +391,13 @@ function getBlacklistedDomains(strType)
     }
 
     strType = strType || "eal";
+    if(strType === "eal") {
+        strType = "";
+    } else {
+        strType = `${strType}_`;
+    }
 
-    return localStorage.getItem(`ext-etheraddresslookup-${strType === 'eal' ? '' : '3p_'}blacklist_domains_list`);
+    return localStorage.getItem(`ext-etheraddresslookup-${strType}blacklist_domains_list`);
 }
 
 function updateAllBlacklists(objEalBlacklistedDomains)
@@ -391,6 +407,13 @@ function updateAllBlacklists(objEalBlacklistedDomains)
         objEalBlacklistedDomains.eal.domains = arrDomains.filter((v,i,a)=>a.indexOf(v)==i);
 
         localStorage.setItem("ext-etheraddresslookup-blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.eal));
+    });
+
+    getBlacklistedDomainsFromSource(objEalBlacklistedDomains.uri).then(function (arrDomains) {
+        objEalBlacklistedDomains.uri.timestamp = Math.floor(Date.now() / 1000);
+        objEalBlacklistedDomains.uri.domains = arrDomains.filter((v,i,a)=>a.indexOf(v)==i);
+
+        localStorage.setItem("ext-etheraddresslookup-uri_blacklist_domains_list", JSON.stringify(objEalBlacklistedDomains.uri));
     });
 
     if( [null, 1].indexOf(localStorage.getItem("ext-etheraddresslookup-use_3rd_party_blacklist")) >= 0) {
