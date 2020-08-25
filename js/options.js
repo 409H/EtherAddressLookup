@@ -350,7 +350,7 @@ function getBlacklistedDomains(strType)
             "timestamp": 0,
             "domains": [],
             "format": "plain",
-            "repo": "http://api.infura.io/v1/blacklist",
+            "repo": "https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json",
             "identifer": "eal"
         },
         "uri": {
