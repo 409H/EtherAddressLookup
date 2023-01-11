@@ -241,6 +241,8 @@ class Labels {
         objBrowser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             objBrowser.tabs.sendMessage(tabs[0].id, {
                 func: 'resetLoadedLabels'
+            }, (objResponse) => {
+                chrome.runtime.lastError;
             });
         });
 

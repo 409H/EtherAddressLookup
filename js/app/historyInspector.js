@@ -26,14 +26,19 @@
     }
 })();
 
-function doHistoryInspection() {
-    var objBrowser = chrome ? chrome : browser;
-    objBrowser.history.search({text: "", maxResults: 500}, function (objHistoryItems) {
+var LS = {
+    getItem: async key => (await chrome.storage.local.get(key))[key],
+    setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+};
+
+async function doHistoryInspection() {
+    var objBrowser = chrome || browser;
+    objBrowser.history.search({text: "", maxResults: 500}, async function (objHistoryItems) {
         var blRedirected = false;
         var intTotalWarnings = 0;
         var strReportText = "";
 
-        var objBlacklistedDomains = localStorage.getItem("ext-etheraddresslookup-blacklist_domains_list");
+        var objBlacklistedDomains = await LS.getItem("ext-etheraddresslookup-blacklist_domains_list");
         objBlacklistedDomains = JSON.parse(objBlacklistedDomains);
 
         var objDiv = document.getElementById("ext-etheraddresslookup-history_inspect_data");
@@ -89,7 +94,7 @@ function exitNoPermission()
 
 function removePermission()
 {
-    var objBrowser = chrome ? chrome : browser;
+    var objBrowser = chrome || browser;
     objBrowser.permissions.remove({
         permissions: ['history']
     }, function(removed) {

@@ -1,3 +1,8 @@
+var LS = {
+    getItem: async key => (await chrome.storage.local.get(key))[key],
+    setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+};
+
 class SignatureSelector
 {
 
@@ -14,16 +19,17 @@ class SignatureSelector
         document.getElementById("ext-etheraddresslookup-signature_success").classList.add("hide-me");
 
         objBrowser.runtime.sendMessage({func: "signature_inject"}, function(objResponse) {
+            chrome.runtime.lastError;
             document.getElementById("ext-etheraddresslookup-signature_modify_checkbox").checked = !!parseInt(objResponse.resp);
         });
     }
 
-    saveFormValues(objEvent)
+    async saveFormValues(objEvent)
     {
         objEvent.preventDefault();
 
         var objSignatureInject = document.getElementById("ext-etheraddresslookup-signature_modify_checkbox");
-        localStorage.setItem("ext-etheraddresslookup-signature_inject", objSignatureInject.checked ? 1 : 0);
+        await LS.setItem("ext-etheraddresslookup-signature_inject", objSignatureInject.checked ? 1 : 0);
         document.getElementById("ext-etheraddresslookup-signature_success").classList.remove("hide-me");
         return false;
     }

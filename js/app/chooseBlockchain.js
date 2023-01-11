@@ -14,21 +14,27 @@ const ETHEREUM_NETWORK_IDS = { //As per https://ethereum.stackexchange.com/a/171
     7762959: "Musicoin"
 };
 
+var LS = {
+    getItem: async key => (await chrome.storage.local.get(key))[key],
+    setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+};
+
 //On page load it selects the default blockchain explorer
 (function() {
     refreshBlockchainExplorer();
 })();
 
 //Sets the local storage to remember their match favourite blockchain explorer
-function toggleBlockchainExplorer() {
+async function toggleBlockchainExplorer() {
     var objBlockchainExplorer = document.getElementById("ext-etheraddresslookup-choose_blockchain");
-    localStorage.setItem("ext-etheraddresslookup-blockchain_explorer", objBlockchainExplorer.options[objBlockchainExplorer.selectedIndex].value);
+    await LS.setItem("ext-etheraddresslookup-blockchain_explorer", objBlockchainExplorer.options[objBlockchainExplorer.selectedIndex].value);
 
     // See if the node is on a different network
     let intNetworkId = objBlockchainExplorer.options[objBlockchainExplorer.selectedIndex].dataset.network;
-    var objBrowser = chrome ? chrome : browser;
+    var objBrowser = chrome || browser;
 
     chrome.runtime.sendMessage({ func: "rpc_provider" }, (objResponse) => {
+        chrome.runtime.lastError;
         web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp)); 
         let intWeb3NetworkId = web3.version.network;
 
@@ -53,10 +59,10 @@ function toggleBlockchainExplorer() {
     refreshBlockchainExplorer();
 }
 
-function refreshBlockchainExplorer() {
-    var strBlockchainExplorer = localStorage.getItem("ext-etheraddresslookup-blockchain_explorer");
+async function refreshBlockchainExplorer() {
+    var strBlockchainExplorer = await LS.getItem("ext-etheraddresslookup-blockchain_explorer");
 
-    if(strBlockchainExplorer === null) {
+    if(!strBlockchainExplorer) {
         document.getElementById("ext-etheraddresslookup-choose_blockchain").value = "https://etherscan.io/address";
     } else {
         document.getElementById("ext-etheraddresslookup-choose_blockchain").value = strBlockchainExplorer;
@@ -64,11 +70,13 @@ function refreshBlockchainExplorer() {
 
     //Notify the tab to do a class method
     var strMethod = "changeBlockchainExplorer";
-    var objBrowser = chrome ? chrome : browser;
+    var objBrowser = chrome || browser;
     objBrowser.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.runtime.lastError;
         objBrowser.tabs.sendMessage(tabs[0].id, {
             "func":strMethod
         }, function(objResponse) {
+            chrome.runtime.lastError;
             if(objResponse && objResponse.status) {
                 console.log("Response from tab: " + objResponse.status);
             } else {

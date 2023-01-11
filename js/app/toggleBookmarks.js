@@ -1,7 +1,7 @@
 //On page load it checks/unchecks the checkbox
-(function() {
+(async function() {
     refreshBookmarksOption();
-    showBookmarks();
+    await showBookmarks();
 
     //Check to see if we are on settings.html
     if(document.getElementById("ext-etheraddresslookup-show_bookmarks")) {
@@ -15,37 +15,51 @@
 })();
 
 //Sets the local storage to remember their match highlight settings
-function toggleBookmarks()
-{
+async function toggleBookmarks()
+{    
+    var LS = {
+        getItem: async key => (await chrome.storage.local.get(key))[key],
+        setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+    };
+
     var objShowBookmarks = document.getElementById("ext-etheraddresslookup-show_bookmarks");
     var intShowBookmarks = objShowBookmarks.checked ? 1 : 0;
-    localStorage.setItem("ext-etheraddresslookup-show_bookmarks", intShowBookmarks);
+    await LS.setItem("ext-etheraddresslookup-show_bookmarks", intShowBookmarks);
 
-    refreshBookmarksOption();
+    await refreshBookmarksOption();
 }
 
-function refreshBookmarksOption()
+async function refreshBookmarksOption()
 {
-    var intShowBookmarks = localStorage.getItem("ext-etheraddresslookup-show_bookmarks");
+    var LS = {
+        getItem: async key => (await chrome.storage.local.get(key))[key],
+        setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+    };
+    var intShowBookmarks = await LS.getItem("ext-etheraddresslookup-show_bookmarks");
 
     if(document.getElementById("ext-etheraddresslookup-show_bookmarks")) {
-        document.getElementById("ext-etheraddresslookup-show_bookmarks").checked = (intShowBookmarks == 1 || intShowBookmarks === null ? true : false);
-        document.getElementById("ext-etheraddresslookup-show_bookmarks_text").innerText = (intShowBookmarks == 1 || intShowBookmarks === null ? "Enabled" : "Disabled");
+        document.getElementById("ext-etheraddresslookup-show_bookmarks").checked = (intShowBookmarks == 1 || intShowBookmarks === null || intShowBookmarks === undefined ? true : false);
+        document.getElementById("ext-etheraddresslookup-show_bookmarks_text").innerText = (intShowBookmarks == 1 || intShowBookmarks === null || intShowBookmarks === undefined ? "Enabled" : "Disabled");
     }
 
     if(document.getElementById("ext-etheraddresslookup-bookmarks")) {
-        document.getElementById("ext-etheraddresslookup-bookmarks").style.display = (intShowBookmarks == 1 || intShowBookmarks === null ? "block" : "none");
+        document.getElementById("ext-etheraddresslookup-bookmarks").style.display = (intShowBookmarks == 1 || intShowBookmarks === null || intShowBookmarks === undefined ? "block" : "none");
     }
 }
 
 /**
  * Fetches the bookmarks from LocalStorage (or default)
  */
-function getBookmarks()
+async function getBookmarks()
 {
-    var strBookmarks = localStorage.getItem("ext-etheraddresslookup-bookmarks");
+    var LS = {
+        getItem: async key => (await chrome.storage.local.get(key))[key],
+        setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+    };
+
+    var strBookmarks = await LS.getItem("ext-etheraddresslookup-bookmarks");
     //No bookmarks have been set, set the default ones.
-    if(strBookmarks === null) {
+    if(!strBookmarks) {
         var arrBookmarks = new Array();
         arrBookmarks.push({
             "icon": "https://www.google.com/s2/favicons?domain=https://mycrypto.com",
@@ -81,9 +95,9 @@ function getBookmarks()
 /**
  * Renders the bookmarks for options.html and settings.html
  */
-function showBookmarks()
+async function showBookmarks()
 {
-    var arrBookmarks = getBookmarks();
+    var arrBookmarks = await getBookmarks();
 
     //We are on the settings view
     if(document.getElementById("ext-etheraddresslookup-bookmarks_table")) {
@@ -130,13 +144,18 @@ function showBookmarks()
  */
 function showModifyWindow()
 {
+    var LS = {
+        getItem: async key => (await chrome.storage.local.get(key))[key],
+        setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+    };
+
     var intBookmarkId = this.getAttribute("data-id");
     var objBookmarks = getBookmarks();
     document.getElementById("ext-etheraddresslookup-bookmark_modify_id").value = intBookmarkId;
     document.getElementById("ext-etheraddresslookup-bookmark_modify_icon").value = objBookmarks[intBookmarkId].icon;
     document.getElementById("ext-etheraddresslookup-bookmark_modify_url").value = objBookmarks[intBookmarkId].url;
         document.getElementById("ext-etheraddresslookup-bookmark_modify_form").setAttribute("data-id", intBookmarkId);
-    document.getElementById("ext-etheraddresslookup-bookmark_modify_form").addEventListener('submit', function(objEvent) {
+    document.getElementById("ext-etheraddresslookup-bookmark_modify_form").addEventListener('submit', async function(objEvent) {
         objEvent.preventDefault();
         var intId = document.getElementById("ext-etheraddresslookup-bookmark_modify_id").value;
 
@@ -151,12 +170,12 @@ function showModifyWindow()
             "url": document.getElementById("ext-etheraddresslookup-bookmark_modify_url").value
         };
 
-        localStorage.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
+        await LS.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
         location.reload();
         return false;
     }.bind(objBookmarks));
 
-    document.getElementById("ext-etheraddresslookup-bookmark_modify_remove").addEventListener('click', function(objEvent) {
+    document.getElementById("ext-etheraddresslookup-bookmark_modify_remove").addEventListener('click', async function(objEvent) {
         objEvent.preventDefault();
         var intId = document.getElementById("ext-etheraddresslookup-bookmark_modify_id").value;
         objBookmarks[intId] = {
@@ -164,7 +183,7 @@ function showModifyWindow()
             "url": ""
         };
 
-        localStorage.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
+        await LS.setItem("ext-etheraddresslookup-bookmarks", JSON.stringify(objBookmarks));
         location.reload();
         return false;
     }.bind(objBookmarks));
