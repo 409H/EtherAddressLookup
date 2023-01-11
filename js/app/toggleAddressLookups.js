@@ -3,19 +3,24 @@
     refreshPerformAddressLookups();
 })();
 
+var LS = {
+    getItem: async key => (await chrome.storage.local.get(key))[key],
+    setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+};
+
 //Sets the local storage to remember their RPC address lookup setting
-function togglePerformAddressLookups()
+async function togglePerformAddressLookups()
 {
     var objAddressLookups = document.getElementById("ext-etheraddresslookup-perform_address_lookups");
     var intAddressLookups = objAddressLookups.checked ? 1 : 0;
-    localStorage.setItem("ext-etheraddresslookup-perform_address_lookups", intAddressLookups);
+    await LS.setItem("ext-etheraddresslookup-perform_address_lookups", intAddressLookups);
 
     refreshPerformAddressLookups();
 }
 
-function refreshPerformAddressLookups() {
-    var intAddressLookups = localStorage.getItem("ext-etheraddresslookup-perform_address_lookups");
-    if(intAddressLookups === null) {
+async function refreshPerformAddressLookups() {
+    var intAddressLookups = await LS.getItem("ext-etheraddresslookup-perform_address_lookups");
+    if(!intAddressLookups) {
         intAddressLookups = 1;
     }
     document.getElementById("ext-etheraddresslookup-perform_address_lookups").checked = (intAddressLookups == 1 ? true : false);

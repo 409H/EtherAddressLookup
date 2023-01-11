@@ -1,4 +1,4 @@
-let objBrowser = chrome ? chrome : browser;
+var objBrowser = chrome || browser;
 
 const ETH_NETWORK_MAP = [
     {
@@ -69,6 +69,11 @@ const ETH_NETWORK_MAP = [
     }   
 ];
 
+var LS = {
+    getItem: async key => (await chrome.storage.local.get(key))[key],
+    setItem: (key, val) => chrome.storage.local.set({[key]: val}),
+};
+
 let LOCALSTORAGE_IDENTIFER = {
     "DETAILS": "ext-etheraddresslookup-rpc_node_details",
     "ENDPOINT": "ext-etheraddresslookup-rpc_node"
@@ -81,10 +86,11 @@ class RpcNodeSelector
         //No need to do anything here.
     }
 
-    static getCurrentNetworkDescription()
+    static async getCurrentNetworkDescription()
     {
-        if(localStorage.getItem(LOCALSTORAGE_IDENTIFER.DETAILS)) {
-            let objDetails = JSON.parse(localStorage.getItem(LOCALSTORAGE_IDENTIFER.DETAILS));
+        const storageDetail = await LS.getItem(LOCALSTORAGE_IDENTIFER.DETAILS);
+        if(storageDetail) {
+            let objDetails = JSON.parse(storageDetail);
             document.getElementById("ext-etheraddresslookup-rpcnode_current_details").innerText = `You are currently connected to: ${[objDetails.name, objDetails.type].join(" ")}`
         }
     }
@@ -95,6 +101,7 @@ class RpcNodeSelector
     populateRpcNodeInput()
     {
         objBrowser.runtime.sendMessage({func: "rpc_provider"}, function(objResponse) {
+            chrome.runtime.lastError;
             document.getElementById("ext-etheraddresslookup-rpcnode_modify_url").value = objResponse.resp;
         });
 
@@ -104,13 +111,14 @@ class RpcNodeSelector
     resetFormValues(objEvent)
     {
         objBrowser.runtime.sendMessage({func: "rpc_default_provider"}, function(objResponse) {
+            chrome.runtime.lastError;
             document.getElementById("ext-etheraddresslookup-rpcnode_modify_url").value = objResponse.resp;
         });
 
         objEvent.preventDefault();
     }
 
-    saveFormValues(objEvent)
+    async saveFormValues(objEvent)
     {
         var objRpcValue = document.getElementById("ext-etheraddresslookup-rpcnode_modify_url");
 
@@ -121,7 +129,7 @@ class RpcNodeSelector
         objRpcSuccessNode.classList.add("hide-me");
 
         if( RpcNodeSelector.rpcEndpointIsAvailable(objRpcValue.value) ) {
-            localStorage.setItem(LOCALSTORAGE_IDENTIFER.ENDPOINT, objRpcValue.value);
+            await LS.setItem(LOCALSTORAGE_IDENTIFER.ENDPOINT, objRpcValue.value);
         }
 
         objEvent.preventDefault();
@@ -153,9 +161,9 @@ class RpcNodeSelector
         return true;
     }
 
-    static updateNodeDetails()
+    static async updateNodeDetails()
     {
-        var strWeb3Provider = localStorage.getItem(LOCALSTORAGE_IDENTIFER.ENDPOINT);
+        var strWeb3Provider = await LS.getItem(LOCALSTORAGE_IDENTIFER.ENDPOINT);
         var objWeb3 = new Web3(new Web3.providers.HttpProvider(strWeb3Provider));
 
         document.getElementById("ext-etheraddresslookup-rpcnode_connected_status").classList.remove("hide-me");
@@ -177,7 +185,7 @@ class RpcNodeSelector
         `;
 
         // Set the LocalStorage so we can remind them on address hover
-        localStorage.setItem(LOCALSTORAGE_IDENTIFER.DETAILS, JSON.stringify(arrNetwork[0]));
+        await LS.setItem(LOCALSTORAGE_IDENTIFER.DETAILS, JSON.stringify(arrNetwork[0]));
     }
 
 }

@@ -1,12 +1,12 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "EtherAddressLookup",
   "short_name": "EtherAddressLookup",
   "description": "Adds links to strings that look like Ethereum addresses to your favorite blockchain explorer + antiphishing measures.",
-  "version": "1.23.1",
+  "version": "1.3",
 
-  "browser_action": {
+  "action": {
     "default_icon": "images/ether-128x128.png",
     "default_popup": "options.html",
     "default_title": "EtherAddressLookup"
@@ -14,16 +14,29 @@
 
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "alarms"
   ],
 
   "optional_permissions": [
     "history"
   ],
 
-  "content_scripts":[{
+  "content_scripts":[
+    {
+      "run_at": "document_start",
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "js/options.js"
+      ]
+    },
+    {
     "run_at": "document_start",
-    "matches": ["http://*/*", "https://*/*"],
+    "matches": [
+      "<all_urls>"
+    ],
     "js": [
       "js/app/lib/punycode.js",
       "js/app/lib/blockies.js",
@@ -41,7 +54,9 @@
   },
   {
     "run_at": "document_end",
-    "matches": ["http://*/*", "https://*/*"],
+    "matches": [
+      "<all_urls>"
+    ],
     "js": [
       "js/app/lib/web3.js",
       "js/DomManipulator.js",
@@ -60,7 +75,7 @@
   }],
 
   "background": {
-    "scripts": ["js/options.js"]
+    "service_worker": "js/service-worker.js"
   },
 
   "icons": {
@@ -70,13 +85,19 @@
   },
 
   "web_accessible_resources": [
-    "images/powered-by-quiknode.png",
-    "/js/workers/TwitterFakeAccount.js",
-    "images/twitter/whitelisted.png",
-    "images/twitter/blacklisted.png",
-    "images/twitter/neutral.png",
-    "static/phishing/phishing.html",
-    "static/phishing/phishing-phishfort.html",
-    "static/phishing/phishing-segasec.html"
+    {
+      "resources": [
+        "images/powered-by-quiknode.png",
+        "/js/workers/TwitterFakeAccount.js",
+        "images/twitter/whitelisted.png",
+        "images/twitter/blacklisted.png",
+        "images/twitter/neutral.png",
+        "static/phishing/phishing.html",
+        "static/phishing/phishing-phishfort.html",
+        "static/phishing/phishing-segasec.html"
+      ],
+
+      "matches": ["http://*/*", "https://*/*"]
+    }
   ]
 }
