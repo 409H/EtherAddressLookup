@@ -202,6 +202,7 @@ let arrNeutralAccountIds = [];
 var intTweetCounter = 0;
 
 chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
+    chrome.runtime.lastError;
     if(objResponse.resp == 1) {
 
         // If they click on the Home button which draws them to the top of the page
@@ -266,6 +267,7 @@ chrome.runtime.sendMessage({func: "twitter_validation"}, function(objResponse) {
 
                     if(arrTweetData.length) {
                         chrome.runtime.sendMessage({func: "twitter_lists"}, function(objResponse) {
+                            chrome.runtime.lastError;
 
                             let twitterlists = JSON.parse(objResponse.resp);
 

@@ -1,11 +1,12 @@
 (function() {
-    let objBrowser = chrome ? chrome : browser;
+    var objBrowser = chrome || browser;
 
     let strInitHref = window.location.href;
 
     function init(){
         //Get the blacklist domains option for the user
         objBrowser.runtime.sendMessage({func: "blacklist_domains"}, function(objResponse) {
+            chrome.runtime.lastError;
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 if(objResponse.resp == 1) {
                     blacklistedDomainCheck();
@@ -25,10 +26,11 @@
 
     //Detects if the current tab is in the blacklisted domains file
     function blacklistedDomainCheck() {
-        let objBrowser = chrome ? chrome : browser;
+        var objBrowser = chrome || browser;
         var arrBlacklistedDomains = [];
         var arrWhitelistedDomains = ["www.myetherwallet.com", "myetherwallet.com"];
         objBrowser.runtime.sendMessage({func: "blacklist_whitelist_domain_list"}, function (objResponse) {
+            chrome.runtime.lastError;
             if (objResponse && objResponse.hasOwnProperty("resp")) {
                 var objDomainLists = JSON.parse(objResponse.resp);
                 var arrWhitelistedDomains = objDomainLists.whitelist;
@@ -42,11 +44,13 @@
     {
 
         objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "neutral", "type": ""}, function(objResponse) {
+            chrome.runtime.lastError;
             // Icon should be a different colour now.
         });
 
         // Check the user bookmarks to see if they trust the domain
         objBrowser.runtime.sendMessage({func: "user_domain_bookmarks"}, function(objResponse) {
+            chrome.runtime.lastError;
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 var strCurrentTab = window.location.hostname.replace(/www\./g,'');
                 var objBookmarks = JSON.parse(objResponse.resp);
@@ -57,6 +61,7 @@
                         strBookmarkUrl = strBookmarkUrl.split("/")[0];
                         if(strBookmarkUrl === strCurrentTab.toLowerCase()) {
                             objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "whitelisted", "type": "bookmarked"}, function(objResponse) {
+                                chrome.runtime.lastError;
                                 // Icon should be a different colour now.
                             });
                             return false;
@@ -68,6 +73,7 @@
 
         //See if we are blocking all punycode domains.
         objBrowser.runtime.sendMessage({func: "block_punycode_domains"}, function(objResponse) {
+            chrome.runtime.lastError;
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 var strCurrentTab = window.location.hostname.replace(/www\./g,'');
 
@@ -78,6 +84,7 @@
                             window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) + "#punycode";
 
                             objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": "punycode"}, function(objResponse) {
+                                chrome.runtime.lastError;
                                 // Icon should be a different colour now.
                             });
 
@@ -120,6 +127,7 @@
                 window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#') + (window.location.hostname) +"#"+ (isBlacklisted ? "blacklisted" : "levenshtein");
 
                 objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": (isBlacklisted ? "blacklisted": "levenshtein")}, function(objResponse) {
+                    chrome.runtime.lastError;
                     // Icon should be a different colour now.
                 });
 
@@ -128,6 +136,7 @@
 
             // Now check the full path (ie: YouTube because of fake livestreams and telegra.ph)
             objBrowser.runtime.sendMessage({func: "blacklist_uri_list"}, function (objResponse) {
+                chrome.runtime.lastError;
                 if (objResponse && objResponse.hasOwnProperty("resp")) {
                     let uris = JSON.parse(objResponse.resp)
                     let windowLoc = window.location.href.replace(/^https?\:\/\/|www\./g,''); 
@@ -139,6 +148,7 @@
                             window.location.href = chrome.runtime.getURL('/static/phishing/phishing.html#'+ btoa(window.location.href) +'#uri');
         
                             objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": "blacklisted"}, function(objResponse) {
+                                chrome.runtime.lastError;
                                 // Icon should be a different colour now.
                             });
         
@@ -151,9 +161,11 @@
 
         //Now do the 3rd party domain list check if they have that option enabled.
         objBrowser.runtime.sendMessage({func: "3rd_party_blacklist_domains"}, function(objResponse) {
+            chrome.runtime.lastError;
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 if(objResponse.resp == 1) {
                     objBrowser.runtime.sendMessage({func: "3p_blacklist_domain_list"}, function(objResponse) {
+                        chrome.runtime.lastError;
                         if(objResponse && objResponse.hasOwnProperty("resp")) {
                             var obj3rdPartyLists = JSON.parse(objResponse.resp);
                             var strCurrentTab = window.location.hostname.replace(/www\./g,'');
@@ -179,6 +191,7 @@
                                     }
 
                                     objBrowser.runtime.sendMessage({func: "change_ext_icon", "icon": "blacklisted", "type": "thirdparty"}, function(objResponse) {
+                                        chrome.runtime.lastError;
                                         // Icon should be a different colour now.
                                     });
 

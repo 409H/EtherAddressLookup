@@ -1,4 +1,4 @@
-let objBrowser = chrome ? chrome : browser;
+var objBrowser = chrome || browser;
 
 const EXT_PREFIX = 'ext-etheraddresslookup';
 const HOVER_POPUP_CLASS_NAME = `${EXT_PREFIX}-address_stats_hover`;
@@ -37,9 +37,9 @@ class EtherAddressLookup {
      */
     init()
     {
-        let objBrowser = chrome ? chrome : browser;
         //Get the highlight option for the user
         objBrowser.runtime.sendMessage({func: "highlight_option"}, function(objResponse) {
+            chrome.runtime.lastError;
             if(objResponse && objResponse.hasOwnProperty("resp")) {
                 this.blHighlight = (objResponse.resp == 1);
             }
@@ -48,18 +48,21 @@ class EtherAddressLookup {
 
         //Get the blockchain explorer for the user
         objBrowser.runtime.sendMessage({func: "blockchain_explorer"}, function(objResponse) {
+            chrome.runtime.lastError;
             this.strBlockchainExplorer = objResponse.resp;
             ++this.intSettingsCount;
         }.bind(this));
 
         //Get the perform address lookup option
         objBrowser.runtime.sendMessage({func: "perform_address_lookups"}, function(objResponse) {
+            chrome.runtime.lastError;
             this.blPerformAddressLookups = objResponse.resp;
             ++this.intSettingsCount;
         }.bind(this));
 
         //Get the RPC network details
         objBrowser.runtime.sendMessage({ func: "rpc_details" }, function(objResponse) {
+            chrome.runtime.lastError;
             let objDetails = JSON.parse(objResponse.resp);
             this.strRpcDetails = `${objDetails.name} (${objDetails.type})`;
         }.bind(this));
@@ -431,6 +434,7 @@ class EtherAddressLookup {
 
             //Get the RPC provider for the user
             objBrowser.runtime.sendMessage({ func: "rpc_provider" }, (objResponse) => {
+                chrome.runtime.lastError;
                 var web3 = new Web3(new Web3.providers.HttpProvider(objResponse.resp));
                 
                 var str0xAddress = addressElement.getAttribute("data-address");
